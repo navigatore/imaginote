@@ -109,7 +109,7 @@ void MainWindow::loadSpaceDef()
     try
     {
         space.loadFromFile(c_str);
-        ui->spaceLabel->setText(spaceName.c_str());
+        ui->spaceLabel->setText(space.getName().c_str());
         spaceLoaded = true;
         tryEnableStartStop();
     }

@@ -1,0 +1,19 @@
+TODO LIST
+Sorted by importance
+
+HIGH:
+Visual cone
+  store information about sonification bounds
+Sonificate "Left-Right"
+New space player constructor and so on...
+Raytracing
+
+MEDIUM:
+Walls
+
+LOW:
+Improved validation of input file
+
+VERY LOW: 
+HRTF
+

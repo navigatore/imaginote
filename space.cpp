@@ -9,10 +9,9 @@ void Space::loadFromFile(const char *fname)
     std::ifstream f;
     f.open(fname);
 
-    std::string spaceName;
     unsigned int height, width;
 
-    f >> spaceName >> height >> width;
+    f >> name >> height >> width;
 
     if (!f)
         throw InvalidSpaceFile();
@@ -36,8 +35,7 @@ void Space::loadFromFile(const char *fname)
         }
     }
 
-    int i;
-    i = 5;
-
     // TODO: Check, if EOF
+
+    f.close();
 }

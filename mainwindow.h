@@ -1,21 +1,3 @@
-/* TODO LIST
- *
- * Categories: Critical, Bug, Feature
- *
- * Critical:
- * Sonificate "Left-Right"
- * New space player constructor and so on...
- *
- * Minor bug:
- * Improved validation of input file
- *
- *
- * Feature:
- * HRTF
- *
- *
-*/
-
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
@@ -66,7 +48,6 @@ private:
 
     Space space;
     SpacePlayer *sp;
-    std::string spaceName;
 
     Coordinates listenerPos;
     Angle listenerAngle;
