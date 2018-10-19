@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>378</width>
+    <width>413</width>
     <height>433</height>
    </rect>
   </property>
@@ -256,8 +256,8 @@
    <slot>loadSpaceDef()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>215</x>
-     <y>67</y>
+     <x>203</x>
+     <y>37</y>
     </hint>
     <hint type="destinationlabel">
      <x>37</x>
@@ -272,8 +272,8 @@
    <slot>startStopClicked()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>307</x>
-     <y>220</y>
+     <x>318</x>
+     <y>324</y>
     </hint>
     <hint type="destinationlabel">
      <x>307</x>
@@ -288,12 +288,28 @@
    <slot>validatePresInterval(QString)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>308</x>
-     <y>167</y>
+     <x>392</x>
+     <y>149</y>
     </hint>
     <hint type="destinationlabel">
      <x>50</x>
      <y>183</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>startStopButton_1</sender>
+   <signal>clicked()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>startStopOneClicked()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>225</x>
+     <y>213</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>404</x>
+     <y>338</y>
     </hint>
    </hints>
   </connection>
@@ -302,5 +318,6 @@
   <slot>loadSpaceDef()</slot>
   <slot>startStopClicked()</slot>
   <slot>validatePresInterval(QString)</slot>
+  <slot>startStopOneClicked()</slot>
  </slots>
 </ui>

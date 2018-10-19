@@ -11,7 +11,7 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
     ui->spaceLabel->setText("No space definition loaded");
     ui->presIntervalLineEdit->setText("1");
     playing = false;
-    keyLeftPressed = false;
+    keyLeftPressed = keyRightPressed = keyUpPressed = keyDownPressed = false;
     presIntValid = true;
 
     updateListenerPos();
@@ -56,19 +56,19 @@ void MainWindow::update()
 //*********************************************************************************************************************
 void MainWindow::keyPressEvent(QKeyEvent *ev)
 {
-    if (ev->key() == Qt::Key_Left)
+    if (ev->key() == Qt::Key_A)
     {
         keyLeftPressed = true;
     }
-    else if (ev->key() == Qt::Key_Right)
+    else if (ev->key() == Qt::Key_D)
     {
         keyRightPressed = true;
     }
-    else if (ev->key() == Qt::Key_Up)
+    else if (ev->key() == Qt::Key_W)
     {
         keyUpPressed = true;
     }
-    else if (ev->key() == Qt::Key_Down)
+    else if (ev->key() == Qt::Key_S)
     {
         keyDownPressed = true;
     }
@@ -76,19 +76,19 @@ void MainWindow::keyPressEvent(QKeyEvent *ev)
 //*********************************************************************************************************************
 void MainWindow::keyReleaseEvent(QKeyEvent *ev)
 {
-    if(ev->key() == Qt::Key_Left)
+    if(ev->key() == Qt::Key_A)
     {
         keyLeftPressed = false;
     }
-    else if (ev->key() == Qt::Key_Right)
+    else if (ev->key() == Qt::Key_D)
     {
         keyRightPressed = false;
     }
-    else if (ev->key() == Qt::Key_Up)
+    else if (ev->key() == Qt::Key_W)
     {
         keyUpPressed = false;
     }
-    else if (ev->key() == Qt::Key_Down)
+    else if (ev->key() == Qt::Key_S)
     {
         keyDownPressed = false;
     }
@@ -159,6 +159,23 @@ void MainWindow::startStopClicked()
         playing = false;
     }
 }
+
+void MainWindow::startStopOneClicked()
+{
+    if (!playing)
+    {
+        ui->startStopButton_1->setText("Stop");
+        ui->visualAngleSlider->setEnabled(false);
+        playing = true;
+        ui->startStopButton->clearFocus();
+    }
+    else
+    {
+        ui->startStopButton_1->setText("Start");
+        ui->visualAngleSlider->setEnabled(true);
+        playing = false;
+    }
+}
 //*********************************************************************************************************************
 void MainWindow::validatePresInterval(const QString &text)
 {
@@ -194,6 +211,8 @@ void MainWindow::tryEnableStartStop()
 {
     if (spaceLoaded && presIntValid)
         ui->startStopButton->setEnabled(true);
+    if (spaceLoaded)
+        ui->startStopButton_1->setEnabled(true);
 }
 //*********************************************************************************************************************
 void MainWindow::updateListenerPos()

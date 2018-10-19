@@ -21,6 +21,7 @@ public:
 public slots:
     void loadSpaceDef();
     void startStopClicked();
+    void startStopOneClicked();
     void validatePresInterval(const QString &text);
     void update();
 
