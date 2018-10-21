@@ -3,7 +3,7 @@
 
 #include "angle.h"
 #include "space.h"
-#include "spaceplayer.h"
+#include "newspaceplayer.h"
 #include <QMainWindow>
 
 namespace Ui {
@@ -48,7 +48,7 @@ private:
     bool keyLeftPressed, keyRightPressed, keyUpPressed, keyDownPressed;
 
     Space space;
-    SpacePlayer *sp;
+    NewSpacePlayer *sp;
 
     Coordinates listenerPos;
     Angle listenerAngle;

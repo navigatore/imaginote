@@ -28,7 +28,8 @@ SOURCES += \
         mainwindow.cpp \
     spaceplayer.cpp \
     spaceobject.cpp \
-    space.cpp
+    space.cpp \
+    newspaceplayer.cpp
 
 HEADERS += \
         mainwindow.h \
@@ -37,7 +38,8 @@ HEADERS += \
     spaceplayer.h \
     coordinates.h \
     space.h \
-    angle.h
+    angle.h \
+    newspaceplayer.h
 
 FORMS += \
         mainwindow.ui
