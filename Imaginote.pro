@@ -29,7 +29,8 @@ SOURCES += \
     spaceplayer.cpp \
     spaceobject.cpp \
     space.cpp \
-    newspaceplayer.cpp
+    newspaceplayer.cpp \
+    viewingcone.cpp
 
 HEADERS += \
         mainwindow.h \

@@ -28,7 +28,7 @@ void Space::loadFromFile(const char *fname)
             f >> tmp;
             if (tmp == "x")
             {
-                initListenerPos = Coordinates(x, 0, z);
+                cone.setPosition(Coordinates(x, 0, z));
             }
             else
             {

@@ -31,13 +31,11 @@ protected:
 
 private:
     const int updateFreq = 60;  // 60 Hz
-    const float speed = 1.0f;        // 1 m/s
-    const float angleSpeed = 45.0f;  // 45 deg/s
 
     void tryEnableStartStop();
     bool is_number(const std::string& s);
     void updateListenerPos();
-    void updateListenerAngle();    
+    void updateListenerAngle();
     void printDebugInfo();
 
 
@@ -51,9 +49,6 @@ private:
 
     Space space;
     NewSpacePlayer *sp;
-
-    Coordinates listenerPos;
-    Angle listenerAngle;
 
     bool spaceLoaded;
     bool presIntValid;

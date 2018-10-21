@@ -14,8 +14,6 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
     keyLeftPressed = keyRightPressed = keyUpPressed = keyDownPressed = printKeyPressed = false;
     presIntValid = true;
 
-    updateListenerPos();
-
     timer = new QTimer(this);
     connect(timer, SIGNAL(timeout()), this, SLOT(update()));
     timer->start(1000 / updateFreq);
@@ -32,21 +30,19 @@ void MainWindow::update()
     {
         if (keyLeftPressed)
         {
-            listenerAngle += angleSpeed / updateFreq;
+            space.rotateListenerLeft(1.0f / updateFreq);
         }
         else if (keyRightPressed)
         {
-            listenerAngle -= angleSpeed / updateFreq;
+            space.rotateListenerRight(1.0f / updateFreq);
         }
         if (keyUpPressed)
         {
-            listenerPos.x += std::cos(listenerAngle.getRad()) / updateFreq;
-            listenerPos.y += std::sin(listenerAngle.getRad()) / updateFreq;
+            space.goForward(1.0f / updateFreq);
         }
         else if (keyDownPressed)
         {
-            listenerPos.x -= std::cos(listenerAngle.getRad()) / updateFreq;
-            listenerPos.y -= std::sin(listenerAngle.getRad()) / updateFreq;
+            space.goBackward(1.0f / updateFreq);
         }
 
         updateListenerPos();
@@ -228,12 +224,12 @@ void MainWindow::tryEnableStartStop()
 //*********************************************************************************************************************
 void MainWindow::updateListenerPos()
 {
-    ui->listenerPosLabel->setText(("Listener position: " + listenerPos.str()).c_str());
+    ui->listenerPosLabel->setText(("Listener position: " + space.listenerPositionStr()).c_str());
 }
 //*********************************************************************************************************************
 void MainWindow::updateListenerAngle()
 {
-    ui->listenerAngleLabel->setText(("Listener angle: " + listenerAngle.str()).c_str());
+    ui->listenerAngleLabel->setText(("Listener angle: " + space.listenerDirectionStr()).c_str());
 }
 //*********************************************************************************************************************
 void MainWindow::printDebugInfo()
