@@ -11,7 +11,7 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
     ui->spaceLabel->setText("No space definition loaded");
     ui->presIntervalLineEdit->setText("1");
     playing = false;
-    keyLeftPressed = keyRightPressed = keyUpPressed = keyDownPressed = false;
+    keyLeftPressed = keyRightPressed = keyUpPressed = keyDownPressed = printKeyPressed = false;
     presIntValid = true;
 
     updateListenerPos();
@@ -51,6 +51,7 @@ void MainWindow::update()
 
         updateListenerPos();
         updateListenerAngle();
+        printDebugInfo();
     }
 }
 //*********************************************************************************************************************
@@ -72,6 +73,10 @@ void MainWindow::keyPressEvent(QKeyEvent *ev)
     {
         keyDownPressed = true;
     }
+    else if (ev->key() == Qt::Key_P)
+    {
+        printKeyPressed = true;
+    }
 }
 //*********************************************************************************************************************
 void MainWindow::keyReleaseEvent(QKeyEvent *ev)
@@ -91,6 +96,10 @@ void MainWindow::keyReleaseEvent(QKeyEvent *ev)
     else if (ev->key() == Qt::Key_S)
     {
         keyDownPressed = false;
+    }
+    else if (ev->key() == Qt::Key_P)
+    {
+        printKeyPressed = false;
     }
 }
 //*********************************************************************************************************************
@@ -225,5 +234,13 @@ void MainWindow::updateListenerPos()
 void MainWindow::updateListenerAngle()
 {
     ui->listenerAngleLabel->setText(("Listener angle: " + listenerAngle.str()).c_str());
+}
+//*********************************************************************************************************************
+void MainWindow::printDebugInfo()
+{
+    if (printKeyPressed)
+    {
+        space.printVisibleObjects();
+    }
 }
 //*********************************************************************************************************************

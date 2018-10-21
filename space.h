@@ -2,6 +2,7 @@
 #define SPACE_H
 
 #include "coordinates.h"
+#include "simplespaceobject.h"
 #include <vector>
 
 class InvalidSpaceFile : public std::exception {};
@@ -14,9 +15,11 @@ public:
     Coordinates getInitListenerPos();
     std::string getName() { return name; }
 
+    void printVisibleObjects();
+
 private:
     std::string name;
-    std::vector<std::vector<int>> fields;
+    std::vector<std::vector<SimpleSpaceObject>> fields;
     Coordinates initListenerPos;
 };
 

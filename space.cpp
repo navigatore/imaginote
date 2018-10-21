@@ -1,7 +1,9 @@
 #include "space.h"
 #include <exception>
 #include <fstream>
+#include <iostream>
 
+//*********************************************************************************************************************
 void Space::loadFromFile(const char *fname)
 {
     fields.clear();
@@ -16,22 +18,23 @@ void Space::loadFromFile(const char *fname)
     if (!f)
         throw InvalidSpaceFile();
 
-    for (unsigned int y = 0; y < width; ++y)
+    for (unsigned int z = 0; z < width; ++z)
     {
-        fields.push_back(std::vector<int>());
+        fields.push_back(std::vector<SimpleSpaceObject>());
         for (unsigned int x = 0; x < height; ++x)
         {
+            unsigned int height = 0;
             std::string tmp;
             f >> tmp;
             if (tmp == "x")
             {
-                initListenerPos = Coordinates(x, y);
-                fields[y].push_back(0);
+                initListenerPos = Coordinates(x, 0, z);
             }
             else
             {
-                fields[y].push_back(std::stoi(tmp));
+                height = static_cast<unsigned int>(std::stoi(tmp));
             }
+            fields[z].push_back(SimpleSpaceObject(Coordinates(x, 0, z), height, height > 0));
         }
     }
 
@@ -39,3 +42,24 @@ void Space::loadFromFile(const char *fname)
 
     f.close();
 }
+//*********************************************************************************************************************
+void Space::printVisibleObjects()
+{
+    for (auto row : fields)
+    {
+        for (auto object : row)
+        {
+            if (object.visible)
+            {
+                std::cout << object.height << " ";
+            }
+            else
+            {
+                std::cout << "- ";
+            }
+        }
+        std::cout << std::endl;
+    }
+    std::cout << std::endl;
+}
+//*********************************************************************************************************************

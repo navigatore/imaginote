@@ -37,7 +37,9 @@ private:
     void tryEnableStartStop();
     bool is_number(const std::string& s);
     void updateListenerPos();
-    void updateListenerAngle();
+    void updateListenerAngle();    
+    void printDebugInfo();
+
 
     Ui::MainWindow *ui;
 
@@ -45,7 +47,7 @@ private:
 
     bool playing;
 
-    bool keyLeftPressed, keyRightPressed, keyUpPressed, keyDownPressed;
+    bool keyLeftPressed, keyRightPressed, keyUpPressed, keyDownPressed, printKeyPressed;
 
     Space space;
     NewSpacePlayer *sp;

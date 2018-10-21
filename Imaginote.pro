@@ -39,7 +39,9 @@ HEADERS += \
     coordinates.h \
     space.h \
     angle.h \
-    newspaceplayer.h
+    newspaceplayer.h \
+    simplespaceobject.h \
+    viewingcone.h
 
 FORMS += \
         mainwindow.ui
