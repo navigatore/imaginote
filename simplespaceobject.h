@@ -6,7 +6,11 @@
 class SimpleSpaceObject
 {
 public:
-    SimpleSpaceObject(Coordinates crd, unsigned int height, bool visible = false) : crds(crd), height(height), visible(visible) { }
+    SimpleSpaceObject(Coordinates crd,
+                      unsigned int height,
+                      bool visible = false,
+                      bool focus = false)
+        : crds(crd), height(height), visible(visible), focus(focus) { }
 
     bool operator==(const SimpleSpaceObject &other)
     {
@@ -15,7 +19,7 @@ public:
 
     Coordinates crds;
     unsigned int height;
-    bool visible;
+    bool visible, focus;
 };
 
 #endif // SIMPLESPACEOBJECT_H

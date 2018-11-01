@@ -28,7 +28,10 @@ public:
     std::string listenerDirectionStr() { return cone.getDirection().str(); }
 
     void setFieldsVisibility();
-    void findClosestField();
+    void setFieldsFocus();
+    void findClosestFocusField();
+
+    bool lookingAt(const SimpleSpaceObject &object);
 
     bool firstCloser(const SimpleSpaceObject &first, const SimpleSpaceObject &second);
     float distanceSqFrom(SimpleSpaceObject obj);
@@ -37,6 +40,7 @@ private:
     std::string name;
     std::vector<std::vector<SimpleSpaceObject>> fields;
     ViewingCone cone;
+    Angle focusAngle;
     SimpleSpaceObject closestField;
     bool closestFieldExists;
 };

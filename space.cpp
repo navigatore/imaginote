@@ -57,6 +57,10 @@ void Space::printVisibleObjects()
             {
                 std::cout << "* ";
             }
+            else if (field.focus)
+            {
+                std::cout << "F ";
+            }
             else if (field.visible)
             {
                 std::cout << field.height << " ";
@@ -74,7 +78,8 @@ void Space::printVisibleObjects()
 void Space::update()
 {
     setFieldsVisibility();
-    findClosestField();
+    setFieldsFocus();
+    findClosestFocusField();
 }
 //*********************************************************************************************************************
 void Space::setFieldsVisibility()
@@ -95,7 +100,25 @@ void Space::setFieldsVisibility()
     }
 }
 //*********************************************************************************************************************
-void Space::findClosestField()
+void Space::setFieldsFocus()
+{
+    for (auto &row : fields)
+    {
+        for (auto &field : row)
+        {
+            if (field.visible && lookingAt(field))
+            {
+                field.focus = true;
+            }
+            else
+            {
+                field.focus = false;
+            }
+        }
+    }
+}
+//*********************************************************************************************************************
+void Space::findClosestFocusField()
 {
     closestFieldExists = false;
     for (auto row : fields)
@@ -104,7 +127,7 @@ void Space::findClosestField()
         {
             if (!closestFieldExists)
             {
-                if (field.visible)
+                if (field.focus)
                 {
                     closestField = field;
                     closestFieldExists = true;
@@ -112,13 +135,37 @@ void Space::findClosestField()
             }
             else
             {
-                if (field.visible && firstCloser(field, closestField))
+                if (field.focus && firstCloser(field, closestField))
                 {
                     closestField = field;
                 }
             }
         }
     }
+}
+//*********************************************************************************************************************
+bool Space::lookingAt(const SimpleSpaceObject &object)
+{
+    Coordinates tl(object.crds), tr(object.crds), bl(object.crds), br(object.crds);
+    tl.x -= 0.5f;
+    tl.z -= 0.5f;
+    tr.x += 0.5f;
+    tr.z -= 0.5f;
+    bl.x -= 0.5f;
+    bl.z += 0.5f;
+    br.x += 0.5f;
+    br.z += 0.5f;
+
+    bool allLeft = cone.onLeftSide(focusAngle, tl)
+            && cone.onLeftSide(focusAngle, tr)
+            && cone.onLeftSide(focusAngle, bl)
+            && cone.onLeftSide(focusAngle, br);
+    bool allRight = !cone.onLeftSide(focusAngle, tl)
+            && !cone.onLeftSide(focusAngle, tr)
+            && !cone.onLeftSide(focusAngle, bl)
+            && !cone.onLeftSide(focusAngle, br);
+
+    return !allLeft && !allRight;
 }
 //*********************************************************************************************************************
 bool Space::firstCloser(const SimpleSpaceObject &first, const SimpleSpaceObject &second)
