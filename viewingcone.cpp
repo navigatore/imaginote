@@ -22,6 +22,15 @@ bool ViewingCone::isInside(Coordinates point)
     return planeInequalityTest(point, rightNormal, position);
 }
 //*********************************************************************************************************************
+bool ViewingCone::onLeftSide(Angle relativeAngle, Coordinates point)
+{
+    auto angle = direction + relativeAngle;
+
+    auto normal = planeNormalFromAngle(angle);
+
+    return planeInequalityTest(point, normal, position);
+}
+//*********************************************************************************************************************
 bool ViewingCone::planeInequalityTest(Coordinates tested, Coordinates planeNormal, Coordinates pointOnPlane)
 {
     auto a = planeNormal.x, b = planeNormal.y, c = planeNormal.z;

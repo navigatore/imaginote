@@ -9,6 +9,12 @@ class Angle
 public:
     explicit Angle(float angle = 0.0f) : value(std::fmod(angle, 360.0f)) { }
 
+    Angle operator+(Angle other)
+    {
+        value = std::fmod(std::fmod(value + other.value, 360.0f) + 360.0f, 360.0f);
+        return Angle(value);
+    }
+
     Angle& operator+=(float angle)
     {
         value = std::fmod(std::fmod(value + angle, 360.0f) + 360.0f, 360.0f);

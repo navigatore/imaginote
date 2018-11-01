@@ -44,6 +44,7 @@ void MainWindow::update()
         {
             space.goBackward(1.0f / updateFreq);
         }
+        space.update();
 
         updateListenerPos();
         updateListenerAngle();

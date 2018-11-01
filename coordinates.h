@@ -13,6 +13,11 @@ public:
         return "X: " + std::to_string(x) + "  Y: " + std::to_string(y) + "  Z: " + std::to_string(z);
     }
 
+    bool operator==(const Coordinates &other)
+    {
+        return x == other.x && y == other.y && z == other.z;
+    }
+
     float x, y, z;
 };
 

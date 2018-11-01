@@ -27,6 +27,7 @@ public:
     void backward(float time);
 
     bool isInside(Coordinates point);
+    bool onLeftSide(Angle relativeAngle, Coordinates point);
 
 private:
     static bool planeInequalityTest(Coordinates tested, Coordinates planeNormal, Coordinates pointOnPlane);
