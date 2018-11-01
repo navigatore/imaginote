@@ -26,7 +26,12 @@ public:
     void forward(float time);
     void backward(float time);
 
+    bool isInside(Coordinates point);
+
 private:
+    static bool planeInequalityTest(Coordinates tested, Coordinates planeNormal, Coordinates pointOnPlane);
+    static Coordinates planeNormalFromAngle(Angle angle);
+
     Coordinates position;
     Angle direction, viewAngleX, viewAngleY;
     float maxDistance, moveSpeed, rotateSpeed;

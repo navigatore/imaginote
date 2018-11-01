@@ -6,9 +6,9 @@
 class SimpleSpaceObject
 {
 public:
-    SimpleSpaceObject(Coordinates crd, unsigned int height, bool visible = false) : crd(crd), height(height), visible(visible) { }
+    SimpleSpaceObject(Coordinates crd, unsigned int height, bool visible = false) : crds(crd), height(height), visible(visible) { }
 
-    Coordinates crd;
+    Coordinates crds;
     unsigned int height;
     bool visible;
 };

@@ -12,3 +12,26 @@ void ViewingCone::backward(float time)
     position.z += std::sin(direction.getRad()) * time;
 }
 //*********************************************************************************************************************
+bool ViewingCone::isInside(Coordinates point)
+{
+    auto rightDirection = direction;
+    rightDirection -= viewAngleX.value / 2.0f;
+
+    auto rightNormal = planeNormalFromAngle(rightDirection);
+
+    return planeInequalityTest(point, rightNormal, position);
+}
+//*********************************************************************************************************************
+bool ViewingCone::planeInequalityTest(Coordinates tested, Coordinates planeNormal, Coordinates pointOnPlane)
+{
+    auto a = planeNormal.x, b = planeNormal.y, c = planeNormal.z;
+    auto d = -(planeNormal.x * pointOnPlane.x + planeNormal.y * pointOnPlane.y + planeNormal.z * pointOnPlane.z);
+
+    return a * tested.x + b * tested.y + c * tested.z + d < 0.0f;
+}
+//*********************************************************************************************************************
+Coordinates ViewingCone::planeNormalFromAngle(Angle angle)
+{
+    return Coordinates(std::sin(angle.getRad()), 0.0f, std::cos(angle.getRad()));
+}
+//*********************************************************************************************************************

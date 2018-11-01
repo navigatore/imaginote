@@ -49,7 +49,7 @@ void Space::printVisibleObjects()
     {
         for (auto object : row)
         {
-            if (object.visible)
+            if (object.height > 0 && cone.isInside(object.crds))
             {
                 std::cout << object.height << " ";
             }
