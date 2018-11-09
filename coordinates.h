@@ -1,6 +1,7 @@
 #ifndef COORDINATES_H
 #define COORDINATES_H
 
+#include <limits>
 #include <string>
 
 class Coordinates
@@ -15,7 +16,8 @@ public:
 
     bool operator==(const Coordinates &other)
     {
-        return x == other.x && y == other.y && z == other.z;
+        auto eps = std::numeric_limits<float>::epsilon();
+        return std::abs(x - other.x) < eps && std::abs(y - other.y) < eps && std::abs(z - other.z) < eps;
     }
 
     float x, y, z;

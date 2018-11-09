@@ -47,13 +47,34 @@ void Space::loadFromFile(const char *fname)
     update();
 }
 //*********************************************************************************************************************
+void Space::rotateListenerLeft(float time)
+{
+    cone.rotateLeft(time);
+    printVisibleObjects();
+}
+//*********************************************************************************************************************
+void Space::rotateListenerRight(float time)
+{
+    cone.rotateRight(time);
+    printVisibleObjects();
+}
+//*********************************************************************************************************************
 void Space::printVisibleObjects()
 {
+    auto roundedPos = cone.getPosition();
+    roundedPos.x = std::round(roundedPos.x);
+    roundedPos.y = std::round(roundedPos.y);
+    roundedPos.z = std::round(roundedPos.z);
+
     for (auto row : fields)
     {
         for (auto field : row)
         {
-            if (field == closestField)
+            if (field.crds == roundedPos)
+            {
+                std::cout << "x ";
+            }
+            else if (field == closestField)
             {
                 std::cout << "* ";
             }
@@ -75,11 +96,24 @@ void Space::printVisibleObjects()
     std::cout << std::endl;
 }
 //*********************************************************************************************************************
+void Space::startPlaying()
+{
+    sp = new NewSpacePlayer();
+    sp->sonificateObject(closestField);
+}
+//*********************************************************************************************************************
+void Space::stopPlaying()
+{
+    delete sp;
+    sp = nullptr;
+}
+//*********************************************************************************************************************
 void Space::update()
 {
     setFieldsVisibility();
     setFieldsFocus();
-    findClosestFocusField();
+    updateClosestFocusField();
+    sp->updateListenerPosition(cone.getPosition());
 }
 //*********************************************************************************************************************
 void Space::setFieldsVisibility()
@@ -118,8 +152,9 @@ void Space::setFieldsFocus()
     }
 }
 //*********************************************************************************************************************
-void Space::findClosestFocusField()
+void Space::updateClosestFocusField()
 {
+    auto oldClosest = closestField;
     closestFieldExists = false;
     for (auto row : fields)
     {
@@ -141,6 +176,11 @@ void Space::findClosestFocusField()
                 }
             }
         }
+    }
+
+    if (sp != nullptr && oldClosest != closestField)
+    {
+        sp->sonificateObject(closestField);
     }
 }
 //*********************************************************************************************************************

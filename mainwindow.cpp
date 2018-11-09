@@ -174,14 +174,14 @@ void MainWindow::startStopOneClicked()
         ui->visualAngleSlider->setEnabled(false);
         playing = true;
         ui->startStopButton->clearFocus();
-        sp = new NewSpacePlayer();
+        space.startPlaying();
     }
     else
     {
-        delete sp;
         ui->startStopButton_1->setText("Start");
         ui->visualAngleSlider->setEnabled(true);
         playing = false;
+        space.stopPlaying();
     }
 }
 //*********************************************************************************************************************

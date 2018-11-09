@@ -2,6 +2,7 @@
 #define SPACE_H
 
 #include "coordinates.h"
+#include "newspaceplayer.h"
 #include "simplespaceobject.h"
 #include "viewingcone.h"
 #include <vector>
@@ -11,17 +12,19 @@ class InvalidSpaceFile : public std::exception {};
 class Space
 {
 public:
-    Space() : cone(Angle(90.0f), Angle(180.0f), Angle(180.0f), 1000.0f), closestField(0.0f, 0.0f, 0.0f) { }
+    Space() : cone(Angle(90.0f), Angle(180.0f), Angle(180.0f), 1000.0f), closestField(0.0f, 0.0f, 0.0f), sp(nullptr) { }
     void loadFromFile(const char* fname);
     Coordinates getInitListenerPos();
     std::string getName() { return name; }
 
-    void rotateListenerLeft(float time) { cone.rotateLeft(time); }
-    void rotateListenerRight(float time) { cone.rotateRight(time); }
-    void goForward(float time) { cone.forward(time); }
-    void goBackward(float time) { cone.backward(time); }
+    void rotateListenerLeft(float time);
+    void rotateListenerRight(float time);
+    void goForward(float time) { cone.forward(time); printVisibleObjects(); }
+    void goBackward(float time) { cone.backward(time); printVisibleObjects(); }
     void printVisibleObjects();
 
+    void startPlaying();
+    void stopPlaying();
     void update();
 
     std::string listenerPositionStr() { return cone.getPosition().str(); }
@@ -29,7 +32,7 @@ public:
 
     void setFieldsVisibility();
     void setFieldsFocus();
-    void findClosestFocusField();
+    void updateClosestFocusField();
 
     bool lookingAt(const SimpleSpaceObject &object);
 
@@ -42,6 +45,7 @@ private:
     ViewingCone cone;
     Angle focusAngle;
     SimpleSpaceObject closestField;
+    NewSpacePlayer *sp;
     bool closestFieldExists;
 };
 

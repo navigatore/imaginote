@@ -17,6 +17,11 @@ public:
         return crds == other.crds && height == other.height;
     }
 
+    bool operator!=(const SimpleSpaceObject &other)
+    {
+        return !(*this == other);
+    }
+
     Coordinates crds;
     unsigned int height;
     bool visible, focus;
