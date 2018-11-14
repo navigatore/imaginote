@@ -7,23 +7,33 @@
 class Angle
 {
 public:
-    explicit Angle(float angle = 0.0f) : value(std::fmod(angle, 360.0f)) { }
+    explicit Angle(float angle = 0.0f) : value(mod360(angle)) { }
 
     Angle operator+(Angle other)
     {
-        value = std::fmod(std::fmod(value + other.value, 360.0f) + 360.0f, 360.0f);
-        return Angle(value);
+        mod360(value + other.value);
+        return Angle(value + other.value);
     }
 
     Angle& operator+=(float angle)
     {
-        value = std::fmod(std::fmod(value + angle, 360.0f) + 360.0f, 360.0f);
+        value = mod360(value + angle);
         return *this;
     }
 
     Angle& operator-=(float angle)
     {
         return operator+=(-angle);
+    }
+
+    Angle operator-()
+    {
+        return Angle(-value);
+    }
+
+    static float mod360(float value)
+    {
+        return std::fmod(std::fmod(value, 360.0f) + 360.0f, 360.0f);
     }
 
     float getRad()

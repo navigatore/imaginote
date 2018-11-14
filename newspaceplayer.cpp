@@ -35,9 +35,11 @@ NewSpacePlayer::NewSpacePlayer() : buf_samples_len(sample_rate), buf_size(buf_sa
     std::memset(samples[0], 0, buf_size);
 }
 //*********************************************************************************************************************
-void NewSpacePlayer::updateListenerPosition(Coordinates pos)
+void NewSpacePlayer::updateListenerPosition(Coordinates pos, Angle angle)
 {
     alListener3f(AL_POSITION, pos.x, pos.y, pos.z);
+    float listener_pos[] = { std::cos(angle.getRad()), 0, -std::sin(angle.getRad()), 0, 1, 0 };
+    alListenerfv(AL_ORIENTATION, listener_pos);
 }
 //*********************************************************************************************************************
 void NewSpacePlayer::sonificateObject(SimpleSpaceObject obj)

@@ -15,11 +15,16 @@ void ViewingCone::backward(float time)
 bool ViewingCone::isInside(Coordinates point)
 {
     auto rightDirection = direction;
+    auto leftDirection = direction;
     rightDirection -= viewAngleX.value / 2.0f;
+    leftDirection += viewAngleX.value / 2.0f;
 
     auto rightNormal = planeNormalFromAngle(rightDirection);
+    auto leftNormal = -planeNormalFromAngle(leftDirection);
 
-    return planeInequalityTest(point, rightNormal, position);
+    if (viewAngleX.value < 180.0f)
+        return planeInequalityTest(point, rightNormal, position) && planeInequalityTest(point, leftNormal, position);
+    return planeInequalityTest(point, rightNormal, position) || planeInequalityTest(point, leftNormal, position);
 }
 //*********************************************************************************************************************
 bool ViewingCone::onLeftSide(Angle relativeAngle, Coordinates point)

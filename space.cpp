@@ -113,7 +113,12 @@ void Space::update()
     setFieldsVisibility();
     setFieldsFocus();
     updateClosestFocusField();
-    sp->updateListenerPosition(cone.getPosition());
+    sp->updateListenerPosition(cone.getPosition(), cone.getDirection());
+}
+//*********************************************************************************************************************
+void Space::setAngleX(const Angle &angleX)
+{
+    cone.setAngleX(angleX);
 }
 //*********************************************************************************************************************
 void Space::setFieldsVisibility()

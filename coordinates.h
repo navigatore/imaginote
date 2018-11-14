@@ -20,6 +20,11 @@ public:
         return std::abs(x - other.x) < eps && std::abs(y - other.y) < eps && std::abs(z - other.z) < eps;
     }
 
+    Coordinates operator-()
+    {
+        return Coordinates(-x, -y, -z);
+    }
+
     float x, y, z;
 };
 

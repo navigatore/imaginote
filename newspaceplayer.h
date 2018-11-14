@@ -5,6 +5,7 @@
 #include <AL/alc.h>
 #include <cstdlib>
 #include <vector>
+#include "angle.h"
 #include "simplespaceobject.h"
 
 class NewSpacePlayer
@@ -14,7 +15,7 @@ public:
     ~NewSpacePlayer();
 
     void sonificateObject(SimpleSpaceObject obj);
-    void updateListenerPosition(Coordinates pos);
+    void updateListenerPosition(Coordinates pos, Angle angle);
 
 private:
     static const unsigned int sample_rate = 44100;

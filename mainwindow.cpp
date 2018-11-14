@@ -241,3 +241,7 @@ void MainWindow::printDebugInfo()
     }
 }
 //*********************************************************************************************************************
+void MainWindow::updateAngleX()
+{
+    space.setAngleX(Angle(ui->visualAngleSlider->value()));
+}
