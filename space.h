@@ -12,7 +12,7 @@ class InvalidSpaceFile : public std::exception {};
 class Space
 {
 public:
-    Space(int updateFreq) : updateFreq(updateFreq), cone(Angle(90.0f), Angle(180.0f), Angle(180.0f), 1000.0f), focusAngleVal(0.0f), focusAngleMoveSpeed(30.0f), closestField(0.0f, 0.0f, 0.0f), sp(nullptr) { }
+    Space(int updateFreq);
     void loadFromFile(const char* fname);
     Coordinates getInitListenerPos();
     std::string getName() { return name; }
@@ -42,6 +42,7 @@ public:
 
 private:
     void moveFocusAngle();
+    void playClosestFocusField();
 
     int updateFreq;
     std::string name;
@@ -52,6 +53,7 @@ private:
     SimpleSpaceObject closestField;
     NewSpacePlayer *sp;
     bool closestFieldExists;
+    bool closestFieldChanged;
 };
 
 #endif // SPACE_H

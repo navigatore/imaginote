@@ -3,7 +3,16 @@
 #include <exception>
 #include <fstream>
 #include <iostream>
-
+//*********************************************************************************************************************
+Space::Space(int updateFreq)
+ : updateFreq(updateFreq),
+   cone(Angle(90.0f), Angle(180.0f), Angle(180.0f), 1000.0f),
+   focusAngleVal(0.0f), focusAngleMoveSpeed(30.0f),
+   closestField(0.0f, 0.0f, 0.0f),
+   sp(nullptr),
+   closestFieldExists(false),
+   closestFieldChanged(false)
+{ }
 //*********************************************************************************************************************
 void Space::loadFromFile(const char *fname)
 {
@@ -114,6 +123,7 @@ void Space::update()
     setFieldsVisibility();
     setFieldsFocus();
     updateClosestFocusField();
+    playClosestFocusField();
     sp->updateListenerPosition(cone.getPosition(), cone.getDirection());
 }
 //*********************************************************************************************************************
@@ -161,7 +171,10 @@ void Space::setFieldsFocus()
 void Space::updateClosestFocusField()
 {
     auto oldClosest = closestField;
+    auto existed = closestFieldExists;
+    closestField = SimpleSpaceObject(0.0f, 0.0f, 0.0f);
     closestFieldExists = false;
+
     for (auto row : fields)
     {
         for (auto field : row)
@@ -183,11 +196,22 @@ void Space::updateClosestFocusField()
             }
         }
     }
-
-    if (sp != nullptr && oldClosest != closestField)
+    closestFieldChanged = ((closestFieldExists && !existed) || (!closestFieldExists && existed) || (oldClosest != closestField));
+}
+//*********************************************************************************************************************
+void Space::playClosestFocusField()
+{
+    if (sp != nullptr && closestFieldChanged)
     {
-        sp->sonificateObject(closestField);
-        printVisibleObjects();
+        if (closestFieldExists)
+        {
+            sp->sonificateObject(closestField);
+            printVisibleObjects();
+        }
+        else
+        {
+            sp->stopPlaying();
+        }
     }
 }
 //*********************************************************************************************************************

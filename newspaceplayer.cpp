@@ -44,12 +44,7 @@ void NewSpacePlayer::updateListenerPosition(Coordinates pos, Angle angle)
 //*********************************************************************************************************************
 void NewSpacePlayer::sonificateObject(SimpleSpaceObject obj)
 {
-    if (playing)
-    {
-        alSourceStop(src[0]);
-        alSourcei(src[0], AL_BUFFER, 0);
-    }
-
+    stopPlaying();
     std::memset(samples[0], 0, buf_size);
 
     addSinusoidalTone(samples[0], buf_samples_len, 440.0f / obj.height, 0.8f);
@@ -63,6 +58,16 @@ void NewSpacePlayer::sonificateObject(SimpleSpaceObject obj)
     alSourcePlay(src[0]);
 
     playing = true;
+}
+//*********************************************************************************************************************
+void NewSpacePlayer::stopPlaying()
+{
+    if (playing)
+    {
+        alSourceStop(src[0]);
+        alSourcei(src[0], AL_BUFFER, 0);
+        playing = false;
+    }
 }
 //*********************************************************************************************************************
 void NewSpacePlayer::addSinusoidalTone(int16_t *buf, const unsigned int buf_samples, float freq, float amp)

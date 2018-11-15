@@ -16,6 +16,7 @@ public:
 
     void sonificateObject(SimpleSpaceObject obj);
     void updateListenerPosition(Coordinates pos, Angle angle);
+    void stopPlaying();
 
 private:
     static const unsigned int sample_rate = 44100;
