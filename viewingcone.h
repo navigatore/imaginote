@@ -27,6 +27,7 @@ public:
     void backward(float time);
 
     void setAngleX(const Angle &angleX) { viewAngleX = angleX; }
+    Angle getAngleX() { return viewAngleX; }
 
     bool isInside(Coordinates point);
     bool onLeftSide(Angle relativeAngle, Coordinates point);

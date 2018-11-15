@@ -5,7 +5,11 @@
 #include <QTimer>
 #include <fstream>
 //*********************************************************************************************************************
-MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWindow), spaceLoaded(false)
+MainWindow::MainWindow(QWidget *parent)
+    : QMainWindow(parent),
+    ui(new Ui::MainWindow),
+    space(updateFreq),
+    spaceLoaded(false)
 {
     ui->setupUi(this);
     ui->spaceLabel->setText("No space definition loaded");

@@ -110,6 +110,7 @@ void Space::stopPlaying()
 //*********************************************************************************************************************
 void Space::update()
 {
+    moveFocusAngle();
     setFieldsVisibility();
     setFieldsFocus();
     updateClosestFocusField();
@@ -186,11 +187,14 @@ void Space::updateClosestFocusField()
     if (sp != nullptr && oldClosest != closestField)
     {
         sp->sonificateObject(closestField);
+        printVisibleObjects();
     }
 }
 //*********************************************************************************************************************
 bool Space::lookingAt(const SimpleSpaceObject &object)
 {
+    auto focusAngle = Angle(focusAngleVal);
+
     Coordinates tl(object.crds), tr(object.crds), bl(object.crds), br(object.crds);
     tl.x -= 0.5f;
     tl.z -= 0.5f;
@@ -223,5 +227,12 @@ float Space::distanceSqFrom(SimpleSpaceObject obj)
     auto x_diff = obj.crds.x - cone.getPosition().x;
     auto z_diff = obj.crds.z - cone.getPosition().z;
     return x_diff * x_diff + z_diff * z_diff;
+}
+//*********************************************************************************************************************
+void Space::moveFocusAngle()
+{
+    focusAngleVal += focusAngleMoveSpeed / updateFreq;
+    if (focusAngleVal > cone.getAngleX().value / 2.0f)
+        focusAngleVal = -cone.getAngleX().value / 2.0f;
 }
 //*********************************************************************************************************************
