@@ -11,7 +11,8 @@ Space::Space(int updateFreq)
    closestField(0.0f, 0.0f, 0.0f),
    sp(nullptr),
    closestFieldExists(false),
-   closestFieldChanged(false)
+   closestFieldChanged(false),
+   movingFocusAngle(false)
 { }
 //*********************************************************************************************************************
 void Space::loadFromFile(const char *fname)
@@ -119,7 +120,10 @@ void Space::stopPlaying()
 //*********************************************************************************************************************
 void Space::update()
 {
-    moveFocusAngle();
+    if (movingFocusAngle)
+    {
+        moveFocusAngle();
+    }
     setFieldsVisibility();
     setFieldsFocus();
     updateClosestFocusField();
@@ -127,6 +131,12 @@ void Space::update()
     sp->updateListenerPosition(cone.getPosition(), cone.getDirection());
 }
 //*********************************************************************************************************************
+void Space::toggleMovingFocusAngle()
+{
+    movingFocusAngle = !movingFocusAngle;
+}
+//*********************************************************************************************************************
+
 void Space::setAngleX(const Angle &angleX)
 {
     cone.setAngleX(angleX);

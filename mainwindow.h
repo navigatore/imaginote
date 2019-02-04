@@ -25,7 +25,6 @@ public slots:
     void update();
     void updateAngleX();
 
-
 protected:
     void keyPressEvent(QKeyEvent *ev);
     void keyReleaseEvent(QKeyEvent *ev);

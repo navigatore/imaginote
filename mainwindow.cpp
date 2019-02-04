@@ -8,6 +8,10 @@
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent),
     ui(new Ui::MainWindow),
+    keyLeftPressed(false),
+    keyRightPressed(false),
+    keyDownPressed(false),
+    printKeyPressed(false),
     space(updateFreq),
     spaceLoaded(false)
 {
@@ -15,9 +19,7 @@ MainWindow::MainWindow(QWidget *parent)
     ui->spaceLabel->setText("No space definition loaded");
     ui->presIntervalLineEdit->setText("1");
     playing = false;
-    keyLeftPressed = keyRightPressed = keyUpPressed = keyDownPressed = printKeyPressed = false;
     presIntValid = true;
-
     timer = new QTimer(this);
     connect(timer, SIGNAL(timeout()), this, SLOT(update()));
     timer->start(1000 / updateFreq);
@@ -77,6 +79,10 @@ void MainWindow::keyPressEvent(QKeyEvent *ev)
     else if (ev->key() == Qt::Key_P)
     {
         printKeyPressed = true;
+    }
+    else if (ev->key() == Qt::Key_F)
+    {
+        space.toggleMovingFocusAngle();
     }
 }
 //*********************************************************************************************************************

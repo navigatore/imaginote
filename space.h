@@ -34,6 +34,7 @@ public:
     void setFieldsVisibility();
     void setFieldsFocus();
     void updateClosestFocusField();
+    void toggleMovingFocusAngle();
 
     bool lookingAt(const SimpleSpaceObject &object);
 
@@ -54,6 +55,7 @@ private:
     NewSpacePlayer *sp;
     bool closestFieldExists;
     bool closestFieldChanged;
+    bool movingFocusAngle;
 };
 
 #endif // SPACE_H
