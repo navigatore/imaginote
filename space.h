@@ -41,6 +41,9 @@ public:
     bool firstCloser(const SimpleSpaceObject &first, const SimpleSpaceObject &second);
     float distanceSqFrom(SimpleSpaceObject obj);
 
+    std::vector<std::vector<SimpleSpaceObject>>& getFields() { return fields; }
+    Coordinates getPlayerPosition() { return cone.getPosition(); }
+
 private:
     void moveFocusAngle();
     void playClosestFocusField();

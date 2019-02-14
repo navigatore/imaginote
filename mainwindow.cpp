@@ -23,6 +23,8 @@ MainWindow::MainWindow(QWidget *parent)
     timer = new QTimer(this);
     connect(timer, SIGNAL(timeout()), this, SLOT(update()));
     timer->start(1000 / updateFreq);
+
+  setWindowFlags(Qt::Dialog | Qt::MSWindowsFixedSizeDialogHint);
 }
 //*********************************************************************************************************************
 MainWindow::~MainWindow()
@@ -55,6 +57,7 @@ void MainWindow::update()
         updateListenerPos();
         updateListenerAngle();
         printDebugInfo();
+        ui->mapWidget->update(space.getPlayerPosition());
     }
 }
 //*********************************************************************************************************************
@@ -184,14 +187,17 @@ void MainWindow::startStopOneClicked()
         ui->visualAngleSlider->setEnabled(false);
         playing = true;
         ui->startStopButton->clearFocus();
+        ui->mapWidget->loadMap(space.getFields());
         space.startPlaying();
     }
     else
     {
+        ui->mapWidget->unloadMap();
         ui->startStopButton_1->setText("Start");
         ui->visualAngleSlider->setEnabled(true);
         playing = false;
         space.stopPlaying();
+        adjustSize();
     }
 }
 //*********************************************************************************************************************
@@ -255,3 +261,4 @@ void MainWindow::updateAngleX()
 {
     space.setAngleX(Angle(ui->visualAngleSlider->value()));
 }
+//*********************************************************************************************************************

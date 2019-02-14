@@ -30,7 +30,8 @@ SOURCES += \
     spaceobject.cpp \
     space.cpp \
     newspaceplayer.cpp \
-    viewingcone.cpp
+    viewingcone.cpp \
+    mapwidget.cpp
 
 HEADERS += \
         mainwindow.h \
@@ -42,10 +43,12 @@ HEADERS += \
     angle.h \
     newspaceplayer.h \
     simplespaceobject.h \
-    viewingcone.h
+    viewingcone.h \
+    mapwidget.h
 
 FORMS += \
-        mainwindow.ui
+        mainwindow.ui \
+    mapwidget.ui
 
 LIBS += -lopenal
 

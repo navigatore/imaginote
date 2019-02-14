@@ -15,6 +15,9 @@
   </property>
   <widget class="QWidget" name="centralWidget">
    <layout class="QVBoxLayout" name="verticalLayout_3">
+    <property name="sizeConstraint">
+     <enum>QLayout::SetFixedSize</enum>
+    </property>
     <item>
      <layout class="QHBoxLayout" name="horizontalLayout">
       <item>
@@ -250,17 +253,7 @@
      </widget>
     </item>
     <item>
-     <spacer name="verticalSpacerBottom">
-      <property name="orientation">
-       <enum>Qt::Vertical</enum>
-      </property>
-      <property name="sizeHint" stdset="0">
-       <size>
-        <width>20</width>
-        <height>40</height>
-       </size>
-      </property>
-     </spacer>
+     <widget class="MapWidget" name="mapWidget" native="true"/>
     </item>
     <item>
      <widget class="QLabel" name="listenerPosLabel">
@@ -280,6 +273,14 @@
   </widget>
  </widget>
  <layoutdefault spacing="6" margin="11"/>
+ <customwidgets>
+  <customwidget>
+   <class>MapWidget</class>
+   <extends>QWidget</extends>
+   <header>mapwidget.h</header>
+   <container>1</container>
+  </customwidget>
+ </customwidgets>
  <resources/>
  <connections>
   <connection>
