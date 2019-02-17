@@ -12,7 +12,8 @@ Space::Space(int updateFreq)
    sp(nullptr),
    closestFieldExists(false),
    closestFieldChanged(false),
-   movingFocusAngle(false)
+   movingFocusAngle(false),
+   mapWidget(nullptr)
 { }
 //*********************************************************************************************************************
 void Space::loadFromFile(const char *fname)
@@ -60,13 +61,21 @@ void Space::loadFromFile(const char *fname)
 void Space::rotateListenerLeft(float time)
 {
     cone.rotateLeft(time);
-    printVisibleObjects();
 }
 //*********************************************************************************************************************
 void Space::rotateListenerRight(float time)
 {
     cone.rotateRight(time);
-    printVisibleObjects();
+}
+//*********************************************************************************************************************
+void Space::goForward(float time)
+{
+    cone.forward(time);
+}
+//*********************************************************************************************************************
+void Space::goBackward(float time)
+{
+    cone.backward(time);
 }
 //*********************************************************************************************************************
 void Space::printVisibleObjects()
@@ -108,6 +117,8 @@ void Space::printVisibleObjects()
 //*********************************************************************************************************************
 void Space::startPlaying()
 {
+    mapWidget->loadMap(fields);
+    mapWidget->setAngleX(cone.getAngleX() / 2);
     sp = new NewSpacePlayer();
     sp->sonificateObject(closestField);
 }
@@ -116,6 +127,7 @@ void Space::stopPlaying()
 {
     delete sp;
     sp = nullptr;
+    mapWidget->unloadMap();
 }
 //*********************************************************************************************************************
 void Space::update()
@@ -127,6 +139,13 @@ void Space::update()
     setFieldsVisibility();
     setFieldsFocus();
     updateClosestFocusField();
+    auto closestFieldPtr = closestFieldExists ? &closestField : nullptr;
+    mapWidget->update(
+                cone.getPosition(),
+                cone.getDirection(),
+                cone.getDirection() + Angle(focusAngleVal),
+                closestFieldPtr
+    );
     playClosestFocusField();
     sp->updateListenerPosition(cone.getPosition(), cone.getDirection());
 }
@@ -136,7 +155,6 @@ void Space::toggleMovingFocusAngle()
     movingFocusAngle = !movingFocusAngle;
 }
 //*********************************************************************************************************************
-
 void Space::setAngleX(const Angle &angleX)
 {
     cone.setAngleX(angleX);
@@ -216,7 +234,6 @@ void Space::playClosestFocusField()
         if (closestFieldExists)
         {
             sp->sonificateObject(closestField);
-            printVisibleObjects();
         }
         else
         {

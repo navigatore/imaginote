@@ -5,6 +5,7 @@
 #include "newspaceplayer.h"
 #include "simplespaceobject.h"
 #include "viewingcone.h"
+#include "mapwidget.h"
 #include <vector>
 
 class InvalidSpaceFile : public std::exception {};
@@ -17,10 +18,12 @@ public:
     Coordinates getInitListenerPos();
     std::string getName() { return name; }
 
+    void setMapWidget(MapWidget* mapWidget) { this->mapWidget = mapWidget; }
+
     void rotateListenerLeft(float time);
     void rotateListenerRight(float time);
-    void goForward(float time) { cone.forward(time); printVisibleObjects(); }
-    void goBackward(float time) { cone.backward(time); printVisibleObjects(); }
+    void goForward(float time);
+    void goBackward(float time);
     void printVisibleObjects();
 
     void startPlaying();
@@ -59,6 +62,9 @@ private:
     bool closestFieldExists;
     bool closestFieldChanged;
     bool movingFocusAngle;
+
+public:
+    MapWidget* mapWidget;
 };
 
 #endif // SPACE_H

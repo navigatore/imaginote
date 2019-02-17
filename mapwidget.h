@@ -3,8 +3,8 @@
 
 #include <QWidget>
 #include <QtGui>
-#include <QtCore>
 #include "simplespaceobject.h"
+#include "angle.h"
 
 
 namespace Ui {
@@ -20,19 +20,37 @@ public:
     ~MapWidget();
     void loadMap(const std::vector<std::vector<SimpleSpaceObject>>& map);
     void unloadMap();
-    void update(Coordinates playerCrds);
+    void update(const Coordinates& playerCrds,
+            const Angle& directionAngle,
+            const Angle& focusAngle,
+            const SimpleSpaceObject *closestField
+    );
+    void setAngleX(const Angle& angleX);
+
 
 protected:
     void paintEvent(QPaintEvent*);
 
 private:
-    const unsigned int fieldSize = 30;
-    const unsigned int playerFieldRadius = 2;
+    void paintFocusAngle();
+    void paintCone();
+    void paintPlayerAngle(Angle angle, const QColor& color);
+    void paintClosestField();
+    void paintFields();
+    void setPenColor(const QColor &color);
+    void paintPlayer();
+
+    const int fieldSize = 30;
+    const int playerFieldRadius = 2;
 
     Ui::MapWidget *ui;
+    QPainter *painter;
     std::vector<std::vector<SimpleSpaceObject>> fields;
-    Coordinates playerCrds;
     bool mapLoaded;
+    Angle directionAngle, angleX, focusAngle;
+    const SimpleSpaceObject* closestField;
+    int pxWidth, pxHeight;
+    int playerPxPosX, playerPxPosY;
 };
 
 #endif // MAPWIDGET_H

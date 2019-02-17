@@ -6,8 +6,8 @@
 class SimpleSpaceObject
 {
 public:
-    SimpleSpaceObject(Coordinates crd,
-                      unsigned int height,
+    SimpleSpaceObject(Coordinates crd = Coordinates(),
+                      unsigned int height = 0,
                       bool visible = false,
                       bool focus = false)
         : crds(crd), height(height), visible(visible), focus(focus) { }

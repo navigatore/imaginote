@@ -15,6 +15,16 @@ public:
         return Angle(value + other.value);
     }
 
+    Angle operator-(const Angle& other)
+    {
+        return *this + (-other);
+    }
+
+    Angle operator/(float x) const
+    {
+        return Angle(this->value / x);
+    }
+
     Angle& operator+=(float angle)
     {
         value = mod360(value + angle);
@@ -26,7 +36,7 @@ public:
         return operator+=(-angle);
     }
 
-    Angle operator-()
+    Angle operator-() const
     {
         return Angle(-value);
     }
