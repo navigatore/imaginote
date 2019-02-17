@@ -116,15 +116,15 @@ void MainWindow::keyReleaseEvent(QKeyEvent *ev)
 //*********************************************************************************************************************
 void MainWindow::loadSpaceDef()
 {
+    ui->startStopButton_1->setEnabled(false);
+    spaceLoaded = false;
+
     QString fileName = QFileDialog::getOpenFileName(this,
             "Select space definition file", "",
             "Space definition (*.spc);;All Files (*)");
 
     QByteArray ba = fileName.toLatin1();
     const char *c_str = ba.data();
-
-    ui->startStopButton->setEnabled(false);
-    spaceLoaded = false;
 
     try
     {
@@ -189,12 +189,14 @@ void MainWindow::startStopOneClicked()
         ui->visualAngleSlider->setEnabled(false);
         playing = true;
         ui->startStopButton->clearFocus();
+        ui->loadSpaceButton->setEnabled(false);
         space.startPlaying();
     }
     else
     {
         ui->startStopButton_1->setText("Start");
         ui->visualAngleSlider->setEnabled(true);
+        ui->loadSpaceButton->setEnabled(true);
         playing = false;
         space.stopPlaying();
         adjustSize();

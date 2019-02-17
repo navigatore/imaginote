@@ -50,6 +50,7 @@ public:
 private:
     void moveFocusAngle();
     void playClosestFocusField();
+    void clearState();
 
     int updateFreq;
     std::string name;

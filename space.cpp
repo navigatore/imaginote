@@ -18,8 +18,7 @@ Space::Space(int updateFreq)
 //*********************************************************************************************************************
 void Space::loadFromFile(const char *fname)
 {
-    fields.clear();
-
+    clearState();
     std::ifstream f;
     f.open(fname);
 
@@ -240,6 +239,18 @@ void Space::playClosestFocusField()
             sp->stopPlaying();
         }
     }
+}
+//*********************************************************************************************************************
+void Space::clearState()
+{
+    fields.clear();
+    cone = ViewingCone(Angle(90.0f), Angle(180.0f), Angle(180.0f), 1000.0f);
+    focusAngleVal = 0.0f;
+    focusAngleMoveSpeed = 30.0f;
+    closestField = SimpleSpaceObject(0.0f, 0.0f, 0.0f);
+    closestFieldExists = false;
+    closestFieldChanged = false;
+    movingFocusAngle = false;
 }
 //*********************************************************************************************************************
 bool Space::lookingAt(const SimpleSpaceObject &object)
