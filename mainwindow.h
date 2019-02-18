@@ -1,56 +1,55 @@
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
+#include <QMainWindow>
 #include "angle.h"
 #include "space.h"
-#include <QMainWindow>
 
 namespace Ui {
 class MainWindow;
 }
 
-class MainWindow : public QMainWindow
-{
-    Q_OBJECT
+class MainWindow : public QMainWindow {
+  Q_OBJECT
 
-public:
-    explicit MainWindow(QWidget *parent = nullptr);
-    ~MainWindow();
+ public:
+  explicit MainWindow(QWidget *parent = nullptr);
+  ~MainWindow();
 
-public slots:
-    void loadSpaceDef();
-    void startStopClicked();
-    void startStopOneClicked();
-    void validatePresInterval(const QString &text);
-    void update();
-    void updateAngleX();
+ public slots:
+  void loadSpaceDef();
+  void startStopClicked();
+  void startStopOneClicked();
+  void validatePresInterval(const QString &text);
+  void update();
+  void updateAngleX();
 
-protected:
-    void keyPressEvent(QKeyEvent *ev);
-    void keyReleaseEvent(QKeyEvent *ev);
+ protected:
+  void keyPressEvent(QKeyEvent *ev);
+  void keyReleaseEvent(QKeyEvent *ev);
 
-private:
-    const int updateFreq = 60;  // 60 Hz
+ private:
+  const int updateFreq = 60;  // 60 Hz
 
-    void tryEnableStartStop();
-    bool is_number(const std::string& s);
-    void updateListenerPos();
-    void updateListenerAngle();
-    void printDebugInfo();
+  void tryEnableStartStop();
+  bool is_number(const std::string &s);
+  void updateListenerPos();
+  void updateListenerAngle();
+  void printDebugInfo();
 
+  Ui::MainWindow *ui;
 
-    Ui::MainWindow *ui;
+  QTimer *timer;
 
-    QTimer *timer;
+  bool playing;
 
-    bool playing;
+  bool keyLeftPressed, keyRightPressed, keyUpPressed, keyDownPressed,
+      printKeyPressed;
 
-    bool keyLeftPressed, keyRightPressed, keyUpPressed, keyDownPressed, printKeyPressed;
+  Space space;
 
-    Space space;
-
-    bool spaceLoaded;
-    bool presIntValid;
+  bool spaceLoaded;
+  bool presIntValid;
 };
 
-#endif // MAINWINDOW_H
+#endif  // MAINWINDOW_H

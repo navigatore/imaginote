@@ -6,100 +6,95 @@
 
 const float pi = static_cast<float>(M_PI);
 
-//*********************************************************************************************************************
-NewSpacePlayer::NewSpacePlayer() : buf_samples_len(sample_rate), buf_size(buf_samples_len * 2), playing(false)
-{
-    // OpenAL initialization
-    device = alcOpenDevice(nullptr);
-    context = alcCreateContext(device, nullptr);
-    alcMakeContextCurrent(context);
+NewSpacePlayer::NewSpacePlayer()
+    : buf_samples_len(sample_rate),
+      buf_size(buf_samples_len * 2),
+      playing(false) {
+  // OpenAL initialization
+  device = alcOpenDevice(nullptr);
+  context = alcCreateContext(device, nullptr);
+  alcMakeContextCurrent(context);
 
-    n = 1;
+  n = 1;
 
-    // sources and buffer initialization
+  // sources and buffer initialization
 
-    src = new ALuint[n];
-    alGenSources(static_cast<int>(n), src);
+  src = new ALuint[n];
+  alGenSources(static_cast<int>(n), src);
 
+  buf = new ALuint[n];
+  alGenBuffers(static_cast<int>(n), buf);
 
-    buf = new ALuint[n];
-    alGenBuffers(static_cast<int>(n), buf);
+  const unsigned int buf_samples_len = static_cast<unsigned int>(sample_rate);
+  const unsigned int buf_size = buf_samples_len * 2;  // 16-bit == 2 bytes
 
-    const unsigned int buf_samples_len = static_cast<unsigned int>(sample_rate);
-    const unsigned int buf_size = buf_samples_len * 2;  // 16-bit == 2 bytes
+  samples.resize(n);
 
-    samples.resize(n);
+  samples[0] = new int16_t[buf_size];
 
-    samples[0] = new int16_t[buf_size];
-
-    std::memset(samples[0], 0, buf_size);
+  std::memset(samples[0], 0, buf_size);
 }
-//*********************************************************************************************************************
-void NewSpacePlayer::updateListenerPosition(Coordinates pos, Angle angle)
-{
-    alListener3f(AL_POSITION, pos.x, pos.y, pos.z);
-    float listener_pos[] = { std::cos(angle.getRad()), 0, -std::sin(angle.getRad()), 0, 1, 0 };
-    alListenerfv(AL_ORIENTATION, listener_pos);
+
+void NewSpacePlayer::updateListenerPosition(Coordinates pos, Angle angle) {
+  alListener3f(AL_POSITION, pos.x, pos.y, pos.z);
+  float listener_pos[] = {
+      std::cos(angle.getRad()), 0, -std::sin(angle.getRad()), 0, 1, 0};
+  alListenerfv(AL_ORIENTATION, listener_pos);
 }
-//*********************************************************************************************************************
-void NewSpacePlayer::sonificateObject(SimpleSpaceObject obj)
-{
-    stopPlaying();
-    std::memset(samples[0], 0, buf_size);
 
-    addSinusoidalTone(samples[0], buf_samples_len, 440.0f / obj.height, 0.8f);
-    alBufferData(buf[0], AL_FORMAT_MONO16, samples[0], static_cast<ALsizei>(buf_size), sample_rate);
+void NewSpacePlayer::sonificateObject(SimpleSpaceObject obj) {
+  stopPlaying();
+  std::memset(samples[0], 0, buf_size);
 
-    alSourcei(src[0], AL_BUFFER, static_cast<ALint>(buf[0]));
-    alSourcei(src[0], AL_LOOPING, 1);
+  addSinusoidalTone(samples[0], buf_samples_len, 440.0f / obj.height, 0.8f);
+  alBufferData(buf[0], AL_FORMAT_MONO16, samples[0],
+               static_cast<ALsizei>(buf_size), sample_rate);
 
-    alSource3f(src[0], AL_POSITION, obj.crds.x, obj.crds.y, obj.crds.z);
+  alSourcei(src[0], AL_BUFFER, static_cast<ALint>(buf[0]));
+  alSourcei(src[0], AL_LOOPING, 1);
 
-    alSourcePlay(src[0]);
+  alSource3f(src[0], AL_POSITION, obj.crds.x, obj.crds.y, obj.crds.z);
 
-    playing = true;
+  alSourcePlay(src[0]);
+
+  playing = true;
 }
-//*********************************************************************************************************************
-void NewSpacePlayer::stopPlaying()
-{
-    if (playing)
-    {
-        alSourceStop(src[0]);
-        alSourcei(src[0], AL_BUFFER, 0);
-        playing = false;
-    }
+
+void NewSpacePlayer::stopPlaying() {
+  if (playing) {
+    alSourceStop(src[0]);
+    alSourcei(src[0], AL_BUFFER, 0);
+    playing = false;
+  }
 }
-//*********************************************************************************************************************
-void NewSpacePlayer::addSinusoidalTone(int16_t *buf, const unsigned int buf_samples, float freq, float amp)
-{
-    int umax = (1 << 15) - 1;
 
-    for (unsigned int i = 0; i < buf_samples; ++i)
-    {
-        buf[i] += static_cast<int16_t>(umax * amp * std::sin( (2.0f * pi * freq) / sample_rate * i ));
-    }
+void NewSpacePlayer::addSinusoidalTone(int16_t *buf,
+                                       const unsigned int buf_samples,
+                                       float freq, float amp) {
+  int umax = (1 << 15) - 1;
+
+  for (unsigned int i = 0; i < buf_samples; ++i) {
+    buf[i] += static_cast<int16_t>(
+        umax * amp * std::sin((2.0f * pi * freq) / sample_rate * i));
+  }
 }
-//*********************************************************************************************************************
-NewSpacePlayer::~NewSpacePlayer()
-{
-    for (unsigned int i = 0; i < n; ++i)
-    {
-        alSourceStop(src[i]);
-    }
 
-    for (auto ptr : samples)
-    {
-        delete [] ptr;
-    }
+NewSpacePlayer::~NewSpacePlayer() {
+  for (unsigned int i = 0; i < n; ++i) {
+    alSourceStop(src[i]);
+  }
 
-    alDeleteSources(static_cast<int>(n), src);
-    alDeleteBuffers(static_cast<int>(n), buf);
-    delete [] src;
-    delete [] buf;
+  for (auto ptr : samples) {
+    delete[] ptr;
+  }
 
-    alcMakeContextCurrent(nullptr);
-    alcDestroyContext(context);
+  alDeleteSources(static_cast<int>(n), src);
+  alDeleteBuffers(static_cast<int>(n), buf);
+  delete[] src;
+  delete[] buf;
 
-    alcCloseDevice(device);
+  alcMakeContextCurrent(nullptr);
+  alcDestroyContext(context);
+
+  alcCloseDevice(device);
 }
-//*********************************************************************************************************************
