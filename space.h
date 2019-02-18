@@ -51,6 +51,7 @@ class Space {
   void moveFocusAngle();
   void playClosestFocusField();
   void clearState();
+  bool canGoInto(const Coordinates &field) const;
 
   int updateFreq;
   std::string name;

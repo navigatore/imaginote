@@ -1,13 +1,21 @@
 #include "viewingcone.h"
 
-void ViewingCone::forward(float time) {
-  position.x += std::cos(direction.getRad()) * time;
-  position.z -= std::sin(direction.getRad()) * time;
+void ViewingCone::forward(float time) { position = tryForward(time); }
+
+void ViewingCone::backward(float time) { position = tryBackward(time); }
+
+Coordinates ViewingCone::tryForward(float time) {
+  Coordinates newPosition = position;
+  newPosition.x += std::cos(direction.getRad()) * time;
+  newPosition.z -= std::sin(direction.getRad()) * time;
+  return newPosition;
 }
 
-void ViewingCone::backward(float time) {
+Coordinates ViewingCone::tryBackward(float time) {
+  Coordinates newPosition = position;
   position.x -= std::cos(direction.getRad()) * time;
   position.z += std::sin(direction.getRad()) * time;
+  return newPosition;
 }
 
 bool ViewingCone::isInside(Coordinates point) {

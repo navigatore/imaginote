@@ -14,6 +14,14 @@ class SimpleSpaceObject {
 
   bool operator!=(const SimpleSpaceObject &other) { return !(*this == other); }
 
+  bool isInside(const Coordinates &point) const {
+    if (std::abs(point.x - crds.x) < 0.5f &&
+        std::abs(point.z - crds.z) < 0.5f) {
+      return true;
+    }
+    return false;
+  }
+
   Coordinates crds;
   unsigned int height;
   bool visible, focus;

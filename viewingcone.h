@@ -24,6 +24,8 @@ class ViewingCone {
   void rotateRight(float time) { direction -= rotateSpeed * time; }
   void forward(float time);
   void backward(float time);
+  Coordinates tryForward(float time);
+  Coordinates tryBackward(float time);
 
   void setAngleX(const Angle &angleX) { viewAngleX = angleX; }
   Angle getAngleX() { return viewAngleX; }

@@ -54,9 +54,19 @@ void Space::rotateListenerLeft(float time) { cone.rotateLeft(time); }
 
 void Space::rotateListenerRight(float time) { cone.rotateRight(time); }
 
-void Space::goForward(float time) { cone.forward(time); }
+void Space::goForward(float time) {
+  auto futurePosition = cone.tryForward(time);
+  if (canGoInto(futurePosition)) {
+    cone.forward(time);
+  }
+}
 
-void Space::goBackward(float time) { cone.backward(time); }
+void Space::goBackward(float time) {
+  auto futurePosition = cone.tryBackward(time);
+  if (canGoInto(futurePosition)) {
+    cone.backward(time);
+  }
+}
 
 void Space::printVisibleObjects() {
   auto roundedPos = cone.getPosition();
@@ -183,6 +193,17 @@ void Space::clearState() {
   closestFieldExists = false;
   closestFieldChanged = false;
   movingFocusAngle = false;
+}
+
+bool Space::canGoInto(const Coordinates &point) const {
+  for (const auto &row : fields) {
+    for (const auto &field : row) {
+      if (field.height > 0 && field.isInside(point)) {
+        return false;
+      }
+    }
+  }
+  return true;
 }
 
 bool Space::lookingAt(const SimpleSpaceObject &object) {
