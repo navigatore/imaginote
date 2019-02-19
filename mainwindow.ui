@@ -7,17 +7,14 @@
     <x>0</x>
     <y>0</y>
     <width>413</width>
-    <height>462</height>
+    <height>432</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>Imaginote</string>
   </property>
   <widget class="QWidget" name="centralWidget">
-   <layout class="QVBoxLayout" name="verticalLayout_3">
-    <property name="sizeConstraint">
-     <enum>QLayout::SetFixedSize</enum>
-    </property>
+   <layout class="QVBoxLayout" name="verticalLayout_5">
     <item>
      <layout class="QHBoxLayout" name="horizontalLayout">
       <item>
@@ -108,6 +105,65 @@
               </property>
               <property name="text">
                <string>180</string>
+              </property>
+              <property name="alignment">
+               <set>Qt::AlignCenter</set>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </item>
+         </layout>
+        </item>
+        <item>
+         <layout class="QHBoxLayout" name="horizontalLayout_3">
+          <item>
+           <widget class="QLabel" name="distanceLimitLabel">
+            <property name="text">
+             <string>Distance limit</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <layout class="QVBoxLayout" name="verticalLayout_4">
+            <item>
+             <widget class="QSlider" name="distanceLimitSlider">
+              <property name="sizePolicy">
+               <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+                <horstretch>0</horstretch>
+                <verstretch>0</verstretch>
+               </sizepolicy>
+              </property>
+              <property name="maximum">
+               <number>20</number>
+              </property>
+              <property name="value">
+               <number>5</number>
+              </property>
+              <property name="sliderPosition">
+               <number>5</number>
+              </property>
+              <property name="orientation">
+               <enum>Qt::Horizontal</enum>
+              </property>
+              <property name="tickPosition">
+               <enum>QSlider::TicksAbove</enum>
+              </property>
+              <property name="tickInterval">
+               <number>5</number>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QLabel" name="DistanceLimitValueLabel">
+              <property name="sizePolicy">
+               <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+                <horstretch>0</horstretch>
+                <verstretch>0</verstretch>
+               </sizepolicy>
+              </property>
+              <property name="text">
+               <string>5</string>
               </property>
               <property name="alignment">
                <set>Qt::AlignCenter</set>
@@ -306,8 +362,8 @@
    <slot>startStopClicked()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>318</x>
-     <y>324</y>
+     <x>329</x>
+     <y>341</y>
     </hint>
     <hint type="destinationlabel">
      <x>307</x>
@@ -323,7 +379,7 @@
    <hints>
     <hint type="sourcelabel">
      <x>392</x>
-     <y>149</y>
+     <y>159</y>
     </hint>
     <hint type="destinationlabel">
      <x>50</x>
@@ -338,28 +394,12 @@
    <slot>startStopOneClicked()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>225</x>
-     <y>335</y>
+     <x>236</x>
+     <y>343</y>
     </hint>
     <hint type="destinationlabel">
-     <x>404</x>
+     <x>400</x>
      <y>338</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>visualAngleSlider</sender>
-   <signal>valueChanged(int)</signal>
-   <receiver>MainWindow</receiver>
-   <slot>updateAngleX()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>255</x>
-     <y>136</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>368</x>
-     <y>58</y>
     </hint>
    </hints>
   </connection>
@@ -370,12 +410,28 @@
    <slot>setNum(int)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>161</x>
-     <y>145</y>
+     <x>260</x>
+     <y>153</y>
     </hint>
     <hint type="destinationlabel">
-     <x>235</x>
-     <y>172</y>
+     <x>334</x>
+     <y>179</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>distanceLimitSlider</sender>
+   <signal>valueChanged(int)</signal>
+   <receiver>DistanceLimitValueLabel</receiver>
+   <slot>setNum(int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>151</x>
+     <y>205</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>156</x>
+     <y>221</y>
     </hint>
    </hints>
   </connection>
@@ -386,5 +442,6 @@
   <slot>validatePresInterval(QString)</slot>
   <slot>startStopOneClicked()</slot>
   <slot>updateAngleX()</slot>
+  <slot>updateDistanceLimit()</slot>
  </slots>
 </ui>

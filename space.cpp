@@ -93,7 +93,9 @@ void Space::printVisibleObjects() {
   std::cout << std::endl;
 }
 
-void Space::startPlaying() {
+void Space::startPlaying(Angle angleX, float maxDistance) {
+  cone.setAngleX(angleX);
+  cone.setDistanceLimit(maxDistance);
   mapWidget->loadMap(fields);
   mapWidget->setAngleX(cone.getAngleX() / 2);
   sp = new NewSpacePlayer();
@@ -122,8 +124,6 @@ void Space::update() {
 }
 
 void Space::toggleMovingFocusAngle() { movingFocusAngle = !movingFocusAngle; }
-
-void Space::setAngleX(const Angle &angleX) { cone.setAngleX(angleX); }
 
 void Space::setFieldsVisibility() {
   for (auto &row : fields) {
@@ -186,7 +186,7 @@ void Space::playClosestFocusField() {
 
 void Space::clearState() {
   fields.clear();
-  cone = ViewingCone(Angle(90.0f), Angle(180.0f), Angle(180.0f), 1000.0f);
+  cone = ViewingCone(Angle(90.0f), Angle(180.0f), Angle(180.0f), 5.0f);
   focusAngleVal = 0.0f;
   focusAngleMoveSpeed = 30.0f;
   closestField = SimpleSpaceObject(0.0f, 0.0f, 0.0f);

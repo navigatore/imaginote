@@ -143,13 +143,17 @@ void MainWindow::startStopOneClicked() {
   if (!playing) {
     ui->startStopButton_1->setText("Stop");
     ui->visualAngleSlider->setEnabled(false);
+    ui->distanceLimitSlider->setEnabled(false);
     playing = true;
     ui->startStopButton->clearFocus();
     ui->loadSpaceButton->setEnabled(false);
-    space.startPlaying();
+    auto angleX = Angle(ui->visualAngleSlider->value());
+    auto maxDistance = ui->distanceLimitSlider->value();
+    space.startPlaying(angleX, maxDistance);
   } else {
     ui->startStopButton_1->setText("Start");
     ui->visualAngleSlider->setEnabled(true);
+    ui->distanceLimitSlider->setEnabled(true);
     ui->loadSpaceButton->setEnabled(true);
     playing = false;
     space.stopPlaying();
@@ -199,8 +203,4 @@ void MainWindow::printDebugInfo() {
   if (printKeyPressed) {
     space.printVisibleObjects();
   }
-}
-
-void MainWindow::updateAngleX() {
-  space.setAngleX(Angle(ui->visualAngleSlider->value()));
 }

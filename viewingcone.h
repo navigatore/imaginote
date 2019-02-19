@@ -29,6 +29,7 @@ class ViewingCone {
 
   void setAngleX(const Angle &angleX) { viewAngleX = angleX; }
   Angle getAngleX() { return viewAngleX; }
+  void setDistanceLimit(float limit);
 
   bool isInside(Coordinates point);
   bool onLeftSide(Angle relativeAngle, Coordinates point);

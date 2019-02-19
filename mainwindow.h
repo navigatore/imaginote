@@ -22,7 +22,6 @@ class MainWindow : public QMainWindow {
   void startStopOneClicked();
   void validatePresInterval(const QString &text);
   void update();
-  void updateAngleX();
 
  protected:
   void keyPressEvent(QKeyEvent *ev);

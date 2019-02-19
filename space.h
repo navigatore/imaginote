@@ -25,10 +25,11 @@ class Space {
   void goBackward(float time);
   void printVisibleObjects();
 
-  void startPlaying();
+  void startPlaying(Angle angleX, float maxDistance);
   void stopPlaying();
   void update();
   void setAngleX(const Angle &angleX);
+  void setDistanceLimit(float limit);
 
   std::string listenerPositionStr() { return cone.getPosition().str(); }
   std::string listenerDirectionStr() { return cone.getDirection().str(); }

@@ -1,6 +1,7 @@
 #ifndef COORDINATES_H
 #define COORDINATES_H
 
+#include <cmath>
 #include <limits>
 #include <string>
 
@@ -20,6 +21,11 @@ class Coordinates {
   }
 
   Coordinates operator-() { return Coordinates(-x, -y, -z); }
+
+  float distance2d(const Coordinates &other) {
+    return std::sqrt((x - other.x) * (x - other.x) +
+                     (z - other.z) * (z - other.z));
+  }
 
   float x, y, z;
 };

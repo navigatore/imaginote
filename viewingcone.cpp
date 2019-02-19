@@ -18,7 +18,13 @@ Coordinates ViewingCone::tryBackward(float time) {
   return newPosition;
 }
 
+void ViewingCone::setDistanceLimit(float limit) { maxDistance = limit; }
+
 bool ViewingCone::isInside(Coordinates point) {
+  if (position.distance2d(point) - 0.5f > maxDistance) {
+    return false;
+  }
+
   auto rightDirection = direction;
   auto leftDirection = direction;
   rightDirection -= viewAngleX.value / 2.0f;
