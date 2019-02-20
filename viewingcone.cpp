@@ -13,8 +13,8 @@ Coordinates ViewingCone::tryForward(float time) {
 
 Coordinates ViewingCone::tryBackward(float time) {
   Coordinates newPosition = position;
-  position.x -= std::cos(direction.getRad()) * time;
-  position.z += std::sin(direction.getRad()) * time;
+  newPosition.x -= std::cos(direction.getRad()) * time;
+  newPosition.z += std::sin(direction.getRad()) * time;
   return newPosition;
 }
 
