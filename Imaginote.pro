@@ -31,7 +31,12 @@ SOURCES += \
     space.cpp \
     newspaceplayer.cpp \
     viewingcone.cpp \
-    mapwidget.cpp
+    mapwidget.cpp \
+    segment.cpp \
+    line.cpp \
+    coordinates2d.cpp \
+    angle.cpp \
+    nvgmath.cpp
 
 HEADERS += \
         mainwindow.h \
@@ -44,7 +49,11 @@ HEADERS += \
     newspaceplayer.h \
     simplespaceobject.h \
     viewingcone.h \
-    mapwidget.h
+    mapwidget.h \
+    segment.h \
+    line.h \
+    coordinates2d.h \
+    nvgmath.h
 
 FORMS += \
         mainwindow.ui \

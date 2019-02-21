@@ -11,7 +11,6 @@ MainWindow::MainWindow(QWidget *parent)
       keyLeftPressed(false),
       keyRightPressed(false),
       keyDownPressed(false),
-      printKeyPressed(false),
       space(updateFreq),
       spaceLoaded(false) {
   ui->setupUi(this);
@@ -42,11 +41,10 @@ void MainWindow::update() {
     } else if (keyDownPressed) {
       space.goBackward(1.0f / updateFreq);
     }
-    space.update();
+    space.update(1.0f / updateFreq);
 
     updateListenerPos();
     updateListenerAngle();
-    printDebugInfo();
   }
 }
 
@@ -59,8 +57,6 @@ void MainWindow::keyPressEvent(QKeyEvent *ev) {
     keyUpPressed = true;
   } else if (ev->key() == Qt::Key_S) {
     keyDownPressed = true;
-  } else if (ev->key() == Qt::Key_P) {
-    printKeyPressed = true;
   } else if (ev->key() == Qt::Key_F) {
     space.toggleMovingFocusAngle();
   }
@@ -75,8 +71,6 @@ void MainWindow::keyReleaseEvent(QKeyEvent *ev) {
     keyUpPressed = false;
   } else if (ev->key() == Qt::Key_S) {
     keyDownPressed = false;
-  } else if (ev->key() == Qt::Key_P) {
-    printKeyPressed = false;
   }
 }
 
@@ -197,10 +191,4 @@ void MainWindow::updateListenerPos() {
 void MainWindow::updateListenerAngle() {
   ui->listenerAngleLabel->setText(
       ("Listener angle: " + space.listenerDirectionStr()).c_str());
-}
-
-void MainWindow::printDebugInfo() {
-  if (printKeyPressed) {
-    space.printVisibleObjects();
-  }
 }

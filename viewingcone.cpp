@@ -1,27 +1,63 @@
 #include "viewingcone.h"
 
+ViewingCone::ViewingCone(Angle direction, Angle viewAngleX, Angle viewAngleY,
+                         float maxDistance)
+    : direction(direction),
+      focusAngle(90),
+      viewAngleX(viewAngleX),
+      viewAngleY(viewAngleY),
+      maxDistance(maxDistance),
+      moveSpeed(1.0f),
+      rotateSpeed(45.0f),
+      focusAngleMoveSpeed(30.0f) {}
+
 void ViewingCone::forward(float time) { position = tryForward(time); }
 
 void ViewingCone::backward(float time) { position = tryBackward(time); }
 
+void ViewingCone::moveFocusAngle(float time) {
+  focusAngle += focusAngleMoveSpeed * time;
+  if (!focusAngle.inRange(direction - viewAngleX / 2,
+                          direction + viewAngleX / 2)) {
+    focusAngle = direction - viewAngleX / 2;
+  }
+}
+
+Coordinates ViewingCone::getPosition() { return position; }
+
+Angle ViewingCone::getDirection() { return direction; }
+
+Angle ViewingCone::getFocusAngle() const { return focusAngle; }
+
 Coordinates ViewingCone::tryForward(float time) {
   Coordinates newPosition = position;
-  newPosition.x += std::cos(direction.getRad()) * time;
-  newPosition.z -= std::sin(direction.getRad()) * time;
+  newPosition.x += moveSpeed * std::cos(direction.getRad()) * time;
+  newPosition.z -= moveSpeed * std::sin(direction.getRad()) * time;
   return newPosition;
 }
 
-Coordinates ViewingCone::tryBackward(float time) {
-  Coordinates newPosition = position;
-  newPosition.x -= std::cos(direction.getRad()) * time;
-  newPosition.z += std::sin(direction.getRad()) * time;
-  return newPosition;
+Coordinates ViewingCone::tryBackward(float time) { return tryForward(-time); }
+
+Angle ViewingCone::getAngleX() { return viewAngleX; }
+
+void ViewingCone::setPosition(Coordinates position) {
+  this->position = position;
 }
+
+void ViewingCone::setAngleX(const Angle &angleX) { viewAngleX = angleX; }
 
 void ViewingCone::setDistanceLimit(float limit) { maxDistance = limit; }
 
+void ViewingCone::rotateLeft(float time) {
+  Angle change(rotateSpeed * time);
+  direction += change;
+  focusAngle += change;
+}
+
+void ViewingCone::rotateRight(float time) { rotateLeft(-time); }
+
 bool ViewingCone::isInside(Coordinates point) {
-  if (position.distance2d(point) - 0.5f > maxDistance) {
+  if (position.distance2d(point) > maxDistance) {
     return false;
   }
 
@@ -48,6 +84,27 @@ bool ViewingCone::onLeftSide(Angle relativeAngle, Coordinates point) {
   return planeInequalityTest(point, normal, position);
 }
 
+bool ViewingCone::lookingAt(const SimpleSpaceObject &obj) const {
+  if (obj.height == 0) {
+    return false;
+  }
+  auto intersectionPts = obj.getIntersectionPts(getFocusSegment());
+  if (intersectionPts.size() == 0) {
+    return false;
+  }
+  auto minDistFromObj = position.to2d().distance(intersectionPts[0]);
+  for (const auto &pt : intersectionPts) {
+    minDistFromObj = std::min(minDistFromObj, position.to2d().distance(pt));
+  }
+
+  if (minDistFromObj < maxDistance) {
+    return true;
+  }
+  return false;
+
+  //  return minDistFromObj < maxDistance;
+}
+
 bool ViewingCone::planeInequalityTest(Coordinates tested,
                                       Coordinates planeNormal,
                                       Coordinates pointOnPlane) {
@@ -60,4 +117,22 @@ bool ViewingCone::planeInequalityTest(Coordinates tested,
 
 Coordinates ViewingCone::planeNormalFromAngle(Angle angle) {
   return Coordinates(std::sin(angle.getRad()), 0.0f, std::cos(angle.getRad()));
+}
+
+Line ViewingCone::getFocusLine() const {
+  auto other_pos = position.to2d();
+  if (focusAngle == Angle(90.0f) || focusAngle == Angle(270.0f)) {
+    other_pos.y += 1.0f;
+  } else {
+    other_pos.x += std::cos(focusAngle.getRad());
+    other_pos.y -= std::sin(focusAngle.getRad());
+  }
+  return Line(position.to2d(), other_pos);
+}
+
+Segment ViewingCone::getFocusSegment() const {
+  auto endPos = position.to2d();
+  endPos.x += maxDistance * std::cos(focusAngle.getRad());
+  endPos.y -= maxDistance * std::sin(focusAngle.getRad());
+  return Segment(position.to2d(), endPos);
 }

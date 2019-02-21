@@ -6,38 +6,31 @@
 
 class Angle {
  public:
-  explicit Angle(float angle = 0.0f) : value(mod360(angle)) {}
+  explicit Angle(float angle = 0.0f);
 
-  Angle operator+(Angle other) {
-    mod360(value + other.value);
-    return Angle(value + other.value);
-  }
+  Angle& operator+=(const Angle& other);
+  Angle& operator+=(float angle);
+  Angle& operator-=(float angle);
 
-  Angle operator-(const Angle& other) { return *this + (-other); }
+  Angle operator-() const;
+  Angle operator+(const Angle& other) const;
+  Angle operator-(const Angle& other) const;
+  Angle operator/(float x) const;
+  Angle operator*(float x) const;
+  bool operator==(const Angle& other) const;
 
-  Angle operator/(float x) const { return Angle(this->value / x); }
+  bool inRange(const Angle& begin, const Angle& end) const;
 
-  Angle operator*(float x) const { return Angle(this->value * x); }
+  float getRad() const;
+  int getQtAngle() const;
+  std::string str() const;
 
-  Angle& operator+=(float angle) {
-    value = mod360(value + angle);
-    return *this;
-  }
-
-  Angle& operator-=(float angle) { return operator+=(-angle); }
-
-  Angle operator-() const { return Angle(-value); }
-
+ private:
   static float mod360(float value) {
     return std::fmod(std::fmod(value, 360.0f) + 360.0f, 360.0f);
   }
 
-  float getRad() { return value * 3.1415f / 180.0f; }
-
-  int getQtAngle() { return static_cast<int>(value * 16); }
-
-  std::string str() { return std::to_string(value) + " deg"; }
-
+ public:  // TODO: remove public access into value
   float value;
 };
 

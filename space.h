@@ -15,9 +15,9 @@ class Space {
   Space(int updateFreq);
   void loadFromFile(const char *fname);
   Coordinates getInitListenerPos();
-  std::string getName() { return name; }
+  std::string getName();
 
-  void setMapWidget(MapWidget *mapWidget) { this->mapWidget = mapWidget; }
+  void setMapWidget(MapWidget *mapWidget);
 
   void rotateListenerLeft(float time);
   void rotateListenerRight(float time);
@@ -27,29 +27,27 @@ class Space {
 
   void startPlaying(Angle angleX, float maxDistance);
   void stopPlaying();
-  void update();
+  void update(float time);
   void setAngleX(const Angle &angleX);
   void setDistanceLimit(float limit);
 
-  std::string listenerPositionStr() { return cone.getPosition().str(); }
-  std::string listenerDirectionStr() { return cone.getDirection().str(); }
+  std::string listenerPositionStr();
+  std::string listenerDirectionStr();
 
   void setFieldsVisibility();
   void setFieldsFocus();
   void updateClosestFocusField();
   void toggleMovingFocusAngle();
 
-  bool lookingAt(const SimpleSpaceObject &object);
-
   bool firstCloser(const SimpleSpaceObject &first,
                    const SimpleSpaceObject &second);
   float distanceSqFrom(SimpleSpaceObject obj);
 
-  std::vector<std::vector<SimpleSpaceObject>> &getFields() { return fields; }
-  Coordinates getPlayerPosition() { return cone.getPosition(); }
+  std::vector<std::vector<SimpleSpaceObject>> &getFields();
+  Coordinates getPlayerPosition();
 
  private:
-  void moveFocusAngle();
+  void moveFocusAngle(float time);
   void playClosestFocusField();
   void clearState();
   bool canGoInto(const Coordinates &field) const;
@@ -58,7 +56,6 @@ class Space {
   std::string name;
   std::vector<std::vector<SimpleSpaceObject>> fields;
   ViewingCone cone;
-  float focusAngleVal;
   float focusAngleMoveSpeed;  // deg/s
   SimpleSpaceObject closestField;
   NewSpacePlayer *sp;

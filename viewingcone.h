@@ -3,45 +3,46 @@
 
 #include "angle.h"
 #include "coordinates.h"
+#include "line.h"
+#include "simplespaceobject.h"
 
 class ViewingCone {
  public:
   ViewingCone(Angle direction, Angle viewAngleX, Angle viewAngleY,
-              float maxDistance)
-      : direction(direction),
-        viewAngleX(viewAngleX),
-        viewAngleY(viewAngleY),
-        maxDistance(maxDistance),
-        moveSpeed(1.0f),
-        rotateSpeed(45.0f) {}
+              float maxDistance);
 
-  void setPosition(Coordinates position) { this->position = position; }
-  Coordinates getPosition() { return position; }
+  void setPosition(Coordinates position);
+  void setAngleX(const Angle &angleX);
+  void setDistanceLimit(float limit);
 
-  Angle getDirection() { return direction; }
-
-  void rotateLeft(float time) { direction += rotateSpeed * time; }
-  void rotateRight(float time) { direction -= rotateSpeed * time; }
+  void rotateLeft(float time);
+  void rotateRight(float time);
   void forward(float time);
   void backward(float time);
+  void moveFocusAngle(float time);
+
+  Coordinates getPosition();
+  Angle getAngleX();
+  Angle getDirection();
+  Angle getFocusAngle() const;
+
   Coordinates tryForward(float time);
   Coordinates tryBackward(float time);
 
-  void setAngleX(const Angle &angleX) { viewAngleX = angleX; }
-  Angle getAngleX() { return viewAngleX; }
-  void setDistanceLimit(float limit);
-
   bool isInside(Coordinates point);
   bool onLeftSide(Angle relativeAngle, Coordinates point);
+  bool lookingAt(const SimpleSpaceObject &obj) const;
 
  private:
   static bool planeInequalityTest(Coordinates tested, Coordinates planeNormal,
                                   Coordinates pointOnPlane);
   static Coordinates planeNormalFromAngle(Angle angle);
+  Line getFocusLine() const;
+  Segment getFocusSegment() const;
 
   Coordinates position;
-  Angle direction, viewAngleX, viewAngleY;
-  float maxDistance, moveSpeed, rotateSpeed;
+  Angle direction, focusAngle, viewAngleX, viewAngleY;
+  float maxDistance, moveSpeed, rotateSpeed, focusAngleMoveSpeed;
 };
 
 #endif  // VIEWINGCONE_H

@@ -4,6 +4,7 @@
 #include <cmath>
 #include <limits>
 #include <string>
+#include "coordinates2d.h"
 
 class Coordinates {
  public:
@@ -22,10 +23,12 @@ class Coordinates {
 
   Coordinates operator-() { return Coordinates(-x, -y, -z); }
 
-  float distance2d(const Coordinates &other) {
+  float distance2d(const Coordinates &other) const {
     return std::sqrt((x - other.x) * (x - other.x) +
                      (z - other.z) * (z - other.z));
   }
+
+  Coordinates2d to2d() const { return Coordinates2d(x, z); }
 
   float x, y, z;
 };

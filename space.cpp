@@ -7,8 +7,6 @@
 Space::Space(int updateFreq)
     : updateFreq(updateFreq),
       cone(Angle(90.0f), Angle(180.0f), Angle(180.0f), 1000.0f),
-      focusAngleVal(0.0f),
-      focusAngleMoveSpeed(30.0f),
       closestField(0.0f, 0.0f, 0.0f),
       sp(nullptr),
       closestFieldExists(false),
@@ -47,8 +45,12 @@ void Space::loadFromFile(const char *fname) {
 
   f.close();
 
-  update();
+  update(0);
 }
+
+std::string Space::getName() { return name; }
+
+void Space::setMapWidget(MapWidget *mapWidget) { this->mapWidget = mapWidget; }
 
 void Space::rotateListenerLeft(float time) { cone.rotateLeft(time); }
 
@@ -68,31 +70,6 @@ void Space::goBackward(float time) {
   }
 }
 
-void Space::printVisibleObjects() {
-  auto roundedPos = cone.getPosition();
-  roundedPos.x = std::round(roundedPos.x);
-  roundedPos.y = std::round(roundedPos.y);
-  roundedPos.z = std::round(roundedPos.z);
-
-  for (auto row : fields) {
-    for (auto field : row) {
-      if (field.crds == roundedPos) {
-        std::cout << "x ";
-      } else if (field == closestField) {
-        std::cout << "* ";
-      } else if (field.focus) {
-        std::cout << "F ";
-      } else if (field.visible) {
-        std::cout << field.height << " ";
-      } else {
-        std::cout << "- ";
-      }
-    }
-    std::cout << std::endl;
-  }
-  std::cout << std::endl;
-}
-
 void Space::startPlaying(Angle angleX, float maxDistance) {
   cone.setAngleX(angleX);
   cone.setDistanceLimit(maxDistance);
@@ -109,39 +86,29 @@ void Space::stopPlaying() {
   mapWidget->unloadMap();
 }
 
-void Space::update() {
+void Space::update(float time) {
   if (movingFocusAngle) {
-    moveFocusAngle();
+    moveFocusAngle(time);
   }
-  setFieldsVisibility();
   setFieldsFocus();
   updateClosestFocusField();
   auto closestFieldPtr = closestFieldExists ? &closestField : nullptr;
   mapWidget->update(cone.getPosition(), cone.getDirection(),
-                    cone.getDirection() + Angle(focusAngleVal),
-                    closestFieldPtr);
+                    cone.getFocusAngle(), closestFieldPtr);
   playClosestFocusField();
   sp->updateListenerPosition(cone.getPosition(), cone.getDirection());
 }
 
-void Space::toggleMovingFocusAngle() { movingFocusAngle = !movingFocusAngle; }
+std::string Space::listenerPositionStr() { return cone.getPosition().str(); }
 
-void Space::setFieldsVisibility() {
-  for (auto &row : fields) {
-    for (auto &field : row) {
-      if (field.height > 0 && cone.isInside(field.crds)) {
-        field.visible = true;
-      } else {
-        field.visible = false;
-      }
-    }
-  }
-}
+std::string Space::listenerDirectionStr() { return cone.getDirection().str(); }
+
+void Space::toggleMovingFocusAngle() { movingFocusAngle = !movingFocusAngle; }
 
 void Space::setFieldsFocus() {
   for (auto &row : fields) {
     for (auto &field : row) {
-      if (field.visible && lookingAt(field)) {
+      if (cone.lookingAt(field)) {
         field.focus = true;
       } else {
         field.focus = false;
@@ -188,7 +155,6 @@ void Space::playClosestFocusField() {
 void Space::clearState() {
   fields.clear();
   cone = ViewingCone(Angle(90.0f), Angle(180.0f), Angle(180.0f), 5.0f);
-  focusAngleVal = 0.0f;
   focusAngleMoveSpeed = 30.0f;
   closestField = SimpleSpaceObject(0.0f, 0.0f, 0.0f);
   closestFieldExists = false;
@@ -207,30 +173,6 @@ bool Space::canGoInto(const Coordinates &point) const {
   return true;
 }
 
-bool Space::lookingAt(const SimpleSpaceObject &object) {
-  auto focusAngle = Angle(focusAngleVal);
-
-  Coordinates tl(object.crds), tr(object.crds), bl(object.crds),
-      br(object.crds);
-  tl.x -= 0.5f;
-  tl.z -= 0.5f;
-  tr.x += 0.5f;
-  tr.z -= 0.5f;
-  bl.x -= 0.5f;
-  bl.z += 0.5f;
-  br.x += 0.5f;
-  br.z += 0.5f;
-
-  bool allLeft =
-      cone.onLeftSide(focusAngle, tl) && cone.onLeftSide(focusAngle, tr) &&
-      cone.onLeftSide(focusAngle, bl) && cone.onLeftSide(focusAngle, br);
-  bool allRight =
-      !cone.onLeftSide(focusAngle, tl) && !cone.onLeftSide(focusAngle, tr) &&
-      !cone.onLeftSide(focusAngle, bl) && !cone.onLeftSide(focusAngle, br);
-
-  return !allLeft && !allRight;
-}
-
 bool Space::firstCloser(const SimpleSpaceObject &first,
                         const SimpleSpaceObject &second) {
   return distanceSqFrom(first) < distanceSqFrom(second);
@@ -242,8 +184,10 @@ float Space::distanceSqFrom(SimpleSpaceObject obj) {
   return x_diff * x_diff + z_diff * z_diff;
 }
 
-void Space::moveFocusAngle() {
-  focusAngleVal += focusAngleMoveSpeed / updateFreq;
-  if (focusAngleVal > cone.getAngleX().value / 2.0f)
-    focusAngleVal = -cone.getAngleX().value / 2.0f;
+std::vector<std::vector<SimpleSpaceObject> > &Space::getFields() {
+  return fields;
 }
+
+Coordinates Space::getPlayerPosition() { return cone.getPosition(); }
+
+void Space::moveFocusAngle(float time) { cone.moveFocusAngle(time); }
