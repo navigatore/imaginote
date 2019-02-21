@@ -17,6 +17,8 @@ class Angle {
 
   Angle operator/(float x) const { return Angle(this->value / x); }
 
+  Angle operator*(float x) const { return Angle(this->value * x); }
+
   Angle& operator+=(float angle) {
     value = mod360(value + angle);
     return *this;
@@ -31,6 +33,8 @@ class Angle {
   }
 
   float getRad() { return value * 3.1415f / 180.0f; }
+
+  int getQtAngle() { return static_cast<int>(value * 16); }
 
   std::string str() { return std::to_string(value) + " deg"; }
 

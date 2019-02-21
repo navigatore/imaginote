@@ -21,18 +21,19 @@ class MapWidget : public QWidget {
   void update(const Coordinates& playerCrds, const Angle& directionAngle,
               const Angle& focusAngle, const SimpleSpaceObject* closestField);
   void setAngleX(const Angle& angleX);
+  void setDistanceLimit(float limit);
 
  protected:
   void paintEvent(QPaintEvent*);
 
  private:
   void paintFocusAngle();
-  void paintCone();
   void paintPlayerAngle(Angle angle, const QColor& color);
   void paintClosestField();
   void paintFields();
   void setPenColor(const QColor& color);
   void paintPlayer();
+  void paintDistanceLimitArc();
 
   const int fieldSize = 30;
   const int playerFieldRadius = 2;
@@ -42,6 +43,7 @@ class MapWidget : public QWidget {
   std::vector<std::vector<SimpleSpaceObject>> fields;
   bool mapLoaded;
   Angle directionAngle, angleX, focusAngle;
+  float distanceLimit;
   const SimpleSpaceObject* closestField;
   int pxWidth, pxHeight;
   int playerPxPosX, playerPxPosY;

@@ -7,6 +7,7 @@ MapWidget::MapWidget(QWidget* parent)
       ui(new Ui::MapWidget),
       painter(nullptr),
       mapLoaded(false),
+      distanceLimit(0),
       closestField(nullptr),
       pxWidth(0),
       pxHeight(0) {
@@ -71,27 +72,31 @@ void MapWidget::paintPlayer() {
   painter->drawRect(playerBeginX, playerBeginY, size, size);
 }
 
+void MapWidget::paintDistanceLimitArc() {
+  auto distanceLimitRadiusPx = static_cast<int>(fieldSize * distanceLimit);
+  setPenColor(QColor(0, 255, 0));
+  painter->drawPie(playerPxPosX - distanceLimitRadiusPx,
+                   playerPxPosY - distanceLimitRadiusPx,
+                   2 * distanceLimitRadiusPx, 2 * distanceLimitRadiusPx,
+                   (directionAngle - angleX).getQtAngle(),
+                   (angleX * 2.0f).getQtAngle());
+}
+
 void MapWidget::paintEvent(QPaintEvent*) {
   if (mapLoaded) {
     QPainter painter(this);
     this->painter = &painter;
-    paintCone();
     paintFocusAngle();
     paintClosestField();
     paintFields();
     paintPlayer();
+    paintDistanceLimitArc();
     this->painter = nullptr;
   }
 }
 
 void MapWidget::paintFocusAngle() {
   paintPlayerAngle(focusAngle, QColor(255, 0, 0));
-}
-
-void MapWidget::paintCone() {
-  auto color = QColor(0, 255, 0);
-  paintPlayerAngle(directionAngle - angleX, color);
-  paintPlayerAngle(directionAngle + angleX, color);
 }
 
 void MapWidget::paintPlayerAngle(Angle angle, const QColor& color) {
@@ -117,3 +122,5 @@ void MapWidget::paintClosestField() {
 }
 
 void MapWidget::setAngleX(const Angle& angleX) { this->angleX = angleX; }
+
+void MapWidget::setDistanceLimit(float limit) { distanceLimit = limit; }

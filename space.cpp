@@ -97,7 +97,8 @@ void Space::startPlaying(Angle angleX, float maxDistance) {
   cone.setAngleX(angleX);
   cone.setDistanceLimit(maxDistance);
   mapWidget->loadMap(fields);
-  mapWidget->setAngleX(cone.getAngleX() / 2);
+  mapWidget->setAngleX(angleX / 2);
+  mapWidget->setDistanceLimit(maxDistance);
   sp = new NewSpacePlayer();
   sp->sonificateObject(closestField);
 }
