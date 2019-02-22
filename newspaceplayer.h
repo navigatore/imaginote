@@ -13,8 +13,10 @@ class NewSpacePlayer {
   NewSpacePlayer();
   ~NewSpacePlayer();
 
-  void sonificateObject(SimpleSpaceObject obj);
-  void updateListenerPosition(Coordinates pos, Angle angle);
+  void setSonificationObject(const SimpleSpaceObject &obj);
+  void updateListenerPosition(const Coordinates &pos, const Angle &angle);
+  void updateSonifiedPointPosition(const Coordinates2d &pos);
+  void startPlaying();
   void stopPlaying();
 
  private:

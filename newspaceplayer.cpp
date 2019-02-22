@@ -35,29 +35,34 @@ NewSpacePlayer::NewSpacePlayer()
   std::memset(samples[0], 0, buf_size);
 }
 
-void NewSpacePlayer::updateListenerPosition(Coordinates pos, Angle angle) {
+void NewSpacePlayer::updateListenerPosition(const Coordinates &pos,
+                                            const Angle &angle) {
   alListener3f(AL_POSITION, pos.x, pos.y, pos.z);
   float listener_pos[] = {
       std::cos(angle.getRad()), 0, -std::sin(angle.getRad()), 0, 1, 0};
   alListenerfv(AL_ORIENTATION, listener_pos);
 }
 
-void NewSpacePlayer::sonificateObject(SimpleSpaceObject obj) {
-  stopPlaying();
-  std::memset(samples[0], 0, buf_size);
+void NewSpacePlayer::updateSonifiedPointPosition(const Coordinates2d &pos) {
+  alSource3f(src[0], AL_POSITION, pos.x, 0, pos.y);
+}
 
+void NewSpacePlayer::startPlaying() {
+  if (!playing) {
+    alSourcei(src[0], AL_BUFFER, static_cast<ALint>(buf[0]));
+    alSourcei(src[0], AL_LOOPING, 1);
+    alSourcePlay(src[0]);
+    playing = true;
+  }
+}
+
+void NewSpacePlayer::setSonificationObject(const SimpleSpaceObject &obj) {
+  std::memset(samples[0], 0, buf_size);
   addSinusoidalTone(samples[0], buf_samples_len, 440.0f / obj.height, 0.8f);
+  stopPlaying();
   alBufferData(buf[0], AL_FORMAT_MONO16, samples[0],
                static_cast<ALsizei>(buf_size), sample_rate);
-
-  alSourcei(src[0], AL_BUFFER, static_cast<ALint>(buf[0]));
-  alSourcei(src[0], AL_LOOPING, 1);
-
-  alSource3f(src[0], AL_POSITION, obj.crds.x, obj.crds.y, obj.crds.z);
-
-  alSourcePlay(src[0]);
-
-  playing = true;
+  startPlaying();
 }
 
 void NewSpacePlayer::stopPlaying() {

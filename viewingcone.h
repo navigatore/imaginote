@@ -22,6 +22,7 @@ class ViewingCone {
   void moveFocusAngle(float time);
 
   Coordinates getPosition();
+  Coordinates2d getFocusPointPosition(const SimpleSpaceObject &obj) const;
   Angle getAngleX();
   Angle getDirection();
   Angle getFocusAngle() const;
@@ -39,6 +40,8 @@ class ViewingCone {
   static Coordinates planeNormalFromAngle(Angle angle);
   Line getFocusLine() const;
   Segment getFocusSegment() const;
+  Coordinates2d closestIntersectionPoint(
+      const std::vector<Coordinates2d> &interPoints) const;
 
   Coordinates position;
   Angle direction, focusAngle, viewAngleX, viewAngleY;

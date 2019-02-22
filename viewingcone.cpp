@@ -1,4 +1,5 @@
 #include "viewingcone.h"
+#include <stdexcept>
 
 ViewingCone::ViewingCone(Angle direction, Angle viewAngleX, Angle viewAngleY,
                          float maxDistance)
@@ -24,6 +25,16 @@ void ViewingCone::moveFocusAngle(float time) {
 }
 
 Coordinates ViewingCone::getPosition() { return position; }
+
+Coordinates2d ViewingCone::getFocusPointPosition(
+    const SimpleSpaceObject &obj) const {
+  if (!lookingAt(obj)) {
+    throw std::runtime_error(
+        "Cannot get focus point position from an object which is not in focus");
+  }
+  auto intersectionPts(obj.getIntersectionPts(getFocusSegment()));
+  return closestIntersectionPoint(intersectionPts);
+}
 
 Angle ViewingCone::getDirection() { return direction; }
 
@@ -92,17 +103,8 @@ bool ViewingCone::lookingAt(const SimpleSpaceObject &obj) const {
   if (intersectionPts.size() == 0) {
     return false;
   }
-  auto minDistFromObj = position.to2d().distance(intersectionPts[0]);
-  for (const auto &pt : intersectionPts) {
-    minDistFromObj = std::min(minDistFromObj, position.to2d().distance(pt));
-  }
-
-  if (minDistFromObj < maxDistance) {
-    return true;
-  }
-  return false;
-
-  //  return minDistFromObj < maxDistance;
+  return position.to2d().distance(closestIntersectionPoint(intersectionPts)) <
+         maxDistance;
 }
 
 bool ViewingCone::planeInequalityTest(Coordinates tested,
@@ -135,4 +137,22 @@ Segment ViewingCone::getFocusSegment() const {
   endPos.x += maxDistance * std::cos(focusAngle.getRad());
   endPos.y -= maxDistance * std::sin(focusAngle.getRad());
   return Segment(position.to2d(), endPos);
+}
+
+Coordinates2d ViewingCone::closestIntersectionPoint(
+    const std::vector<Coordinates2d> &interPoints) const {
+  if (interPoints.size() == 0) {
+    throw std::runtime_error(
+        "Cannot return closest point if there is no point in the vector");
+  }
+  auto min_dist = position.to2d().distance(interPoints[0]);
+  Coordinates2d closest(interPoints[0]);
+  for (const auto &pt : interPoints) {
+    auto current_distance(position.to2d().distance(pt));
+    if (current_distance < min_dist) {
+      closest = pt;
+      min_dist = current_distance;
+    }
+  }
+  return closest;
 }

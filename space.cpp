@@ -44,8 +44,6 @@ void Space::loadFromFile(const char *fname) {
   // TODO: Check, if EOF
 
   f.close();
-
-  update(0);
 }
 
 std::string Space::getName() { return name; }
@@ -77,7 +75,7 @@ void Space::startPlaying(Angle angleX, float maxDistance) {
   mapWidget->setAngleX(angleX / 2);
   mapWidget->setDistanceLimit(maxDistance);
   sp = new NewSpacePlayer();
-  sp->sonificateObject(closestField);
+  update(0);
 }
 
 void Space::stopPlaying() {
@@ -143,9 +141,13 @@ void Space::updateClosestFocusField() {
 }
 
 void Space::playClosestFocusField() {
-  if (sp != nullptr && closestFieldChanged) {
+  if (sp != nullptr) {
     if (closestFieldExists) {
-      sp->sonificateObject(closestField);
+      if (closestFieldChanged) {
+        sp->setSonificationObject(closestField);
+      }
+      sp->updateSonifiedPointPosition(cone.getFocusPointPosition(closestField));
+      sp->startPlaying();
     } else {
       sp->stopPlaying();
     }
