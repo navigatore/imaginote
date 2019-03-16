@@ -36,7 +36,9 @@ SOURCES += \
     line.cpp \
     coordinates2d.cpp \
     angle.cpp \
-    nvgmath.cpp
+    nvgmath.cpp \
+    genericspaceplayer.cpp \
+    sonarspaceplayer.cpp
 
 HEADERS += \
         mainwindow.h \
@@ -53,7 +55,9 @@ HEADERS += \
     segment.h \
     line.h \
     coordinates2d.h \
-    nvgmath.h
+    nvgmath.h \
+    genericspaceplayer.h \
+    sonarspaceplayer.h
 
 FORMS += \
         mainwindow.ui \

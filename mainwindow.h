@@ -20,6 +20,7 @@ class MainWindow : public QMainWindow {
   void loadSpaceDef();
   void startStopClicked();
   void startStopOneClicked();
+  void startSonarClicked();
   void validatePresInterval(const QString &text);
   void update();
 
@@ -36,6 +37,8 @@ class MainWindow : public QMainWindow {
   void updateListenerAngle();
   void printDebugInfo();
 
+  void startClicked(GenericSpacePlayer *sp);
+
   Ui::MainWindow *ui;
 
   QTimer *timer;
@@ -48,6 +51,7 @@ class MainWindow : public QMainWindow {
 
   bool spaceLoaded;
   bool presIntValid;
+  void stopClicked();
 };
 
 #endif  // MAINWINDOW_H

@@ -3,6 +3,7 @@
 #include <QKeyEvent>
 #include <QTimer>
 #include <fstream>
+#include "sonarspaceplayer.h"
 #include "ui_mainwindow.h"
 
 MainWindow::MainWindow(QWidget *parent)
@@ -76,6 +77,7 @@ void MainWindow::keyReleaseEvent(QKeyEvent *ev) {
 
 void MainWindow::loadSpaceDef() {
   ui->startStopButton_1->setEnabled(false);
+  ui->startStopButton_2->setEnabled(false);
   spaceLoaded = false;
 
   QString fileName =
@@ -136,22 +138,40 @@ void MainWindow::startStopClicked() {
 void MainWindow::startStopOneClicked() {
   if (!playing) {
     ui->startStopButton_1->setText("Stop");
-    ui->visualAngleSlider->setEnabled(false);
-    ui->distanceLimitSlider->setEnabled(false);
-    playing = true;
-    ui->startStopButton->clearFocus();
-    ui->loadSpaceButton->setEnabled(false);
-    auto angleX = Angle(ui->visualAngleSlider->value());
-    auto maxDistance = ui->distanceLimitSlider->value();
-    space.startPlaying(angleX, maxDistance);
+    startClicked(new NewSpacePlayer());
   } else {
     ui->startStopButton_1->setText("Start");
-    ui->visualAngleSlider->setEnabled(true);
-    ui->distanceLimitSlider->setEnabled(true);
-    ui->loadSpaceButton->setEnabled(true);
-    playing = false;
-    space.stopPlaying();
-    adjustSize();
+    stopClicked();
+  }
+}
+
+void MainWindow::startClicked(GenericSpacePlayer *sp) {
+  ui->visualAngleSlider->setEnabled(false);
+  ui->distanceLimitSlider->setEnabled(false);
+  playing = true;
+  ui->startStopButton->clearFocus();
+  ui->loadSpaceButton->setEnabled(false);
+  auto angleX = Angle(ui->visualAngleSlider->value());
+  auto maxDistance = ui->distanceLimitSlider->value();
+  space.startPlaying(angleX, maxDistance, sp);
+}
+
+void MainWindow::stopClicked() {
+  ui->visualAngleSlider->setEnabled(true);
+  ui->distanceLimitSlider->setEnabled(true);
+  ui->loadSpaceButton->setEnabled(true);
+  playing = false;
+  space.stopPlaying();
+  adjustSize();
+}
+
+void MainWindow::startSonarClicked() {
+  if (!playing) {
+    ui->startStopButton_2->setText("Stop");
+    startClicked(new SonarSpacePlayer());
+  } else {
+    ui->startStopButton_2->setText("Start");
+    stopClicked();
   }
 }
 
@@ -181,6 +201,7 @@ bool MainWindow::is_number(const std::string &s) {
 void MainWindow::tryEnableStartStop() {
   if (spaceLoaded && presIntValid) ui->startStopButton->setEnabled(true);
   if (spaceLoaded) ui->startStopButton_1->setEnabled(true);
+  if (spaceLoaded) ui->startStopButton_2->setEnabled(true);
 }
 
 void MainWindow::updateListenerPos() {

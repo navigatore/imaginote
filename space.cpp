@@ -68,13 +68,14 @@ void Space::goBackward(float time) {
   }
 }
 
-void Space::startPlaying(Angle angleX, float maxDistance) {
+void Space::startPlaying(Angle angleX, float maxDistance,
+                         GenericSpacePlayer *sp) {
   cone.setAngleX(angleX);
   cone.setDistanceLimit(maxDistance);
   mapWidget->loadMap(fields);
   mapWidget->setAngleX(angleX / 2);
   mapWidget->setDistanceLimit(maxDistance);
-  sp = new NewSpacePlayer();
+  this->sp = sp;
   update(0);
 }
 
@@ -94,6 +95,7 @@ void Space::update(float time) {
   mapWidget->update(cone.getPosition(), cone.getDirection(),
                     cone.getFocusAngle(), closestFieldPtr);
   playClosestFocusField();
+  sp->update(time);
   sp->updateListenerPosition(cone.getPosition(), cone.getDirection());
 }
 

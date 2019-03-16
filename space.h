@@ -25,7 +25,7 @@ class Space {
   void goBackward(float time);
   void printVisibleObjects();
 
-  void startPlaying(Angle angleX, float maxDistance);
+  void startPlaying(Angle angleX, float maxDistance, GenericSpacePlayer *sp);
   void stopPlaying();
   void update(float time);
   void setAngleX(const Angle &angleX);
@@ -58,7 +58,7 @@ class Space {
   ViewingCone cone;
   float focusAngleMoveSpeed;  // deg/s
   SimpleSpaceObject closestField;
-  NewSpacePlayer *sp;
+  GenericSpacePlayer *sp;
   bool closestFieldExists;
   bool closestFieldChanged;
   bool movingFocusAngle;
