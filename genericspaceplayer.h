@@ -10,7 +10,7 @@
 
 class GenericSpacePlayer {
  public:
-  GenericSpacePlayer();
+  GenericSpacePlayer(unsigned int samplesLength = sample_rate * 1);
   virtual ~GenericSpacePlayer();
 
   virtual void startPlaying();
@@ -21,14 +21,17 @@ class GenericSpacePlayer {
                                       const Angle &angle);
   virtual void update(float duration);
 
+  static const unsigned int sample_rate = 44100;
+
  protected:
   Coordinates2d listenerPos, sonifiedPointPos;
 
  private:
-  static const unsigned int sample_rate = 44100;
-
   void addSinusoidalTone(int16_t *buf, const unsigned int buf_samples,
                          float freq, float amp);
+
+  static void fadeIn(int16_t *buf, unsigned int buf_samples);
+  static void fadeOut(int16_t *buf, unsigned int buf_samples);
 
   bool playing;
   unsigned int n;

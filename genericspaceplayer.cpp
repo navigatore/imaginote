@@ -7,9 +7,9 @@
 
 const float pi = static_cast<float>(M_PI);
 
-GenericSpacePlayer::GenericSpacePlayer()
+GenericSpacePlayer::GenericSpacePlayer(unsigned int samplesLength)
     : playing(false),
-      buf_samples_len(sample_rate),
+      buf_samples_len(samplesLength),
       buf_size(buf_samples_len * 2),
       curTime(0) {
   // OpenAL initialization
@@ -65,6 +65,8 @@ void GenericSpacePlayer::startPlaying() {
 void GenericSpacePlayer::setSonificationObject(const SimpleSpaceObject &obj) {
   std::memset(samples[0], 0, buf_size);
   addSinusoidalTone(samples[0], buf_samples_len, 440.0f / obj.height, 0.8f);
+  fadeIn(samples[0], sample_rate / 10);
+  fadeOut(samples[0] + buf_samples_len - sample_rate / 10, sample_rate / 10);
   stopPlaying();
   alBufferData(buf[0], AL_FORMAT_MONO16, samples[0],
                static_cast<ALsizei>(buf_size), sample_rate);
@@ -87,6 +89,18 @@ void GenericSpacePlayer::addSinusoidalTone(int16_t *buf,
   for (unsigned int i = 0; i < buf_samples; ++i) {
     buf[i] += static_cast<int16_t>(
         umax * amp * std::sin((2.0f * pi * freq) / sample_rate * i));
+  }
+}
+
+void GenericSpacePlayer::fadeIn(int16_t *buf, unsigned int samples) {
+  for (unsigned int i = 0; i < samples; ++i) {
+    buf[i] *= static_cast<double>(i) / samples;
+  }
+}
+
+void GenericSpacePlayer::fadeOut(int16_t *buf, unsigned int samples) {
+  for (unsigned int i = 0; i < samples; ++i) {
+    buf[i] *= static_cast<double>(samples - i) / samples;
   }
 }
 
