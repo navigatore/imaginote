@@ -63,7 +63,10 @@ FORMS += \
         mainwindow.ui \
     mapwidget.ui
 
-LIBS += -lopenal
-
 CONFIG += \
     c++11
+
+win32: INCLUDEPATH += 'C:\Program Files (x86)\OpenAL 1.1 SDK\include'
+
+unix: LIBS += -lopenal
+win32: LIBS += 'C:\Program Files (x86)\OpenAL 1.1 SDK\libs\Win64\OpenAL32.lib'
