@@ -10,7 +10,7 @@ ViewingCone::ViewingCone(Angle direction, Angle viewAngleX, Angle viewAngleY,
       maxDistance(maxDistance),
       moveSpeed(1.0f),
       rotateSpeed(45.0f),
-      focusAngleMoveSpeed(30.0f) {}
+      focusAngleMoveSpeed(15.0f) {}
 
 void ViewingCone::forward(float time) { position = tryForward(time); }
 
@@ -23,6 +23,8 @@ void ViewingCone::moveFocusAngle(float time) {
     focusAngle = direction - viewAngleX / 2;
   }
 }
+
+void ViewingCone::resetFocusAngle() { focusAngle = direction; }
 
 Coordinates ViewingCone::getPosition() { return position; }
 

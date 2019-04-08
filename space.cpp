@@ -103,7 +103,14 @@ std::string Space::listenerPositionStr() { return cone.getPosition().str(); }
 
 std::string Space::listenerDirectionStr() { return cone.getDirection().str(); }
 
-void Space::toggleMovingFocusAngle() { movingFocusAngle = !movingFocusAngle; }
+void Space::toggleMovingFocusAngle() {
+  if (movingFocusAngle) {
+    movingFocusAngle = false;
+    cone.resetFocusAngle();
+  } else {
+    movingFocusAngle = true;
+  }
+}
 
 void Space::toggleMapWidgetVisibility() {
   mapWidget->setVisible(!mapWidget->isVisible());

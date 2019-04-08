@@ -20,6 +20,7 @@ class ViewingCone {
   void forward(float time);
   void backward(float time);
   void moveFocusAngle(float time);
+  void resetFocusAngle();
 
   Coordinates getPosition();
   Coordinates2d getFocusPointPosition(const SimpleSpaceObject &obj) const;
