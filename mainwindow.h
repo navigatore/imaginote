@@ -18,10 +18,8 @@ class MainWindow : public QMainWindow {
 
  public slots:
   void loadSpaceDef();
-  void startStopClicked();
   void startStopOneClicked();
   void startSonarClicked();
-  void validatePresInterval(const QString &text);
   void update();
 
  protected:

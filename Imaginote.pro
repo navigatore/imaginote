@@ -26,10 +26,7 @@ DEFINES += QT_DEPRECATED_WARNINGS
 SOURCES += \
         main.cpp \
         mainwindow.cpp \
-    spaceplayer.cpp \
-    spaceobject.cpp \
     space.cpp \
-    newspaceplayer.cpp \
     viewingcone.cpp \
     mapwidget.cpp \
     segment.cpp \
@@ -42,9 +39,6 @@ SOURCES += \
 
 HEADERS += \
         mainwindow.h \
-    presentationparams.h \
-    spaceobject.h \
-    spaceplayer.h \
     coordinates.h \
     space.h \
     angle.h \

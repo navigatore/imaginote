@@ -16,7 +16,6 @@ MainWindow::MainWindow(QWidget *parent)
       spaceLoaded(false) {
   ui->setupUi(this);
   ui->spaceLabel->setText("No space definition loaded");
-  ui->presIntervalLineEdit->setText("1");
   playing = false;
   presIntValid = true;
   timer = new QTimer(this);
@@ -98,43 +97,6 @@ void MainWindow::loadSpaceDef() {
   }
 }
 
-void MainWindow::startStopClicked() {
-  if (!playing) {
-    // auto params = PresentationParams();
-    //        params.headAngle = ui->horizontalSlider->value();
-    //        params.presInterval = ui->presIntervalLineEdit->text().toDouble();
-    //        if (ui->waveTypeCombo->currentText() == "Sinusoidal")
-    //            params.waveType = PresentationParams::WaveType::SINUS;
-    //        else if (ui->waveTypeCombo->currentText() == "Triangular")
-    //            params.waveType = PresentationParams::WaveType::TRIANGLE;
-
-    //        if (ui->soundPitchCombo->currentText() == "Distance")
-    //            params.pitchUse = PresentationParams::PitchUse::DISTANCE;
-
-    //        if (ui->soundTimbreCombo->currentText() == "Width / height ratio")
-    //            params.timbreUse = PresentationParams::TimbreUse::WH_RATIO;
-
-    // sp = new SpacePlayer(spaceObjects, params);
-    ui->startStopButton->setText("Stop");
-    ui->presIntervalLineEdit->setEnabled(false);
-    ui->waveTypeCombo->setEnabled(false);
-    ui->soundTimbreCombo->setEnabled(false);
-    ui->soundPitchCombo->setEnabled(false);
-    ui->loadSpaceButton->setEnabled(false);
-    playing = true;
-    ui->startStopButton->clearFocus();
-  } else {
-    // delete sp;
-    ui->startStopButton->setText("Start");
-    ui->presIntervalLineEdit->setEnabled(true);
-    ui->waveTypeCombo->setEnabled(true);
-    ui->soundTimbreCombo->setEnabled(true);
-    ui->soundPitchCombo->setEnabled(true);
-    ui->loadSpaceButton->setEnabled(true);
-    playing = false;
-  }
-}
-
 void MainWindow::startStopOneClicked() {
   if (!playing) {
     ui->startStopButton_1->setText("Stop");
@@ -149,7 +111,6 @@ void MainWindow::startClicked(GenericSpacePlayer *sp) {
   ui->visualAngleSlider->setEnabled(false);
   ui->distanceLimitSlider->setEnabled(false);
   playing = true;
-  ui->startStopButton->clearFocus();
   ui->loadSpaceButton->setEnabled(false);
   auto angleX = Angle(ui->visualAngleSlider->value());
   auto maxDistance = ui->distanceLimitSlider->value();
@@ -175,19 +136,6 @@ void MainWindow::startSonarClicked() {
   }
 }
 
-void MainWindow::validatePresInterval(const QString &text) {
-  if (is_number(text.toStdString()) && std::stod(text.toStdString()) > 0.1 &&
-      std::stod(text.toStdString()) < 10) {
-    presIntValid = true;
-    ui->presIntervalLineEdit->setStyleSheet("");
-  } else {
-    presIntValid = false;
-    ui->presIntervalLineEdit->setStyleSheet("QLineEdit { color: red; }");
-    ui->startStopButton->setEnabled(false);
-  }
-  tryEnableStartStop();
-}
-
 bool MainWindow::is_number(const std::string &s) {
   std::size_t pos;
   try {
@@ -199,7 +147,6 @@ bool MainWindow::is_number(const std::string &s) {
 }
 
 void MainWindow::tryEnableStartStop() {
-  if (spaceLoaded && presIntValid) ui->startStopButton->setEnabled(true);
   if (spaceLoaded) ui->startStopButton_1->setEnabled(true);
   if (spaceLoaded) ui->startStopButton_2->setEnabled(true);
 }
