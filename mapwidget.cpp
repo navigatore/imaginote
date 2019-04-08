@@ -12,6 +12,10 @@ MapWidget::MapWidget(QWidget* parent)
       pxWidth(0),
       pxHeight(0) {
   ui->setupUi(this);
+  QPalette pal = palette();
+  pal.setColor(QPalette::Background, Qt::black);
+  setAutoFillBackground(true);
+  setPalette(pal);
 }
 
 MapWidget::~MapWidget() { delete ui; }
