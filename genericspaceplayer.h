@@ -13,6 +13,9 @@ class GenericSpacePlayer {
   GenericSpacePlayer(unsigned int samplesLength = sample_rate * 1);
   virtual ~GenericSpacePlayer();
 
+  static const unsigned int sample_rate = 44100;
+  static constexpr float volumeMultiplierChangeStep = 0.1f;
+
   virtual void startPlaying();
   virtual void stopPlaying();
   virtual void setSonificationObject(const SimpleSpaceObject &obj);
@@ -20,8 +23,10 @@ class GenericSpacePlayer {
   virtual void updateListenerPosition(const Coordinates &pos,
                                       const Angle &angle);
   virtual void update(float duration);
+  virtual void volumeUp();
+  virtual void volumeDown();
 
-  static const unsigned int sample_rate = 44100;
+  float getVolume() const;
 
  protected:
   Coordinates2d listenerPos, sonifiedPointPos;
@@ -39,6 +44,7 @@ class GenericSpacePlayer {
   const unsigned int buf_size;
 
   float curTime;
+  float volumeMultiplier;
 
   ALuint *src;
   ALuint *buf;

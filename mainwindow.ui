@@ -238,6 +238,13 @@
       </property>
      </widget>
     </item>
+    <item>
+     <widget class="QLabel" name="volumeLabel">
+      <property name="text">
+       <string>Volume: undefined</string>
+      </property>
+     </widget>
+    </item>
    </layout>
   </widget>
  </widget>
@@ -291,8 +298,8 @@
    <slot>setNum(int)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>333</x>
-     <y>99</y>
+     <x>401</x>
+     <y>97</y>
     </hint>
     <hint type="destinationlabel">
      <x>401</x>
@@ -307,8 +314,8 @@
    <slot>setNum(int)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>230</x>
-     <y>155</y>
+     <x>337</x>
+     <y>153</y>
     </hint>
     <hint type="destinationlabel">
      <x>235</x>

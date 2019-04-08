@@ -11,7 +11,8 @@ GenericSpacePlayer::GenericSpacePlayer(unsigned int samplesLength)
     : playing(false),
       buf_samples_len(samplesLength),
       buf_size(buf_samples_len * 2),
-      curTime(0) {
+      curTime(0),
+      volumeMultiplier(1) {
   // OpenAL initialization
   device = alcOpenDevice(nullptr);
   context = alcCreateContext(device, nullptr);
@@ -47,6 +48,21 @@ void GenericSpacePlayer::updateListenerPosition(const Coordinates &pos,
 }
 
 void GenericSpacePlayer::update(float duration) { curTime += duration; }
+
+void GenericSpacePlayer::volumeUp() {
+  volumeMultiplier += volumeMultiplierChangeStep;
+  alListenerf(AL_GAIN, volumeMultiplier);
+}
+
+void GenericSpacePlayer::volumeDown() {
+  volumeMultiplier -= volumeMultiplierChangeStep;
+  if (volumeMultiplier < 0) {
+    volumeMultiplier = 0;
+  }
+  alListenerf(AL_GAIN, volumeMultiplier);
+}
+
+float GenericSpacePlayer::getVolume() const { return volumeMultiplier; }
 
 void GenericSpacePlayer::updateSonifiedPointPosition(const Coordinates2d &pos) {
   sonifiedPointPos = pos;

@@ -33,7 +33,7 @@ class MainWindow : public QMainWindow {
   bool is_number(const std::string &s);
   void updateListenerPos();
   void updateListenerAngle();
-  void printDebugInfo();
+  void updateVolume();
 
   void startClicked(GenericSpacePlayer *sp);
 

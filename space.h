@@ -40,12 +40,16 @@ class Space {
   void toggleMovingFocusAngle();
   void toggleMapWidgetVisibility();
 
+  void volumeUp();
+  void volumeDown();
+
   bool firstCloser(const SimpleSpaceObject &first,
                    const SimpleSpaceObject &second);
   float distanceSqFrom(SimpleSpaceObject obj);
 
   std::vector<std::vector<SimpleSpaceObject>> &getFields();
   Coordinates getPlayerPosition();
+  float getVolume() const;
 
  private:
   void moveFocusAngle(float time);

@@ -45,6 +45,7 @@ void MainWindow::update() {
 
     updateListenerPos();
     updateListenerAngle();
+    updateVolume();
   }
 }
 
@@ -63,6 +64,14 @@ void MainWindow::keyPressEvent(QKeyEvent *ev) {
     space.toggleMapWidgetVisibility();
     ui->listenerPosLabel->setVisible(!ui->listenerPosLabel->isVisible());
     ui->listenerAngleLabel->setVisible(!ui->listenerAngleLabel->isVisible());
+  } else if (ev->key() == Qt::Key_P) {
+    if (playing) {
+      space.volumeUp();
+    }
+  } else if (ev->key() == Qt::Key_L) {
+    if (playing) {
+      space.volumeDown();
+    }
   }
 }
 
@@ -163,4 +172,13 @@ void MainWindow::updateListenerPos() {
 void MainWindow::updateListenerAngle() {
   ui->listenerAngleLabel->setText(
       ("Listener angle: " + space.listenerDirectionStr()).c_str());
+}
+
+void MainWindow::updateVolume() {
+  if (!playing) {
+    ui->volumeLabel->setText("Volume: undefined");
+  } else {
+    ui->volumeLabel->setText(
+        ("Volume: " + std::to_string(space.getVolume())).c_str());
+  }
 }

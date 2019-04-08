@@ -116,6 +116,10 @@ void Space::toggleMapWidgetVisibility() {
   mapWidget->setVisible(!mapWidget->isVisible());
 }
 
+void Space::volumeUp() { sp->volumeUp(); }
+
+void Space::volumeDown() { sp->volumeDown(); }
+
 void Space::setFieldsFocus() {
   for (auto &row : fields) {
     for (auto &field : row) {
@@ -204,5 +208,7 @@ std::vector<std::vector<SimpleSpaceObject> > &Space::getFields() {
 }
 
 Coordinates Space::getPlayerPosition() { return cone.getPosition(); }
+
+float Space::getVolume() const { return sp->getVolume(); }
 
 void Space::moveFocusAngle(float time) { cone.moveFocusAngle(time); }
