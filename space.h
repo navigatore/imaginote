@@ -38,6 +38,7 @@ class Space {
   void setFieldsFocus();
   void updateClosestFocusField();
   void toggleMovingFocusAngle();
+  void toggleMapWidgetVisibility();
 
   bool firstCloser(const SimpleSpaceObject &first,
                    const SimpleSpaceObject &second);

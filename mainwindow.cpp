@@ -59,6 +59,10 @@ void MainWindow::keyPressEvent(QKeyEvent *ev) {
     keyDownPressed = true;
   } else if (ev->key() == Qt::Key_F) {
     space.toggleMovingFocusAngle();
+  } else if (ev->key() == Qt::Key_H) {
+    space.toggleMapWidgetVisibility();
+    ui->listenerPosLabel->setVisible(!ui->listenerPosLabel->isVisible());
+    ui->listenerAngleLabel->setVisible(!ui->listenerAngleLabel->isVisible());
   }
 }
 

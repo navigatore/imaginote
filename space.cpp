@@ -105,6 +105,10 @@ std::string Space::listenerDirectionStr() { return cone.getDirection().str(); }
 
 void Space::toggleMovingFocusAngle() { movingFocusAngle = !movingFocusAngle; }
 
+void Space::toggleMapWidgetVisibility() {
+  mapWidget->setVisible(!mapWidget->isVisible());
+}
+
 void Space::setFieldsFocus() {
   for (auto &row : fields) {
     for (auto &field : row) {
