@@ -28,7 +28,7 @@ bool Line::intersects(const Line &other) const {
 Coordinates2d Line::getIntersectionPoint(const Line &other) const {
   if (!intersects(other)) {
     throw std::runtime_error(
-        "There is not intersection point between perpendicular lines");
+        "There is no intersection point between perpendicular lines");
   }
 
   Coordinates2d inter;

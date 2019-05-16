@@ -83,6 +83,7 @@ void Space::stopPlaying() {
   delete sp;
   sp = nullptr;
   mapWidget->unloadMap();
+  closestFieldExists = false;
 }
 
 void Space::update(float time) {
