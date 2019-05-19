@@ -1,7 +1,7 @@
 #include "sonarspaceplayer.h"
 
 SonarSpacePlayer::SonarSpacePlayer()
-    : GenericSpacePlayer(sample_rate / 2),
+    : GenericSpacePlayer(),
       silence(true),
       playing(false),
       timeToChangeState(oneSignalDuration)

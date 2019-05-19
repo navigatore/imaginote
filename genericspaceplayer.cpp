@@ -1,41 +1,47 @@
 #include "genericspaceplayer.h"
-
 #include <AL/al.h>
 #include <AL/alc.h>
 #include <cmath>
 #include <cstring>
+#include "nvgmath.h"
 
 const float pi = static_cast<float>(M_PI);
 
-GenericSpacePlayer::GenericSpacePlayer(unsigned int samplesLength)
+GenericSpacePlayer::GenericSpacePlayer()
     : playing(false),
-      buf_samples_len(samplesLength),
-      buf_size(buf_samples_len * 2),
+      primaryIdx(0),
       curTime(0),
-      volumeMultiplier(1) {
-  // OpenAL initialization
+      volumeMultiplier(1.0f),
+      primaryGain(0.0f),
+      secondaryGain(0.0f),
+      primaryFrequency(0.0f) {
   device = alcOpenDevice(nullptr);
   context = alcCreateContext(device, nullptr);
   alcMakeContextCurrent(context);
 
-  n = 1;
+  src = new ALuint[2];
+  alGenSources(static_cast<int>(2), src);
 
-  // sources and buffer initialization
+  buf = new ALuint[2];
+  alGenBuffers(static_cast<int>(2), buf);
 
-  src = new ALuint[n];
-  alGenSources(static_cast<int>(n), src);
-
-  buf = new ALuint[n];
-  alGenBuffers(static_cast<int>(n), buf);
-
-  const unsigned int buf_samples_len = static_cast<unsigned int>(sample_rate);
-  const unsigned int buf_size = buf_samples_len * 2;  // 16-bit == 2 bytes
-
-  samples.resize(n);
-
+  samples.resize(2);
   samples[0] = new int16_t[buf_size];
+  samples[1] = new int16_t[buf_size];
 
   std::memset(samples[0], 0, buf_size);
+  std::memset(samples[1], 0, buf_size);
+
+  auto secondaryIdx = (primaryIdx + 1) % 2;
+
+  alBufferData(buf[primaryIdx], AL_FORMAT_MONO16, samples[primaryIdx],
+               static_cast<ALsizei>(buf_size), sample_rate);
+  alBufferData(buf[secondaryIdx], AL_FORMAT_MONO16, samples[primaryIdx],
+               static_cast<ALsizei>(buf_size), sample_rate);
+
+  for (unsigned int i = 0; i < 2; ++i) {
+    startSource(i);
+  }
 }
 
 void GenericSpacePlayer::updateListenerPosition(const Coordinates &pos,
@@ -47,7 +53,19 @@ void GenericSpacePlayer::updateListenerPosition(const Coordinates &pos,
   alListenerfv(AL_ORIENTATION, listener_pos);
 }
 
-void GenericSpacePlayer::update(float duration) { curTime += duration; }
+void GenericSpacePlayer::update(float duration) {
+  curTime += duration;
+  auto gainStep = duration / fadeTime;
+  if (!playing) {
+    primaryGain = std::max(primaryGain - gainStep, 0.0f);
+    secondaryGain = std::max(secondaryGain - gainStep, 0.0f);
+    setGains();
+  } else if (primaryGain != 1.0f) {
+    primaryGain = std::min(primaryGain + gainStep, 1.0f);
+    secondaryGain = std::max(secondaryGain - gainStep, 0.0f);
+    setGains();
+  }
+}
 
 void GenericSpacePlayer::volumeUp() {
   volumeMultiplier += volumeMultiplierChangeStep;
@@ -64,38 +82,54 @@ void GenericSpacePlayer::volumeDown() {
 
 float GenericSpacePlayer::getVolume() const { return volumeMultiplier; }
 
+float GenericSpacePlayer::getFrequency(unsigned int height) {
+  return baseFrequency / height;
+}
+
+void GenericSpacePlayer::stopPrimary() { stopSource(primaryIdx); }
+
+void GenericSpacePlayer::startPrimary() { startSource(primaryIdx); }
+
 void GenericSpacePlayer::updateSonifiedPointPosition(const Coordinates2d &pos) {
   sonifiedPointPos = pos;
-  alSource3f(src[0], AL_POSITION, pos.x, 0, pos.y);
+  alSource3f(src[primaryIdx], AL_POSITION, pos.x, 0, pos.y);
 }
 
-void GenericSpacePlayer::startPlaying() {
-  if (!playing) {
-    alSourcei(src[0], AL_BUFFER, static_cast<ALint>(buf[0]));
-    alSourcei(src[0], AL_LOOPING, 1);
-    alSourcePlay(src[0]);
-    playing = true;
-  }
+void GenericSpacePlayer::startSource(unsigned int idx) {
+  alSourcei(src[idx], AL_BUFFER, static_cast<ALint>(buf[idx]));
+  alSourcei(src[idx], AL_LOOPING, 1);
+  alSourcePlay(src[idx]);
 }
+
+void GenericSpacePlayer::startPlaying() { playing = true; }
 
 void GenericSpacePlayer::setSonificationObject(const SimpleSpaceObject &obj) {
-  std::memset(samples[0], 0, buf_size);
-  addSinusoidalTone(samples[0], buf_samples_len, 440.0f / obj.height, 0.8f);
-  fadeIn(samples[0], sample_rate / 10);
-  fadeOut(samples[0] + buf_samples_len - sample_rate / 10, sample_rate / 10);
-  stopPlaying();
-  alBufferData(buf[0], AL_FORMAT_MONO16, samples[0],
-               static_cast<ALsizei>(buf_size), sample_rate);
-  startPlaying();
+  auto frequency = getFrequency(obj.height);
+  if (nvg::almostEqual(frequency, primaryFrequency)) {
+    return;
+  }
+  primaryFrequency = frequency;
+  primaryIdx = (primaryIdx + 1) % 2;
+  secondaryGain = primaryGain;
+  primaryGain = 0.0f;
+  std::memset(samples[primaryIdx], 0, buf_size);
+  auto period = std::min(static_cast<unsigned int>(sample_rate / frequency),
+                         static_cast<unsigned int>(buf_size));
+  auto lengthInBytes = period * 2;
+
+  addSinusoidalTone(samples[primaryIdx], period, frequency, 0.8f);
+  stopPrimary();
+  alBufferData(buf[primaryIdx], AL_FORMAT_MONO16, samples[primaryIdx],
+               static_cast<ALsizei>(lengthInBytes), sample_rate);
+  startPrimary();
 }
 
-void GenericSpacePlayer::stopPlaying() {
-  if (playing) {
-    alSourceStop(src[0]);
-    alSourcei(src[0], AL_BUFFER, 0);
-    playing = false;
-  }
+void GenericSpacePlayer::stopSource(unsigned int idx) {
+  alSourceStop(src[idx]);
+  alSourcei(src[idx], AL_BUFFER, 0);
 }
+
+void GenericSpacePlayer::stopPlaying() { playing = false; }
 
 void GenericSpacePlayer::addSinusoidalTone(int16_t *buf,
                                            const unsigned int buf_samples,
@@ -108,29 +142,22 @@ void GenericSpacePlayer::addSinusoidalTone(int16_t *buf,
   }
 }
 
-void GenericSpacePlayer::fadeIn(int16_t *buf, unsigned int samples) {
-  for (unsigned int i = 0; i < samples; ++i) {
-    buf[i] *= static_cast<double>(i) / samples;
-  }
-}
-
-void GenericSpacePlayer::fadeOut(int16_t *buf, unsigned int samples) {
-  for (unsigned int i = 0; i < samples; ++i) {
-    buf[i] *= static_cast<double>(samples - i) / samples;
-  }
+void GenericSpacePlayer::setGains() {
+  auto secondaryIdx = (primaryIdx + 1) % 2;
+  alSourcef(src[primaryIdx], AL_GAIN, primaryGain);
+  alSourcef(src[secondaryIdx], AL_GAIN, secondaryGain);
 }
 
 GenericSpacePlayer::~GenericSpacePlayer() {
-  for (unsigned int i = 0; i < n; ++i) {
-    alSourceStop(src[i]);
-  }
+  alSourceStop(src[0]);
+  alSourceStop(src[1]);
 
   for (auto ptr : samples) {
     delete[] ptr;
   }
 
-  alDeleteSources(static_cast<int>(n), src);
-  alDeleteBuffers(static_cast<int>(n), buf);
+  alDeleteSources(static_cast<int>(2), src);
+  alDeleteBuffers(static_cast<int>(2), buf);
   delete[] src;
   delete[] buf;
 

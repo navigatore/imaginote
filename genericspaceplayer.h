@@ -10,11 +10,8 @@
 
 class GenericSpacePlayer {
  public:
-  GenericSpacePlayer(unsigned int samplesLength = sample_rate * 1);
+  GenericSpacePlayer();
   virtual ~GenericSpacePlayer();
-
-  static const unsigned int sample_rate = 44100;
-  static constexpr float volumeMultiplierChangeStep = 0.1f;
 
   virtual void startPlaying();
   virtual void stopPlaying();
@@ -29,23 +26,32 @@ class GenericSpacePlayer {
   float getVolume() const;
 
  protected:
+  static const unsigned int sample_rate = 44100;
+  static const unsigned int buf_size = sample_rate * 2;
+  static constexpr float volumeMultiplierChangeStep = 0.1f;
+  static constexpr float fadeTime = 0.1f;
+  static constexpr float baseFrequency = 440.0f;
+
+  float getFrequency(unsigned int height);
   Coordinates2d listenerPos, sonifiedPointPos;
 
  private:
+  void startPrimary();
+  void stopPrimary();
+  void startSource(unsigned int idx);
+  void stopSource(unsigned int idx);
+
   void addSinusoidalTone(int16_t *buf, const unsigned int buf_samples,
                          float freq, float amp);
-
-  static void fadeIn(int16_t *buf, unsigned int buf_samples);
-  static void fadeOut(int16_t *buf, unsigned int buf_samples);
+  void setGains();
 
   bool playing;
-  unsigned int n;
-  const unsigned int buf_samples_len;
-  const unsigned int buf_size;
+  unsigned int primaryIdx;
 
   float curTime;
   float volumeMultiplier;
-
+  float primaryGain, secondaryGain;
+  float primaryFrequency;
   ALuint *src;
   ALuint *buf;
   std::vector<int16_t *> samples;
