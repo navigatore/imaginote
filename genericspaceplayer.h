@@ -32,7 +32,10 @@ class GenericSpacePlayer {
   static constexpr float fadeTime = 0.1f;
   static constexpr float baseFrequency = 440.0f;
 
-  float getFrequency(unsigned int height);
+  virtual void updateGains(float duration);
+
+  virtual float getFrequency(unsigned int height);
+
   Coordinates2d listenerPos, sonifiedPointPos;
 
  private:
@@ -48,7 +51,6 @@ class GenericSpacePlayer {
   bool playing;
   unsigned int primaryIdx;
 
-  float curTime;
   float volumeMultiplier;
   float primaryGain, secondaryGain;
   float primaryFrequency;

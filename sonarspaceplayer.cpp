@@ -40,4 +40,5 @@ void SonarSpacePlayer::update(float duration) {
       }
     }
   }
+  GenericSpacePlayer::updateGains(duration);
 }

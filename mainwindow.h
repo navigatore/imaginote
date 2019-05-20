@@ -18,8 +18,7 @@ class MainWindow : public QMainWindow {
 
  public slots:
   void loadSpaceDef();
-  void startStopOneClicked();
-  void startSonarClicked();
+  void startStopClicked();
   void update();
 
  protected:

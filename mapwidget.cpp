@@ -16,6 +16,7 @@ MapWidget::MapWidget(QWidget* parent)
   pal.setColor(QPalette::Background, Qt::black);
   setAutoFillBackground(true);
   setPalette(pal);
+  hide();
 }
 
 MapWidget::~MapWidget() { delete ui; }
@@ -38,12 +39,15 @@ void MapWidget::loadMap(
   pxWidth = fieldSize * static_cast<int>(fields[0].size());
   pxHeight = fieldSize * static_cast<int>(fields.size());
   setMinimumSize(pxWidth, pxHeight);
+  setMaximumSize(9999, 9999);
+  show();
 }
 
 void MapWidget::unloadMap() {
   mapLoaded = false;
   setMinimumSize(0, 0);
-  repaint();
+  setMaximumSize(0, 0);
+  hide();
 }
 
 void MapWidget::setPenColor(const QColor& color) {

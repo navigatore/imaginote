@@ -10,7 +10,6 @@ const float pi = static_cast<float>(M_PI);
 GenericSpacePlayer::GenericSpacePlayer()
     : playing(false),
       primaryIdx(0),
-      curTime(0),
       volumeMultiplier(1.0f),
       primaryGain(0.0f),
       secondaryGain(0.0f),
@@ -53,8 +52,9 @@ void GenericSpacePlayer::updateListenerPosition(const Coordinates &pos,
   alListenerfv(AL_ORIENTATION, listener_pos);
 }
 
-void GenericSpacePlayer::update(float duration) {
-  curTime += duration;
+void GenericSpacePlayer::update(float duration) { updateGains(duration); }
+
+void GenericSpacePlayer::updateGains(float duration) {
   auto gainStep = duration / fadeTime;
   if (!playing) {
     primaryGain = std::max(primaryGain - gainStep, 0.0f);

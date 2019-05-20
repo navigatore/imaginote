@@ -88,8 +88,7 @@ void MainWindow::keyReleaseEvent(QKeyEvent *ev) {
 }
 
 void MainWindow::loadSpaceDef() {
-  ui->startStopButton_1->setEnabled(false);
-  ui->startStopButton_2->setEnabled(false);
+  ui->startStopButton->setEnabled(false);
   spaceLoaded = false;
 
   QString fileName =
@@ -110,12 +109,18 @@ void MainWindow::loadSpaceDef() {
   }
 }
 
-void MainWindow::startStopOneClicked() {
+void MainWindow::startStopClicked() {
   if (!playing) {
-    ui->startStopButton_1->setText("Stop");
-    startClicked(new NewSpacePlayer());
+    ui->startStopButton->setText("Stop");
+    GenericSpacePlayer *player = nullptr;
+    if (ui->simpleButton->isChecked()) {
+      player = new NewSpacePlayer();
+    } else if (ui->sonarButton->isChecked()) {
+      player = new SonarSpacePlayer();
+    }
+    startClicked(player);
   } else {
-    ui->startStopButton_1->setText("Start");
+    ui->startStopButton->setText("Start");
     stopClicked();
   }
 }
@@ -128,6 +133,7 @@ void MainWindow::startClicked(GenericSpacePlayer *sp) {
   auto angleX = Angle(ui->visualAngleSlider->value());
   auto maxDistance = ui->distanceLimitSlider->value();
   space.startPlaying(angleX, maxDistance, sp);
+  adjustSize();
 }
 
 void MainWindow::stopClicked() {
@@ -136,17 +142,6 @@ void MainWindow::stopClicked() {
   ui->loadSpaceButton->setEnabled(true);
   playing = false;
   space.stopPlaying();
-  adjustSize();
-}
-
-void MainWindow::startSonarClicked() {
-  if (!playing) {
-    ui->startStopButton_2->setText("Stop");
-    startClicked(new SonarSpacePlayer());
-  } else {
-    ui->startStopButton_2->setText("Start");
-    stopClicked();
-  }
 }
 
 bool MainWindow::is_number(const std::string &s) {
@@ -160,8 +155,7 @@ bool MainWindow::is_number(const std::string &s) {
 }
 
 void MainWindow::tryEnableStartStop() {
-  if (spaceLoaded) ui->startStopButton_1->setEnabled(true);
-  if (spaceLoaded) ui->startStopButton_2->setEnabled(true);
+  if (spaceLoaded) ui->startStopButton->setEnabled(true);
 }
 
 void MainWindow::updateListenerPos() {
