@@ -28,7 +28,7 @@ class Coordinates {
                      (z - other.z) * (z - other.z));
   }
 
-  Coordinates2d to2d() const { return Coordinates2d(x, z); }
+  operator Coordinates2d() const { return Coordinates2d(x, z); }
 
   float x, y, z;
 };

@@ -6,6 +6,7 @@
 #include "mapwidget.h"
 #include "newspaceplayer.h"
 #include "simplespaceobject.h"
+#include "track.h"
 #include "viewingcone.h"
 
 class InvalidSpaceFile : public std::exception {};
@@ -67,6 +68,9 @@ class Space {
   bool closestFieldExists;
   bool closestFieldChanged;
   bool movingFocusAngle;
+
+ public:
+  Track recTrack;
 
  public:
   MapWidget *mapWidget;

@@ -6,6 +6,7 @@ MapWidget::MapWidget(QWidget* parent)
     : QWidget(parent),
       ui(new Ui::MapWidget),
       painter(nullptr),
+      track(nullptr),
       mapLoaded(false),
       distanceLimit(0),
       closestField(nullptr),
@@ -21,11 +22,20 @@ MapWidget::MapWidget(QWidget* parent)
 
 MapWidget::~MapWidget() { delete ui; }
 
+int MapWidget::calcPxPositionX(const Coordinates2d& crds) {
+  return static_cast<int>(fieldSize * (crds.x + 0.5f));
+}
+
+int MapWidget::calcPxPositionY(const Coordinates2d& crds) {
+  return static_cast<int>(fieldSize * (crds.y + 0.5f));
+}
+
 void MapWidget::update(const Coordinates& playerCrds,
                        const Angle& directionAngle, const Angle& focusAngle,
                        const SimpleSpaceObject* closestField) {
-  playerPxPosX = static_cast<int>(fieldSize * (playerCrds.x + 0.5f));
-  playerPxPosY = static_cast<int>(fieldSize * (playerCrds.z + 0.5f));
+  playerPxPosX = calcPxPositionX(playerCrds);
+  playerPxPosY = calcPxPositionY(playerCrds);
+
   this->directionAngle = directionAngle;
   this->focusAngle = focusAngle;
   this->closestField = closestField;
@@ -90,6 +100,21 @@ void MapWidget::paintDistanceLimitArc() {
                    (angleX * 2.0f).getQtAngle());
 }
 
+void MapWidget::paintTrack() {
+  std::optional<std::pair<int, int>> lastCrds;
+  setPenColor(QColor(255, 255, 0));
+  for (auto& pos : track->getPositions()) {
+    auto currCrds = std::make_pair(calcPxPositionX(pos), calcPxPositionY(pos));
+    if (!lastCrds || currCrds != lastCrds) {
+      if (lastCrds) {
+        painter->drawLine(lastCrds->first, lastCrds->second, currCrds.first,
+                          currCrds.second);
+      }
+      lastCrds = currCrds;
+    }
+  }
+}
+
 void MapWidget::paintEvent(QPaintEvent*) {
   if (mapLoaded) {
     QPainter painter(this);
@@ -99,6 +124,7 @@ void MapWidget::paintEvent(QPaintEvent*) {
     paintFields();
     paintPlayer();
     paintDistanceLimitArc();
+    paintTrack();
     this->painter = nullptr;
   }
 }
@@ -132,3 +158,5 @@ void MapWidget::paintClosestField() {
 void MapWidget::setAngleX(const Angle& angleX) { this->angleX = angleX; }
 
 void MapWidget::setDistanceLimit(float limit) { distanceLimit = limit; }
+
+void MapWidget::setTrack(const Track& track) { this->track = &track; }

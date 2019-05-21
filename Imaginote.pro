@@ -27,6 +27,7 @@ SOURCES += \
         main.cpp \
         mainwindow.cpp \
     space.cpp \
+    track.cpp \
     viewingcone.cpp \
     mapwidget.cpp \
     segment.cpp \
@@ -44,6 +45,7 @@ HEADERS += \
     angle.h \
     newspaceplayer.h \
     simplespaceobject.h \
+    track.h \
     viewingcone.h \
     mapwidget.h \
     segment.h \
@@ -58,7 +60,7 @@ FORMS += \
     mapwidget.ui
 
 CONFIG += \
-    c++11
+    c++17
 
 win32: INCLUDEPATH += 'C:\Program Files (x86)\OpenAL 1.1 SDK\include'
 

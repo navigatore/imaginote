@@ -28,7 +28,7 @@ class SimpleSpaceObject {
     std::vector<Coordinates2d> inters;
     std::vector<Segment> walls;
     Coordinates2d tl, tr, bl, br;
-    tl = tr = bl = br = crds.to2d();
+    tl = tr = bl = br = crds;
     tl.x -= 0.5f;
     tl.y -= 0.5f;
     tr.x += 0.5f;

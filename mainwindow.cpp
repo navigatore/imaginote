@@ -2,7 +2,9 @@
 #include <QFileDialog>
 #include <QKeyEvent>
 #include <QTimer>
+#include <chrono>
 #include <fstream>
+#include <thread>
 #include "sonarspaceplayer.h"
 #include "ui_mainwindow.h"
 

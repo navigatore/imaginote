@@ -45,7 +45,7 @@ GenericSpacePlayer::GenericSpacePlayer()
 
 void GenericSpacePlayer::updateListenerPosition(const Coordinates &pos,
                                                 const Angle &angle) {
-  listenerPos = pos.to2d();
+  listenerPos = pos;
   alListener3f(AL_POSITION, pos.x, pos.y, pos.z);
   float listener_pos[] = {
       std::cos(angle.getRad()), 0, -std::sin(angle.getRad()), 0, 1, 0};

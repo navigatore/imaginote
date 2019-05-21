@@ -12,6 +12,7 @@ Space::Space(int updateFreq)
       closestFieldExists(false),
       closestFieldChanged(false),
       movingFocusAngle(false),
+      recTrack(std::chrono::milliseconds(1000 / updateFreq)),
       mapWidget(nullptr) {}
 
 void Space::loadFromFile(const char *fname) {
@@ -48,7 +49,10 @@ void Space::loadFromFile(const char *fname) {
 
 std::string Space::getName() { return name; }
 
-void Space::setMapWidget(MapWidget *mapWidget) { this->mapWidget = mapWidget; }
+void Space::setMapWidget(MapWidget *mapWidget) {
+  this->mapWidget = mapWidget;
+  mapWidget->setTrack(recTrack);
+}
 
 void Space::rotateListenerLeft(float time) { cone.rotateLeft(time); }
 
@@ -87,6 +91,7 @@ void Space::stopPlaying() {
 }
 
 void Space::update(float time) {
+  recTrack.addPosition(cone.getPosition());
   if (movingFocusAngle) {
     moveFocusAngle(time);
   }
@@ -180,6 +185,7 @@ void Space::clearState() {
   closestFieldExists = false;
   closestFieldChanged = false;
   movingFocusAngle = false;
+  recTrack.reset();
 }
 
 bool Space::canGoInto(const Coordinates &point) const {

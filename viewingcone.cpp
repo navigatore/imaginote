@@ -105,8 +105,8 @@ bool ViewingCone::lookingAt(const SimpleSpaceObject &obj) const {
   if (intersectionPts.size() == 0) {
     return false;
   }
-  return position.to2d().distance(closestIntersectionPoint(intersectionPts)) <
-         maxDistance;
+  return Coordinates2d(position).distance(
+             closestIntersectionPoint(intersectionPts)) < maxDistance;
 }
 
 bool ViewingCone::planeInequalityTest(Coordinates tested,
@@ -124,21 +124,21 @@ Coordinates ViewingCone::planeNormalFromAngle(Angle angle) {
 }
 
 Line ViewingCone::getFocusLine() const {
-  auto other_pos = position.to2d();
+  Coordinates2d other_pos = position;
   if (focusAngle == Angle(90.0f) || focusAngle == Angle(270.0f)) {
     other_pos.y += 1.0f;
   } else {
     other_pos.x += std::cos(focusAngle.getRad());
     other_pos.y -= std::sin(focusAngle.getRad());
   }
-  return Line(position.to2d(), other_pos);
+  return Line(position, other_pos);
 }
 
 Segment ViewingCone::getFocusSegment() const {
-  auto endPos = position.to2d();
+  Coordinates2d endPos = position;
   endPos.x += maxDistance * std::cos(focusAngle.getRad());
   endPos.y -= maxDistance * std::sin(focusAngle.getRad());
-  return Segment(position.to2d(), endPos);
+  return Segment(position, endPos);
 }
 
 Coordinates2d ViewingCone::closestIntersectionPoint(
@@ -147,10 +147,10 @@ Coordinates2d ViewingCone::closestIntersectionPoint(
     throw std::runtime_error(
         "Cannot return closest point if there is no point in the vector");
   }
-  auto min_dist = position.to2d().distance(interPoints[0]);
+  auto min_dist = Coordinates2d(position).distance(interPoints[0]);
   Coordinates2d closest(interPoints[0]);
   for (const auto &pt : interPoints) {
-    auto current_distance(position.to2d().distance(pt));
+    auto current_distance(Coordinates2d(position).distance(pt));
     if (current_distance < min_dist) {
       closest = pt;
       min_dist = current_distance;

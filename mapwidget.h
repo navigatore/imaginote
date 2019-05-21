@@ -5,6 +5,7 @@
 #include <QtGui>
 #include "angle.h"
 #include "simplespaceobject.h"
+#include "track.h"
 
 namespace Ui {
 class MapWidget;
@@ -16,12 +17,14 @@ class MapWidget : public QWidget {
  public:
   explicit MapWidget(QWidget* parent = nullptr);
   ~MapWidget();
+
   void loadMap(const std::vector<std::vector<SimpleSpaceObject>>& map);
   void unloadMap();
   void update(const Coordinates& playerCrds, const Angle& directionAngle,
               const Angle& focusAngle, const SimpleSpaceObject* closestField);
   void setAngleX(const Angle& angleX);
   void setDistanceLimit(float limit);
+  void setTrack(const Track& track);
 
  protected:
   void paintEvent(QPaintEvent*);
@@ -34,6 +37,10 @@ class MapWidget : public QWidget {
   void setPenColor(const QColor& color);
   void paintPlayer();
   void paintDistanceLimitArc();
+  void paintTrack();
+
+  int calcPxPositionX(const Coordinates2d& crds);
+  int calcPxPositionY(const Coordinates2d& crds);
 
   const int fieldSize = 30;
   const int playerFieldRadius = 2;
@@ -41,6 +48,7 @@ class MapWidget : public QWidget {
   Ui::MapWidget* ui;
   QPainter* painter;
   std::vector<std::vector<SimpleSpaceObject>> fields;
+  const Track* track;
   bool mapLoaded;
   Angle directionAngle, angleX, focusAngle;
   float distanceLimit;
