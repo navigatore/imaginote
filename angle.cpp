@@ -1,19 +1,18 @@
 #include "angle.h"
 #include "nvgmath.h"
 
-Angle::Angle(float angle) : value(mod360(angle)) {}
+Angle::Angle(float angle) : value(nvg::positiveFmod(angle, fullAngle)) {}
 
 Angle &Angle::operator+=(const Angle &other) { return operator+=(other.value); }
 
 Angle &Angle::operator+=(float angle) {
-  value = mod360(value + angle);
+  value = nvg::positiveFmod(value + angle, fullAngle);
   return *this;
 }
 
 Angle &Angle::operator-=(float angle) { return operator+=(-angle); }
 
 Angle Angle::operator+(const Angle &other) const {
-  mod360(value + other.value);
   return Angle(value + other.value);
 }
 
@@ -34,9 +33,11 @@ bool Angle::inRange(const Angle &begin, const Angle &end) const {
   return value >= begin.value && value < end.value;
 }
 
-float Angle::getRad() const { return value * 3.1415f / 180.0f; }
+float Angle::getRad() const { return nvg::degToRad(value); }
 
-int Angle::getQtAngle() const { return static_cast<int>(value * 16); }
+float Angle::getDeg() const { return value; }
+
+int Angle::getQtAngle() const { return nvg::degToQt(value); }
 
 std::string Angle::str() const { return std::to_string(value) + " deg"; }
 

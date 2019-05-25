@@ -27,8 +27,7 @@ bool Segment::interPointInside(const Coordinates2d &point) const {
   if (moreHorizontal) {
     return (a.x <= point.x && point.x <= b.x) ||
            (b.x <= point.x && point.x <= a.x);
-  } else {
-    return (a.y <= point.y && point.y <= b.y) ||
-           (b.y <= point.y && point.y <= a.y);
   }
+  return (a.y <= point.y && point.y <= b.y) ||
+         (b.y <= point.y && point.y <= a.y);
 }

@@ -34,7 +34,6 @@ SOURCES += \
     line.cpp \
     coordinates2d.cpp \
     angle.cpp \
-    nvgmath.cpp \
     genericspaceplayer.cpp \
     sonarspaceplayer.cpp
 

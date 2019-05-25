@@ -2,9 +2,7 @@
 #include <QFileDialog>
 #include <QKeyEvent>
 #include <QTimer>
-#include <chrono>
 #include <fstream>
-#include <thread>
 #include "sonarspaceplayer.h"
 #include "ui_mainwindow.h"
 
@@ -44,10 +42,14 @@ void MainWindow::update() {
       space.goBackward(1.0f / updateFreq);
     }
     space.update(1.0f / updateFreq);
-
     updateListenerPos();
     updateListenerAngle();
     updateVolume();
+
+    if (space.outOfMap()) {
+      stopClicked();
+      space.setFromBeginning();
+    }
   }
 }
 
@@ -113,35 +115,42 @@ void MainWindow::loadSpaceDef() {
 
 void MainWindow::startStopClicked() {
   if (!playing) {
-    ui->startStopButton->setText("Stop");
-    GenericSpacePlayer *player = nullptr;
-    if (ui->simpleButton->isChecked()) {
-      player = new NewSpacePlayer();
-    } else if (ui->sonarButton->isChecked()) {
-      player = new SonarSpacePlayer();
-    }
-    startClicked(player);
+    startClicked();
   } else {
-    ui->startStopButton->setText("Start");
     stopClicked();
   }
 }
 
-void MainWindow::startClicked(GenericSpacePlayer *sp) {
+void MainWindow::startClicked() {
+  ui->startStopButton->setText("Stop");
+
+  GenericSpacePlayer *player = nullptr;
+  if (ui->simpleButton->isChecked()) {
+    player = new NewSpacePlayer();
+  } else if (ui->sonarButton->isChecked()) {
+    player = new SonarSpacePlayer();
+  }
+
   ui->visualAngleSlider->setEnabled(false);
   ui->distanceLimitSlider->setEnabled(false);
-  playing = true;
   ui->loadSpaceButton->setEnabled(false);
+  ui->recordTrackCheckBox->setEnabled(false);
+
+  playing = true;
   auto angleX = Angle(ui->visualAngleSlider->value());
   auto maxDistance = ui->distanceLimitSlider->value();
-  space.startPlaying(angleX, maxDistance, sp);
+  space.setRecording(ui->recordTrackCheckBox->isChecked());
+  space.startPlaying(angleX, maxDistance, player);
   adjustSize();
 }
 
 void MainWindow::stopClicked() {
+  ui->startStopButton->setText("Start");
+
   ui->visualAngleSlider->setEnabled(true);
   ui->distanceLimitSlider->setEnabled(true);
   ui->loadSpaceButton->setEnabled(true);
+  ui->recordTrackCheckBox->setEnabled(true);
   playing = false;
   space.stopPlaying();
 }

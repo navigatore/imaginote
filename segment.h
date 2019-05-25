@@ -8,11 +8,11 @@ class Segment {
  public:
   explicit Segment(const Coordinates2d &a, const Coordinates2d &b);
 
-  bool intersects(const Segment &other) const;
-  Coordinates2d getIntersectionPoint(const Segment &other) const;
+  [[nodiscard]] bool intersects(const Segment &other) const;
+  [[nodiscard]] Coordinates2d getIntersectionPoint(const Segment &other) const;
 
  private:
-  bool interPointInside(const Coordinates2d &point) const;
+  [[nodiscard]] bool interPointInside(const Coordinates2d &point) const;
 
   Coordinates2d a, b;
   Line line;

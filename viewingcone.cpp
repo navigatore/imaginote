@@ -1,9 +1,8 @@
 #include "viewingcone.h"
 #include <stdexcept>
 
-ViewingCone::ViewingCone(Angle direction, Angle viewAngleX, Angle viewAngleY,
-                         float maxDistance)
-    : direction(direction),
+ViewingCone::ViewingCone(Angle viewAngleX, Angle viewAngleY, float maxDistance)
+    : direction(90),
       focusAngle(90),
       viewAngleX(viewAngleX),
       viewAngleY(viewAngleY),
@@ -26,7 +25,12 @@ void ViewingCone::moveFocusAngle(float time) {
 
 void ViewingCone::resetFocusAngle() { focusAngle = direction; }
 
-Coordinates ViewingCone::getPosition() { return position; }
+void ViewingCone::resetDirection() {
+  direction = Angle(90.0F);
+  resetFocusAngle();
+}
+
+Coordinates ViewingCone::getPosition() const { return position; }
 
 Coordinates2d ViewingCone::getFocusPointPosition(
     const SimpleSpaceObject &obj) const {
@@ -76,13 +80,13 @@ bool ViewingCone::isInside(Coordinates point) {
 
   auto rightDirection = direction;
   auto leftDirection = direction;
-  rightDirection -= viewAngleX.value / 2.0f;
-  leftDirection += viewAngleX.value / 2.0f;
+  rightDirection -= viewAngleX.getDeg() / 2.0f;
+  leftDirection += viewAngleX.getDeg() / 2.0f;
 
   auto rightNormal = planeNormalFromAngle(rightDirection);
   auto leftNormal = -planeNormalFromAngle(leftDirection);
 
-  if (viewAngleX.value < 180.0f)
+  if (viewAngleX.getDeg() < 180.0f)
     return planeInequalityTest(point, rightNormal, position) &&
            planeInequalityTest(point, leftNormal, position);
   return planeInequalityTest(point, rightNormal, position) ||

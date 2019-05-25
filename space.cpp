@@ -6,12 +6,13 @@
 
 Space::Space(int updateFreq)
     : updateFreq(updateFreq),
-      cone(Angle(90.0f), Angle(180.0f), Angle(180.0f), 1000.0f),
+      cone(Angle(180.0f), Angle(180.0f), 1000.0f),
       closestField(0.0f, 0.0f, 0.0f),
       sp(nullptr),
       closestFieldExists(false),
       closestFieldChanged(false),
       movingFocusAngle(false),
+      recording(false),
       recTrack(std::chrono::milliseconds(1000 / updateFreq)),
       mapWidget(nullptr) {}
 
@@ -33,7 +34,8 @@ void Space::loadFromFile(const char *fname) {
       std::string tmp;
       f >> tmp;
       if (tmp == "x") {
-        cone.setPosition(Coordinates(x, 0, z));
+        startPos = Coordinates(x, 0, z);
+        cone.setPosition(startPos);
       } else {
         height = static_cast<unsigned int>(std::stoi(tmp));
       }
@@ -91,7 +93,9 @@ void Space::stopPlaying() {
 }
 
 void Space::update(float time) {
-  recTrack.addPosition(cone.getPosition());
+  if (recording) {
+    recTrack.addPosition(cone.getPosition());
+  }
   if (movingFocusAngle) {
     moveFocusAngle(time);
   }
@@ -125,6 +129,16 @@ void Space::toggleMapWidgetVisibility() {
 void Space::volumeUp() { sp->volumeUp(); }
 
 void Space::volumeDown() { sp->volumeDown(); }
+
+void Space::setRecording(bool activated) { recording = activated; }
+
+bool Space::outOfMap() const {
+  auto pos = getPlayerPosition();
+  auto width = fields[0].size();
+  auto height = fields.size();
+  return pos.x < -halfFieldSize || pos.x > width - halfFieldSize ||
+         pos.z < -halfFieldSize || pos.z > height - halfFieldSize;
+}
 
 void Space::setFieldsFocus() {
   for (auto &row : fields) {
@@ -179,12 +193,18 @@ void Space::playClosestFocusField() {
 
 void Space::clearState() {
   fields.clear();
-  cone = ViewingCone(Angle(90.0f), Angle(180.0f), Angle(180.0f), 5.0f);
+  cone = ViewingCone(Angle(180.0f), Angle(180.0f), 1000.0f);
   focusAngleMoveSpeed = 30.0f;
+  movingFocusAngle = false;
+  setFromBeginning();
+}
+
+void Space::setFromBeginning() {
+  cone.setPosition(startPos);
+  cone.resetDirection();
   closestField = SimpleSpaceObject(0.0f, 0.0f, 0.0f);
   closestFieldExists = false;
   closestFieldChanged = false;
-  movingFocusAngle = false;
   recTrack.reset();
 }
 
@@ -214,7 +234,7 @@ std::vector<std::vector<SimpleSpaceObject> > &Space::getFields() {
   return fields;
 }
 
-Coordinates Space::getPlayerPosition() { return cone.getPosition(); }
+Coordinates Space::getPlayerPosition() const { return cone.getPosition(); }
 
 float Space::getVolume() const { return sp->getVolume(); }
 

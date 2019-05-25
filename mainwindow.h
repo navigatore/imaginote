@@ -34,7 +34,8 @@ class MainWindow : public QMainWindow {
   void updateListenerAngle();
   void updateVolume();
 
-  void startClicked(GenericSpacePlayer *sp);
+  void startClicked();
+  void stopClicked();
 
   Ui::MainWindow *ui;
 
@@ -48,7 +49,6 @@ class MainWindow : public QMainWindow {
 
   bool spaceLoaded;
   bool presIntValid;
-  void stopClicked();
 };
 
 #endif  // MAINWINDOW_H

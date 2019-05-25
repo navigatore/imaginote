@@ -5,8 +5,6 @@
 #include <cstring>
 #include "nvgmath.h"
 
-const float pi = static_cast<float>(M_PI);
-
 GenericSpacePlayer::GenericSpacePlayer()
     : playing(false),
       primaryIdx(0),
@@ -138,7 +136,7 @@ void GenericSpacePlayer::addSinusoidalTone(int16_t *buf,
 
   for (unsigned int i = 0; i < buf_samples; ++i) {
     buf[i] += static_cast<int16_t>(
-        umax * amp * std::sin((2.0f * pi * freq) / sample_rate * i));
+        umax * amp * std::sin((2.0f * nvg::pi * freq) / sample_rate * i));
   }
 }
 

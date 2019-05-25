@@ -8,8 +8,7 @@
 
 class ViewingCone {
  public:
-  ViewingCone(Angle direction, Angle viewAngleX, Angle viewAngleY,
-              float maxDistance);
+  ViewingCone(Angle viewAngleX, Angle viewAngleY, float maxDistance);
 
   void setPosition(Coordinates position);
   void setAngleX(const Angle &angleX);
@@ -21,8 +20,9 @@ class ViewingCone {
   void backward(float time);
   void moveFocusAngle(float time);
   void resetFocusAngle();
+  void resetDirection();
 
-  Coordinates getPosition();
+  Coordinates getPosition() const;
   Coordinates2d getFocusPointPosition(const SimpleSpaceObject &obj) const;
   Angle getAngleX();
   Angle getDirection();

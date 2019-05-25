@@ -14,9 +14,16 @@ class InvalidSpaceFile : public std::exception {};
 class Space {
  public:
   Space(int updateFreq);
+
+  static constexpr float fieldSize = 1.0F;
+  static constexpr float halfFieldSize = fieldSize / 2.0F;
+
   void loadFromFile(const char *fname);
   Coordinates getInitListenerPos();
   std::string getName();
+
+  void clearState();
+  void setFromBeginning();
 
   void setMapWidget(MapWidget *mapWidget);
 
@@ -44,30 +51,34 @@ class Space {
   void volumeUp();
   void volumeDown();
 
+  void setRecording(bool activated);
+
+  bool outOfMap() const;
   bool firstCloser(const SimpleSpaceObject &first,
                    const SimpleSpaceObject &second);
   float distanceSqFrom(SimpleSpaceObject obj);
 
   std::vector<std::vector<SimpleSpaceObject>> &getFields();
-  Coordinates getPlayerPosition();
+  Coordinates getPlayerPosition() const;
   float getVolume() const;
 
  private:
   void moveFocusAngle(float time);
   void playClosestFocusField();
-  void clearState();
   bool canGoInto(const Coordinates &field) const;
 
   int updateFreq;
   std::string name;
   std::vector<std::vector<SimpleSpaceObject>> fields;
   ViewingCone cone;
+  Coordinates startPos;
   float focusAngleMoveSpeed;  // deg/s
   SimpleSpaceObject closestField;
   GenericSpacePlayer *sp;
   bool closestFieldExists;
   bool closestFieldChanged;
   bool movingFocusAngle;
+  bool recording;
 
  public:
   Track recTrack;
