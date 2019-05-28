@@ -46,7 +46,8 @@ class MainWindow : public QMainWindow {
 
   bool playing;
 
-  bool keyLeftPressed, keyRightPressed, keyUpPressed, keyDownPressed;
+  bool keyLeftPressed = false, keyRightPressed = false, keyUpPressed = false,
+       keyDownPressed = false;
 
   Space space;
   Analysis analysis;

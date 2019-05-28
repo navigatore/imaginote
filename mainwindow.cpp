@@ -12,9 +12,6 @@
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent),
       ui(new Ui::MainWindow),
-      keyLeftPressed(false),
-      keyRightPressed(false),
-      keyDownPressed(false),
       space(updateFreq),
       analysis(updatePeriod),
       spaceLoaded(false) {

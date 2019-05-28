@@ -8,7 +8,6 @@ MapWidget::MapWidget(QWidget* parent)
       painter(nullptr),
       track(nullptr),
       mapLoaded(false),
-      distanceLimit(0),
       closestField(nullptr),
       pxWidth(0),
       pxHeight(0) {
@@ -141,16 +140,18 @@ void MapWidget::paintFocusAngle() {
 }
 
 void MapWidget::paintPlayerAngle(Angle angle, const QColor& color) {
-  float radius =
-      static_cast<float>(std::sqrt(pxWidth * pxWidth + pxHeight * pxHeight));
-  int x = static_cast<int>(radius * std::cos(angle.getRad()));
-  int y = static_cast<int>(radius * std::sin(angle.getRad()));
+  if (playerPxPosX) {
+    float radius =
+        static_cast<float>(std::sqrt(pxWidth * pxWidth + pxHeight * pxHeight));
+    int x = static_cast<int>(radius * std::cos(angle.getRad()));
+    int y = static_cast<int>(radius * std::sin(angle.getRad()));
 
-  QPen pen;
-  pen.setColor(color);
-  painter->setPen(pen);
-  painter->drawLine(*playerPxPosX, *playerPxPosY, *playerPxPosX + x,
-                    *playerPxPosY - y);
+    QPen pen;
+    pen.setColor(color);
+    painter->setPen(pen);
+    painter->drawLine(*playerPxPosX, *playerPxPosY, *playerPxPosX + x,
+                      *playerPxPosY - y);
+  }
 }
 
 void MapWidget::paintClosestField() {
