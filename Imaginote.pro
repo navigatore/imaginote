@@ -24,8 +24,11 @@ DEFINES += QT_DEPRECATED_WARNINGS
 
 
 SOURCES += \
+    analysis.cpp \
+    coordinates.cpp \
         main.cpp \
         mainwindow.cpp \
+    simplespaceobject.cpp \
     space.cpp \
     track.cpp \
     viewingcone.cpp \
@@ -38,6 +41,7 @@ SOURCES += \
     sonarspaceplayer.cpp
 
 HEADERS += \
+    analysis.h \
         mainwindow.h \
     coordinates.h \
     space.h \

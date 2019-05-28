@@ -2,6 +2,7 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
+#include "analysis.h"
 #include "angle.h"
 #include "space.h"
 
@@ -18,6 +19,7 @@ class MainWindow : public QMainWindow {
 
  public slots:
   void loadSpaceDef();
+  void loadTrack();
   void startStopClicked();
   void update();
 
@@ -26,7 +28,8 @@ class MainWindow : public QMainWindow {
   void keyReleaseEvent(QKeyEvent *ev);
 
  private:
-  const int updateFreq = 60;  // 60 Hz
+  static const unsigned int updateFreq = 60;
+  static constexpr std::chrono::milliseconds updatePeriod{1000 / updateFreq};
 
   void tryEnableStartStop();
   bool is_number(const std::string &s);
@@ -46,6 +49,7 @@ class MainWindow : public QMainWindow {
   bool keyLeftPressed, keyRightPressed, keyUpPressed, keyDownPressed;
 
   Space space;
+  Analysis analysis;
 
   bool spaceLoaded;
   bool presIntValid;

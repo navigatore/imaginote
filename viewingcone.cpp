@@ -48,8 +48,8 @@ Angle ViewingCone::getFocusAngle() const { return focusAngle; }
 
 Coordinates ViewingCone::tryForward(float time) {
   Coordinates newPosition = position;
-  newPosition.x += moveSpeed * std::cos(direction.getRad()) * time;
-  newPosition.z -= moveSpeed * std::sin(direction.getRad()) * time;
+  newPosition.x() += moveSpeed * std::cos(direction.getRad()) * time;
+  newPosition.z() -= moveSpeed * std::sin(direction.getRad()) * time;
   return newPosition;
 }
 
@@ -102,7 +102,7 @@ bool ViewingCone::onLeftSide(Angle relativeAngle, Coordinates point) {
 }
 
 bool ViewingCone::lookingAt(const SimpleSpaceObject &obj) const {
-  if (obj.height == 0) {
+  if (obj.height() == 0) {
     return false;
   }
   auto intersectionPts = obj.getIntersectionPts(getFocusSegment());
@@ -116,11 +116,12 @@ bool ViewingCone::lookingAt(const SimpleSpaceObject &obj) const {
 bool ViewingCone::planeInequalityTest(Coordinates tested,
                                       Coordinates planeNormal,
                                       Coordinates pointOnPlane) {
-  auto a = planeNormal.x, b = planeNormal.y, c = planeNormal.z;
-  auto d = -(planeNormal.x * pointOnPlane.x + planeNormal.y * pointOnPlane.y +
-             planeNormal.z * pointOnPlane.z);
+  auto a = planeNormal.x(), b = planeNormal.y(), c = planeNormal.z();
+  auto d = -(planeNormal.x() * pointOnPlane.x() +
+             planeNormal.y() * pointOnPlane.y() +
+             planeNormal.z() * pointOnPlane.z());
 
-  return a * tested.x + b * tested.y + c * tested.z + d < 0.0f;
+  return a * tested.x() + b * tested.y() + c * tested.z() + d < 0.0f;
 }
 
 Coordinates ViewingCone::planeNormalFromAngle(Angle angle) {
@@ -130,18 +131,18 @@ Coordinates ViewingCone::planeNormalFromAngle(Angle angle) {
 Line ViewingCone::getFocusLine() const {
   Coordinates2d other_pos = position;
   if (focusAngle == Angle(90.0f) || focusAngle == Angle(270.0f)) {
-    other_pos.y += 1.0f;
+    other_pos.y() += 1.0f;
   } else {
-    other_pos.x += std::cos(focusAngle.getRad());
-    other_pos.y -= std::sin(focusAngle.getRad());
+    other_pos.x() += std::cos(focusAngle.getRad());
+    other_pos.y() -= std::sin(focusAngle.getRad());
   }
   return Line(position, other_pos);
 }
 
 Segment ViewingCone::getFocusSegment() const {
   Coordinates2d endPos = position;
-  endPos.x += maxDistance * std::cos(focusAngle.getRad());
-  endPos.y -= maxDistance * std::sin(focusAngle.getRad());
+  endPos.x() += maxDistance * std::cos(focusAngle.getRad());
+  endPos.y() -= maxDistance * std::sin(focusAngle.getRad());
   return Segment(position, endPos);
 }
 

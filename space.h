@@ -52,8 +52,10 @@ class Space {
   void volumeDown();
 
   void setRecording(bool activated);
+  void saveRecording(std::string filename);
 
   bool outOfMap() const;
+  bool recordingEnabled() const;
   bool firstCloser(const SimpleSpaceObject &first,
                    const SimpleSpaceObject &second);
   float distanceSqFrom(SimpleSpaceObject obj);
@@ -70,21 +72,17 @@ class Space {
   int updateFreq;
   std::string name;
   std::vector<std::vector<SimpleSpaceObject>> fields;
+  unsigned int width, height;
   ViewingCone cone;
   Coordinates startPos;
-  float focusAngleMoveSpeed;  // deg/s
   SimpleSpaceObject closestField;
   GenericSpacePlayer *sp;
+  Track recTrack;
+  MapWidget *mapWidget;
   bool closestFieldExists;
   bool closestFieldChanged;
   bool movingFocusAngle;
   bool recording;
-
- public:
-  Track recTrack;
-
- public:
-  MapWidget *mapWidget;
 };
 
 #endif  // SPACE_H

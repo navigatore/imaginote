@@ -2,7 +2,10 @@
 #include <QFileDialog>
 #include <QKeyEvent>
 #include <QTimer>
+#include <ctime>
 #include <fstream>
+#include <iomanip>
+#include <sstream>
 #include "sonarspaceplayer.h"
 #include "ui_mainwindow.h"
 
@@ -13,6 +16,7 @@ MainWindow::MainWindow(QWidget *parent)
       keyRightPressed(false),
       keyDownPressed(false),
       space(updateFreq),
+      analysis(updatePeriod),
       spaceLoaded(false) {
   ui->setupUi(this);
   ui->spaceLabel->setText("No space definition loaded");
@@ -20,11 +24,12 @@ MainWindow::MainWindow(QWidget *parent)
   presIntValid = true;
   timer = new QTimer(this);
   connect(timer, SIGNAL(timeout()), this, SLOT(update()));
-  timer->start(1000 / updateFreq);
+  timer->start(updatePeriod);
 
   setWindowFlags(Qt::Dialog | Qt::MSWindowsFixedSizeDialogHint);
 
   space.setMapWidget(ui->mapWidget);
+  analysis.setMapWidget(ui->analysisMapWidget);
 }
 
 MainWindow::~MainWindow() { delete ui; }
@@ -95,21 +100,43 @@ void MainWindow::loadSpaceDef() {
   ui->startStopButton->setEnabled(false);
   spaceLoaded = false;
 
-  QString fileName =
-      QFileDialog::getOpenFileName(this, "Select space definition file", "",
-                                   "Space definition (*.spc);;All Files (*)");
+  QString fileName = QFileDialog::getOpenFileName(
+      this, "Select space definition file", QDir::currentPath(),
+      "Space definition (*.spc)");
 
   QByteArray ba = fileName.toLatin1();
   const char *c_str = ba.data();
 
   try {
-    space.mapWidget = ui->mapWidget;
     space.loadFromFile(c_str);
     ui->spaceLabel->setText(space.getName().c_str());
     spaceLoaded = true;
     tryEnableStartStop();
   } catch (InvalidSpaceFile &) {
     ui->spaceLabel->setText("Invalid file!");
+  }
+}
+
+void MainWindow::loadTrack() {
+  QString qFileName = QFileDialog::getOpenFileName(
+      this, "Select recorded track file", QDir::currentPath(),
+      "Imaginote track (*.rec)");
+  if (qFileName.length() == 0) {
+    return;
+  }
+  std::string filename(qFileName.toLatin1().data());
+  std::string shortFilename;
+  if (filename.find('/') == std::string::npos) {
+    shortFilename = filename;
+  } else {
+    shortFilename = filename.substr(filename.rfind('/') + 1);
+  }
+
+  try {
+    analysis.loadRecording(filename);
+    ui->trackNameLabel->setText(shortFilename.c_str());
+  } catch (Analysis::InvalidFile &) {
+    ui->trackNameLabel->setText("Invalid file!");
   }
 }
 
@@ -135,6 +162,11 @@ void MainWindow::startClicked() {
   ui->distanceLimitSlider->setEnabled(false);
   ui->loadSpaceButton->setEnabled(false);
   ui->recordTrackCheckBox->setEnabled(false);
+  for (int i = 0; i < ui->tabWidget->count(); ++i) {
+    if (i != ui->tabWidget->currentIndex()) {
+      ui->tabWidget->setTabEnabled(i, false);
+    }
+  }
 
   playing = true;
   auto angleX = Angle(ui->visualAngleSlider->value());
@@ -146,13 +178,23 @@ void MainWindow::startClicked() {
 
 void MainWindow::stopClicked() {
   ui->startStopButton->setText("Start");
-
   ui->visualAngleSlider->setEnabled(true);
   ui->distanceLimitSlider->setEnabled(true);
   ui->loadSpaceButton->setEnabled(true);
   ui->recordTrackCheckBox->setEnabled(true);
+  for (int i = 0; i < ui->tabWidget->count(); ++i) {
+    ui->tabWidget->setTabEnabled(i, true);
+  }
+
   playing = false;
   space.stopPlaying();
+  if (space.recordingEnabled()) {
+    auto t = std::time(nullptr);
+    auto tm = *std::localtime(&t);
+    std::ostringstream filename;
+    filename << std::put_time(&tm, "%Y-%m-%d_%H-%M-%S") << ".rec";
+    space.saveRecording(std::string((filename.str())));
+  }
 }
 
 bool MainWindow::is_number(const std::string &s) {

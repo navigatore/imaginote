@@ -8,29 +8,25 @@
 
 class Coordinates {
  public:
-  Coordinates(float x = 0, float y = 0, float z = 0) : x(x), y(y), z(z) {}
+  Coordinates(float x = 0, float y = 0, float z = 0);
 
-  std::string str() {
-    return "X: " + std::to_string(x) + "  Y: " + std::to_string(y) +
-           "  Z: " + std::to_string(z);
-  }
+  operator Coordinates2d() const;
 
-  bool operator==(const Coordinates &other) {
-    auto eps = std::numeric_limits<float>::epsilon();
-    return std::abs(x - other.x) < eps && std::abs(y - other.y) < eps &&
-           std::abs(z - other.z) < eps;
-  }
+  bool operator==(const Coordinates& other);
+  Coordinates operator-() { return Coordinates(-_x, -_y, -_z); }
 
-  Coordinates operator-() { return Coordinates(-x, -y, -z); }
+  [[nodiscard]] float distance2d(const Coordinates& other) const;
+  [[nodiscard]] std::string str() const;
 
-  float distance2d(const Coordinates &other) const {
-    return std::sqrt((x - other.x) * (x - other.x) +
-                     (z - other.z) * (z - other.z));
-  }
+  [[nodiscard]] const float& x() const;
+  float& x();
+  [[nodiscard]] const float& y() const;
+  float& y();
+  [[nodiscard]] const float& z() const;
+  float& z();
 
-  operator Coordinates2d() const { return Coordinates2d(x, z); }
-
-  float x, y, z;
+ private:
+  float _x, _y, _z;
 };
 
 #endif  // COORDINATES_H

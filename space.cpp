@@ -6,15 +6,17 @@
 
 Space::Space(int updateFreq)
     : updateFreq(updateFreq),
+      width(0),
+      height(0),
       cone(Angle(180.0f), Angle(180.0f), 1000.0f),
       closestField(0.0f, 0.0f, 0.0f),
       sp(nullptr),
+      recTrack(std::chrono::milliseconds(1000 / updateFreq)),
+      mapWidget(nullptr),
       closestFieldExists(false),
       closestFieldChanged(false),
       movingFocusAngle(false),
-      recording(false),
-      recTrack(std::chrono::milliseconds(1000 / updateFreq)),
-      mapWidget(nullptr) {}
+      recording(false) {}
 
 void Space::loadFromFile(const char *fname) {
   clearState();
@@ -23,13 +25,15 @@ void Space::loadFromFile(const char *fname) {
 
   unsigned int height, width;
 
-  f >> name >> height >> width;
+  f >> name >> width >> height;
+  this->height = height;
+  this->width = width;
 
   if (!f) throw InvalidSpaceFile();
 
-  for (unsigned int z = 0; z < width; ++z) {
+  for (unsigned int z = 0; z < height; ++z) {
     fields.push_back(std::vector<SimpleSpaceObject>());
-    for (unsigned int x = 0; x < height; ++x) {
+    for (unsigned int x = 0; x < width; ++x) {
       unsigned int height = 0;
       std::string tmp;
       f >> tmp;
@@ -46,6 +50,23 @@ void Space::loadFromFile(const char *fname) {
 
   // TODO: Check, if EOF
 
+  f.close();
+}
+
+void Space::saveRecording(std::string filename) {
+  std::ofstream f(filename.c_str(), std::ios::trunc | std::ios::binary);
+  auto fixedWidth = static_cast<uint32_t>(width);
+  f.write(reinterpret_cast<char *>(&fixedWidth), sizeof(fixedWidth));
+  auto fixedHeight = static_cast<uint32_t>(height);
+  f.write(reinterpret_cast<char *>(&fixedHeight), sizeof(fixedHeight));
+  for (auto &row : fields) {
+    for (auto &field : row) {
+      auto fixedFieldHeight = static_cast<uint32_t>(field.height());
+      f.write(reinterpret_cast<char *>(&fixedFieldHeight),
+              sizeof(fixedFieldHeight));
+    }
+  }
+  recTrack.save(f);
   f.close();
 }
 
@@ -136,17 +157,19 @@ bool Space::outOfMap() const {
   auto pos = getPlayerPosition();
   auto width = fields[0].size();
   auto height = fields.size();
-  return pos.x < -halfFieldSize || pos.x > width - halfFieldSize ||
-         pos.z < -halfFieldSize || pos.z > height - halfFieldSize;
+  return pos.x() < -halfFieldSize || pos.x() > width - halfFieldSize ||
+         pos.z() < -halfFieldSize || pos.z() > height - halfFieldSize;
 }
+
+bool Space::recordingEnabled() const { return recording; }
 
 void Space::setFieldsFocus() {
   for (auto &row : fields) {
     for (auto &field : row) {
       if (cone.lookingAt(field)) {
-        field.focus = true;
+        field.focus() = true;
       } else {
-        field.focus = false;
+        field.focus() = false;
       }
     }
   }
@@ -161,12 +184,12 @@ void Space::updateClosestFocusField() {
   for (auto row : fields) {
     for (auto field : row) {
       if (!closestFieldExists) {
-        if (field.focus) {
+        if (field.focus()) {
           closestField = field;
           closestFieldExists = true;
         }
       } else {
-        if (field.focus && firstCloser(field, closestField)) {
+        if (field.focus() && firstCloser(field, closestField)) {
           closestField = field;
         }
       }
@@ -194,8 +217,8 @@ void Space::playClosestFocusField() {
 void Space::clearState() {
   fields.clear();
   cone = ViewingCone(Angle(180.0f), Angle(180.0f), 1000.0f);
-  focusAngleMoveSpeed = 30.0f;
   movingFocusAngle = false;
+  width = height = 0;
   setFromBeginning();
 }
 
@@ -211,7 +234,7 @@ void Space::setFromBeginning() {
 bool Space::canGoInto(const Coordinates &point) const {
   for (const auto &row : fields) {
     for (const auto &field : row) {
-      if (field.height > 0 && field.isInside(point)) {
+      if (field.height() > 0 && field.isInside(point)) {
         return false;
       }
     }
@@ -225,12 +248,12 @@ bool Space::firstCloser(const SimpleSpaceObject &first,
 }
 
 float Space::distanceSqFrom(SimpleSpaceObject obj) {
-  auto x_diff = obj.crds.x - cone.getPosition().x;
-  auto z_diff = obj.crds.z - cone.getPosition().z;
+  auto x_diff = obj.crds().x() - cone.getPosition().x();
+  auto z_diff = obj.crds().z() - cone.getPosition().z();
   return x_diff * x_diff + z_diff * z_diff;
 }
 
-std::vector<std::vector<SimpleSpaceObject> > &Space::getFields() {
+std::vector<std::vector<SimpleSpaceObject>> &Space::getFields() {
   return fields;
 }
 

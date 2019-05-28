@@ -16,7 +16,7 @@ class MapWidget : public QWidget {
 
  public:
   explicit MapWidget(QWidget* parent = nullptr);
-  ~MapWidget();
+  ~MapWidget() override;
 
   void loadMap(const std::vector<std::vector<SimpleSpaceObject>>& map);
   void unloadMap();
@@ -27,7 +27,7 @@ class MapWidget : public QWidget {
   void setTrack(const Track& track);
 
  protected:
-  void paintEvent(QPaintEvent*);
+  void paintEvent(QPaintEvent* /*event*/) override;
 
  private:
   void paintFocusAngle();
@@ -51,10 +51,10 @@ class MapWidget : public QWidget {
   const Track* track;
   bool mapLoaded;
   Angle directionAngle, angleX, focusAngle;
-  float distanceLimit;
+  std::optional<float> distanceLimit;
   const SimpleSpaceObject* closestField;
   int pxWidth, pxHeight;
-  int playerPxPosX, playerPxPosY;
+  std::optional<int> playerPxPosX, playerPxPosY;
 };
 
 #endif  // MAPWIDGET_H

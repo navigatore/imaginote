@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>248</width>
-    <height>506</height>
+    <height>538</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -284,20 +284,23 @@
         <item>
          <layout class="QHBoxLayout" name="horizontalLayout_4">
           <item>
-           <widget class="QPushButton" name="pushButton">
+           <widget class="QPushButton" name="loadTrackButton">
             <property name="text">
-             <string>Load track</string>
+             <string>Load track...</string>
             </property>
            </widget>
           </item>
           <item>
-           <widget class="QLabel" name="label">
+           <widget class="QLabel" name="trackNameLabel">
             <property name="text">
-             <string>trackName</string>
+             <string/>
             </property>
            </widget>
           </item>
          </layout>
+        </item>
+        <item>
+         <widget class="MapWidget" name="analysisMapWidget" native="true"/>
         </item>
         <item>
          <spacer name="verticalSpacer_2">
@@ -342,8 +345,8 @@
    <slot>loadSpaceDef()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>102</x>
-     <y>37</y>
+     <x>114</x>
+     <y>78</y>
     </hint>
     <hint type="destinationlabel">
      <x>37</x>
@@ -358,12 +361,12 @@
    <slot>setNum(int)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>180</x>
-     <y>177</y>
+     <x>213</x>
+     <y>253</y>
     </hint>
     <hint type="destinationlabel">
-     <x>180</x>
-     <y>203</y>
+     <x>213</x>
+     <y>279</y>
     </hint>
    </hints>
   </connection>
@@ -374,12 +377,12 @@
    <slot>setNum(int)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>190</x>
-     <y>233</y>
+     <x>213</x>
+     <y>309</y>
     </hint>
     <hint type="destinationlabel">
-     <x>190</x>
-     <y>259</y>
+     <x>213</x>
+     <y>335</y>
     </hint>
    </hints>
   </connection>
@@ -390,12 +393,28 @@
    <slot>startStopClicked()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>82</x>
-     <y>277</y>
+     <x>93</x>
+     <y>415</y>
     </hint>
     <hint type="destinationlabel">
      <x>176</x>
      <y>393</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>loadTrackButton</sender>
+   <signal>clicked()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>loadTrack()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>113</x>
+     <y>65</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>248</x>
+     <y>82</y>
     </hint>
    </hints>
   </connection>
@@ -405,5 +424,6 @@
   <slot>updateAngleX()</slot>
   <slot>updateDistanceLimit()</slot>
   <slot>startStopClicked()</slot>
+  <slot>loadTrack()</slot>
  </slots>
 </ui>

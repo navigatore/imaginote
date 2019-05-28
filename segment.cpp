@@ -5,7 +5,7 @@ Segment::Segment(const Coordinates2d &a, const Coordinates2d &b)
     : a(a),
       b(b),
       line(a, b),
-      moreHorizontal(std::abs(a.x - b.x) > std::abs(a.y - b.y)) {}
+      moreHorizontal(std::abs(a.x() - b.x()) > std::abs(a.y() - b.y())) {}
 
 bool Segment::intersects(const Segment &other) const {
   if (!line.intersects(other.line)) {
@@ -25,9 +25,9 @@ Coordinates2d Segment::getIntersectionPoint(const Segment &other) const {
 
 bool Segment::interPointInside(const Coordinates2d &point) const {
   if (moreHorizontal) {
-    return (a.x <= point.x && point.x <= b.x) ||
-           (b.x <= point.x && point.x <= a.x);
+    return (a.x() <= point.x() && point.x() <= b.x()) ||
+           (b.x() <= point.x() && point.x() <= a.x());
   }
-  return (a.y <= point.y && point.y <= b.y) ||
-         (b.y <= point.y && point.y <= a.y);
+  return (a.y() <= point.y() && point.y() <= b.y()) ||
+         (b.y() <= point.y() && point.y() <= a.y());
 }

@@ -44,7 +44,7 @@ GenericSpacePlayer::GenericSpacePlayer()
 void GenericSpacePlayer::updateListenerPosition(const Coordinates &pos,
                                                 const Angle &angle) {
   listenerPos = pos;
-  alListener3f(AL_POSITION, pos.x, pos.y, pos.z);
+  alListener3f(AL_POSITION, pos.x(), pos.y(), pos.z());
   float listener_pos[] = {
       std::cos(angle.getRad()), 0, -std::sin(angle.getRad()), 0, 1, 0};
   alListenerfv(AL_ORIENTATION, listener_pos);
@@ -90,7 +90,7 @@ void GenericSpacePlayer::startPrimary() { startSource(primaryIdx); }
 
 void GenericSpacePlayer::updateSonifiedPointPosition(const Coordinates2d &pos) {
   sonifiedPointPos = pos;
-  alSource3f(src[primaryIdx], AL_POSITION, pos.x, 0, pos.y);
+  alSource3f(src[primaryIdx], AL_POSITION, pos.x(), 0, pos.y());
 }
 
 void GenericSpacePlayer::startSource(unsigned int idx) {
@@ -102,7 +102,7 @@ void GenericSpacePlayer::startSource(unsigned int idx) {
 void GenericSpacePlayer::startPlaying() { playing = true; }
 
 void GenericSpacePlayer::setSonificationObject(const SimpleSpaceObject &obj) {
-  auto frequency = getFrequency(obj.height);
+  auto frequency = getFrequency(obj.height());
   if (nvg::almostEqual(frequency, primaryFrequency)) {
     return;
   }
