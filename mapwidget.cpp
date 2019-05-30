@@ -8,7 +8,6 @@ MapWidget::MapWidget(QWidget* parent)
       painter(nullptr),
       track(nullptr),
       mapLoaded(false),
-      closestField(nullptr),
       pxWidth(0),
       pxHeight(0) {
   ui->setupUi(this);
@@ -31,7 +30,7 @@ int MapWidget::calcPxPositionY(const Coordinates2d& crds) {
 
 void MapWidget::update(const Coordinates& playerCrds,
                        const Angle& directionAngle, const Angle& focusAngle,
-                       const SimpleSpaceObject* closestField) {
+                       const std::optional<SimpleSpaceObject>& closestField) {
   playerPxPosX = calcPxPositionX(playerCrds);
   playerPxPosY = calcPxPositionY(playerCrds);
 
@@ -43,10 +42,10 @@ void MapWidget::update(const Coordinates& playerCrds,
 
 void MapWidget::loadMap(
     const std::vector<std::vector<SimpleSpaceObject>>& map) {
-  fields = map;
+  fields = &map;
   mapLoaded = true;
-  pxWidth = fieldSize * static_cast<int>(fields[0].size());
-  pxHeight = fieldSize * static_cast<int>(fields.size());
+  pxWidth = fieldSize * static_cast<int>((*fields)[0].size());
+  pxHeight = fieldSize * static_cast<int>((*fields).size());
   setMinimumSize(pxWidth, pxHeight);
   setMaximumSize(9999, 9999);
   show();
@@ -66,15 +65,20 @@ void MapWidget::setPenColor(const QColor& color) {
 }
 
 void MapWidget::paintFields() {
-  setPenColor(QColor(255, 255, 255));
-  for (const auto& row : fields) {
+  for (const auto& row : *fields) {
     for (const auto& field : row) {
+      auto x = static_cast<int>(field.crds().x() * fieldSize);
+      auto y = static_cast<int>(field.crds().z() * fieldSize);
       if (field.height() > 0) {
-        auto x = static_cast<int>(field.crds().x() * fieldSize);
-        auto y = static_cast<int>(field.crds().z() * fieldSize);
+        setPenColor(QColor(255, 255, 255));
         painter->drawRect(x, y, fieldSize - 2, fieldSize - 2);
         painter->drawText(x + fieldSize / 2, y + fieldSize / 2,
                           QString(std::to_string(field.height()).c_str()));
+      }
+      if (field.visited()) {
+        setPenColor(QColor(0, 100, 100));
+        painter->drawRect(x, y, fieldSize - 2, fieldSize - 2);
+        painter->drawText(x + fieldSize / 2, y + fieldSize / 2, QString('V'));
       }
     }
   }
@@ -155,7 +159,7 @@ void MapWidget::paintPlayerAngle(Angle angle, const QColor& color) {
 }
 
 void MapWidget::paintClosestField() {
-  if (closestField != nullptr) {
+  if (closestField) {
     int x = static_cast<int>(closestField->crds().x()) * fieldSize;
     int y = static_cast<int>(closestField->crds().z()) * fieldSize;
 

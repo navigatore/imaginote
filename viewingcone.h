@@ -8,7 +8,7 @@
 
 class ViewingCone {
  public:
-  ViewingCone(Angle viewAngleX, Angle viewAngleY, float maxDistance);
+  ViewingCone(Coordinates startPosition, Angle viewAngleX, float maxDistance);
 
   void setPosition(Coordinates position);
   void setAngleX(const Angle &angleX);
@@ -22,30 +22,31 @@ class ViewingCone {
   void resetFocusAngle();
   void resetDirection();
 
-  Coordinates getPosition() const;
-  Coordinates2d getFocusPointPosition(const SimpleSpaceObject &obj) const;
+  [[nodiscard]] Coordinates getPosition() const;
+  [[nodiscard]] Coordinates2d getFocusPointPosition(
+      const SimpleSpaceObject &obj) const;
   Angle getAngleX();
   Angle getDirection();
-  Angle getFocusAngle() const;
+  [[nodiscard]] Angle getFocusAngle() const;
 
   Coordinates tryForward(float time);
   Coordinates tryBackward(float time);
 
   bool isInside(Coordinates point);
   bool onLeftSide(Angle relativeAngle, Coordinates point);
-  bool lookingAt(const SimpleSpaceObject &obj) const;
+  [[nodiscard]] bool lookingAt(const SimpleSpaceObject &obj) const;
 
  private:
   static bool planeInequalityTest(Coordinates tested, Coordinates planeNormal,
                                   Coordinates pointOnPlane);
   static Coordinates planeNormalFromAngle(Angle angle);
-  Line getFocusLine() const;
-  Segment getFocusSegment() const;
-  Coordinates2d closestIntersectionPoint(
+  [[nodiscard]] Line getFocusLine() const;
+  [[nodiscard]] Segment getFocusSegment() const;
+  [[nodiscard]] Coordinates2d closestIntersectionPoint(
       const std::vector<Coordinates2d> &interPoints) const;
 
   Coordinates position;
-  Angle direction, focusAngle, viewAngleX, viewAngleY;
+  Angle direction, focusAngle, viewAngleX;
   float maxDistance, moveSpeed, rotateSpeed, focusAngleMoveSpeed;
 };
 

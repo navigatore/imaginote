@@ -9,7 +9,7 @@ class SonarSpacePlayer : public GenericSpacePlayer {
 
   virtual void startPlaying();
   virtual void stopPlaying();
-  virtual void update(float duration);
+  virtual void updateTime(float duration);
 
  private:
   constexpr static const float oneSignalDuration = 0.5f;

@@ -16,12 +16,17 @@ class MapWidget : public QWidget {
 
  public:
   explicit MapWidget(QWidget* parent = nullptr);
+  MapWidget(const MapWidget&) = delete;
+  MapWidget(MapWidget&&) = delete;
+  MapWidget& operator=(const MapWidget&) = delete;
+  MapWidget& operator=(MapWidget&&) = delete;
   ~MapWidget() override;
 
   void loadMap(const std::vector<std::vector<SimpleSpaceObject>>& map);
   void unloadMap();
   void update(const Coordinates& playerCrds, const Angle& directionAngle,
-              const Angle& focusAngle, const SimpleSpaceObject* closestField);
+              const Angle& focusAngle,
+              const std::optional<SimpleSpaceObject>& closestField);
   void setAngleX(const Angle& angleX);
   void setDistanceLimit(float limit);
   void setTrack(const Track& track);
@@ -47,12 +52,12 @@ class MapWidget : public QWidget {
 
   Ui::MapWidget* ui;
   QPainter* painter;
-  std::vector<std::vector<SimpleSpaceObject>> fields;
+  const std::vector<std::vector<SimpleSpaceObject>>* fields{};
   const Track* track;
   bool mapLoaded;
   Angle directionAngle, angleX, focusAngle;
   std::optional<float> distanceLimit;
-  const SimpleSpaceObject* closestField;
+  std::optional<SimpleSpaceObject> closestField;
   int pxWidth, pxHeight;
   std::optional<int> playerPxPosX, playerPxPosY;
 };

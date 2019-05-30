@@ -6,6 +6,7 @@
 namespace nvg {
 constexpr float pi = static_cast<float>(M_PI);
 constexpr float straightAngle = 180.0F;
+constexpr float fullAngleDeg = 2.0F * pi;
 constexpr unsigned int qtUnitsInDegree = 16;
 
 constexpr bool almostEqual(float a, float b) {

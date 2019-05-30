@@ -12,7 +12,7 @@
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent),
       ui(new Ui::MainWindow),
-      space(updateFreq),
+      space(updatePeriod),
       analysis(updatePeriod),
       spaceLoaded(false) {
   ui->setupUi(this);

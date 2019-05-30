@@ -1,11 +1,12 @@
 #include "viewingcone.h"
 #include <stdexcept>
 
-ViewingCone::ViewingCone(Angle viewAngleX, Angle viewAngleY, float maxDistance)
-    : direction(90),
+ViewingCone::ViewingCone(Coordinates startPosition, Angle viewAngleX,
+                         float maxDistance)
+    : position(startPosition),
+      direction(90),
       focusAngle(90),
       viewAngleX(viewAngleX),
-      viewAngleY(viewAngleY),
       maxDistance(maxDistance),
       moveSpeed(1.0f),
       rotateSpeed(45.0f),

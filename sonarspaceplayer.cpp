@@ -24,14 +24,14 @@ void SonarSpacePlayer::stopPlaying() {
   }
 }
 
-void SonarSpacePlayer::update(float duration) {
+void SonarSpacePlayer::updateTime(float duration) {
   if (playing) {
     timeToChangeState -= duration;
     if (timeToChangeState <= 0) {
       if (!silence) {
         GenericSpacePlayer::stopPlaying();
         timeToChangeState =
-            listenerPos.distance(sonifiedPointPos) * timeDistanceCoeff;
+            listenerPos().distance(sonifiedPointPos()) * timeDistanceCoeff;
         silence = true;
       } else {
         GenericSpacePlayer::startPlaying();

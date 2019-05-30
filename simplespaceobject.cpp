@@ -53,6 +53,10 @@ unsigned int &SimpleSpaceObject::height() { return _height; }
 
 bool &SimpleSpaceObject::focus() { return _focus; }
 
+const bool &SimpleSpaceObject::visited() const { return _visited; }
+
+bool &SimpleSpaceObject::visited() { return _visited; }
+
 const bool &SimpleSpaceObject::focus() const { return _focus; }
 
 const unsigned int &SimpleSpaceObject::height() const { return _height; }

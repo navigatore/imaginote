@@ -22,11 +22,14 @@ class SimpleSpaceObject {
   unsigned int& height();
   [[nodiscard]] const bool& focus() const;
   bool& focus();
+  [[nodiscard]] const bool& visited() const;
+  bool& visited();
 
  private:
   Coordinates _crds;
   unsigned int _height;
   bool _focus;
+  bool _visited{};
 };
 
 #endif  // SIMPLESPACEOBJECT_H

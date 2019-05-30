@@ -13,7 +13,7 @@ class InvalidSpaceFile : public std::exception {};
 
 class Space {
  public:
-  Space(int updateFreq);
+  Space(const std::chrono::milliseconds &updatePeriod);
 
   static constexpr float fieldSize = 1.0F;
   static constexpr float halfFieldSize = fieldSize / 2.0F;
@@ -36,8 +36,6 @@ class Space {
   void startPlaying(Angle angleX, float maxDistance, GenericSpacePlayer *sp);
   void stopPlaying();
   void update(float time);
-  void setAngleX(const Angle &angleX);
-  void setDistanceLimit(float limit);
 
   std::string listenerPositionStr();
   std::string listenerDirectionStr();
@@ -45,6 +43,7 @@ class Space {
   void setFieldsVisibility();
   void setFieldsFocus();
   void updateClosestFocusField();
+  void updateStandingField();
   void toggleMovingFocusAngle();
   void toggleMapWidgetVisibility();
 
@@ -52,37 +51,36 @@ class Space {
   void volumeDown();
 
   void setRecording(bool activated);
-  void saveRecording(std::string filename);
+  void saveRecording(const std::string &filename);
 
-  bool outOfMap() const;
-  bool recordingEnabled() const;
+  [[nodiscard]] bool outOfMap() const;
+  [[nodiscard]] bool recordingEnabled() const;
   bool firstCloser(const SimpleSpaceObject &first,
                    const SimpleSpaceObject &second);
   float distanceSqFrom(SimpleSpaceObject obj);
 
   std::vector<std::vector<SimpleSpaceObject>> &getFields();
-  Coordinates getPlayerPosition() const;
-  float getVolume() const;
+  [[nodiscard]] Coordinates getPlayerPosition() const;
+  [[nodiscard]] float getVolume() const;
 
  private:
   void moveFocusAngle(float time);
   void playClosestFocusField();
-  bool canGoInto(const Coordinates &field) const;
+  [[nodiscard]] bool canGoInto(const Coordinates &point) const;
 
-  int updateFreq;
   std::string name;
   std::vector<std::vector<SimpleSpaceObject>> fields;
-  unsigned int width, height;
-  ViewingCone cone;
+  unsigned int width{}, height{};
+  std::optional<ViewingCone> cone;
   Coordinates startPos;
-  SimpleSpaceObject closestField;
-  GenericSpacePlayer *sp;
+  std::optional<SimpleSpaceObject> closestField;
+  SimpleSpaceObject *standingField{};
+  GenericSpacePlayer *sp{};
   Track recTrack;
-  MapWidget *mapWidget;
-  bool closestFieldExists;
-  bool closestFieldChanged;
-  bool movingFocusAngle;
-  bool recording;
+  MapWidget *mapWidget{};
+  bool closestFieldChanged{false};
+  bool movingFocusAngle{false};
+  bool recording{false};
 };
 
 #endif  // SPACE_H
