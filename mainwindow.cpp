@@ -183,8 +183,6 @@ void MainWindow::stopClicked() {
     ui->tabWidget->setTabEnabled(i, true);
   }
 
-  playing = false;
-  space.stopPlaying();
   if (space.recordingEnabled()) {
     auto t = std::time(nullptr);
     auto tm = *std::localtime(&t);
@@ -192,6 +190,9 @@ void MainWindow::stopClicked() {
     filename << std::put_time(&tm, "%Y-%m-%d_%H-%M-%S") << ".rec";
     space.saveRecording(std::string((filename.str())));
   }
+
+  playing = false;
+  space.stopPlaying();
 }
 
 bool MainWindow::is_number(const std::string &s) {
