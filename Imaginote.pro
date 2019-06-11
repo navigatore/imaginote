@@ -75,7 +75,12 @@ win32: INCLUDEPATH += 'C:\Program Files (x86)\OpenAL 1.1 SDK\include'
 unix: LIBS += -lopenal -lgtest -lpthread
 win32: LIBS += 'C:\Program Files (x86)\OpenAL 1.1 SDK\libs\Win64\OpenAL32.lib'
 
-# Uncomment these 3 lines to make build for code coverage
-#DEFINES += TEST_ONLY
-#LIBS += -lgcov
-#QMAKE_CXXFLAGS += -fprofile-arcs -ftest-coverage -O0
+extraclean.commands = rm *gc*; rm *\.info; rm -r res;
+distclean.depends = extraclean
+QMAKE_EXTRA_TARGETS += distclean extraclean
+
+CONFIG(coverage) {
+    DEFINES += TEST_ONLY
+    LIBS += -lgcov
+    QMAKE_CXXFLAGS += -fprofile-arcs -ftest-coverage -O0
+}
