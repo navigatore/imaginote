@@ -1,5 +1,6 @@
 #include "segment.h"
 #include <stdexcept>
+#include "nvgmath.h"
 
 Segment::Segment(const Coordinates2d &a, const Coordinates2d &b)
     : a(a),
@@ -25,9 +26,13 @@ Coordinates2d Segment::getIntersectionPoint(const Segment &other) const {
 
 bool Segment::interPointInside(const Coordinates2d &point) const {
   if (moreHorizontal) {
-    return (a.x() <= point.x() && point.x() <= b.x()) ||
-           (b.x() <= point.x() && point.x() <= a.x());
+    return (nvg::lessOrAlmostEqual(a.x(), point.x()) &&
+            nvg::lessOrAlmostEqual(point.x(), b.x())) ||
+           (nvg::lessOrAlmostEqual(b.x(), point.x()) &&
+            nvg::lessOrAlmostEqual(point.x(), a.x()));
   }
-  return (a.y() <= point.y() && point.y() <= b.y()) ||
-         (b.y() <= point.y() && point.y() <= a.y());
+  return (nvg::lessOrAlmostEqual(a.y(), point.y()) &&
+          nvg::lessOrAlmostEqual(point.y(), b.y())) ||
+         (nvg::lessOrAlmostEqual(b.y(), point.y()) &&
+          nvg::lessOrAlmostEqual(point.y(), a.y()));
 }

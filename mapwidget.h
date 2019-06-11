@@ -3,6 +3,7 @@
 
 #include <QWidget>
 #include <QtGui>
+#include <optional>
 #include "angle.h"
 #include "simplespaceobject.h"
 #include "track.h"
@@ -30,6 +31,9 @@ class MapWidget : public QWidget {
   void setAngleX(const Angle& angleX);
   void setDistanceLimit(float limit);
   void setTrack(const Track& track);
+  void setCorners(const std::vector<Coordinates2d>& points);
+  void setExitCorners(const std::vector<Coordinates2d>& points);
+  void setShortestPath(const std::vector<Coordinates2d>& points);
 
  protected:
   void paintEvent(QPaintEvent* /*event*/) override;
@@ -43,6 +47,10 @@ class MapWidget : public QWidget {
   void paintPlayer();
   void paintDistanceLimitArc();
   void paintTrack();
+  void paintAllCorners();
+  void paintExitCorners();
+  void paintShortestPath();
+  void paintCorners(const std::vector<Coordinates2d>* ptr, const QColor& color);
 
   int calcPxPositionX(const Coordinates2d& crds);
   int calcPxPositionY(const Coordinates2d& crds);
@@ -54,6 +62,9 @@ class MapWidget : public QWidget {
   QPainter* painter;
   const std::vector<std::vector<SimpleSpaceObject>>* fields{};
   const Track* track;
+  std::vector<Coordinates2d> corners;
+  std::vector<Coordinates2d> exitCorners;
+  std::vector<Coordinates2d> shortestPathNodes;
   bool mapLoaded;
   Angle directionAngle, angleX, focusAngle;
   std::optional<float> distanceLimit;

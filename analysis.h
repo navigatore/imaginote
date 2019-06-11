@@ -3,18 +3,22 @@
 
 #include <chrono>
 #include "mapwidget.h"
+#include "space.h"
 
 class Analysis {
  public:
   explicit Analysis(std::chrono::milliseconds updatePeriod);
 
   class InvalidFile : public std::exception {};
+  class FileNotLoaded : public std::exception {};
 
   void setMapWidget(MapWidget* mapWidget);
   void loadRecording(const std::string& filename);
+  void findBestTrack();
 
  private:
-  std::vector<std::vector<SimpleSpaceObject>> fields;
+  Space space;
+
   Track track;
   MapWidget* mapWidget{};
 };

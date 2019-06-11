@@ -131,6 +131,7 @@ void MainWindow::loadTrack() {
 
   try {
     analysis.loadRecording(filename);
+    analysis.findBestTrack();
     ui->trackNameLabel->setText(shortFilename.c_str());
   } catch (Analysis::InvalidFile &) {
     ui->trackNameLabel->setText("Invalid file!");

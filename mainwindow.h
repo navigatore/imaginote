@@ -4,7 +4,7 @@
 #include <QMainWindow>
 #include "analysis.h"
 #include "angle.h"
-#include "space.h"
+#include "simulationcontroller.h"
 
 namespace Ui {
 class MainWindow;
@@ -49,7 +49,7 @@ class MainWindow : public QMainWindow {
   bool keyLeftPressed = false, keyRightPressed = false, keyUpPressed = false,
        keyDownPressed = false;
 
-  Space space;
+  SimulationController space;
   Analysis analysis;
 
   bool spaceLoaded;

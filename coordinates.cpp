@@ -2,6 +2,9 @@
 
 Coordinates::Coordinates(float x, float y, float z) : _x(x), _y(y), _z(z) {}
 
+Coordinates::Coordinates(const Coordinates2d &other)
+    : _x(other.x()), _y(0), _z(other.y()) {}
+
 std::string Coordinates::str() const {
   return "X: " + std::to_string(_x) + "  Y: " + std::to_string(_y) +
          "  Z: " + std::to_string(_z);
@@ -26,8 +29,13 @@ bool Coordinates::operator==(const Coordinates &other) {
 }
 
 float Coordinates::distance2d(const Coordinates &other) const {
-  return std::sqrt((_x - other._x) * (_x - other._x) +
-                   (_z - other._z) * (_z - other._z));
+  return distance2d(*this, other);
+}
+
+float Coordinates::distance2d(const Coordinates &first,
+                              const Coordinates &second) {
+  return std::sqrt((first._x - second._x) * (first._x - second._x) +
+                   (first._z - second._z) * (first._z - second._z));
 }
 
 Coordinates::operator Coordinates2d() const { return Coordinates2d(_x, _z); }

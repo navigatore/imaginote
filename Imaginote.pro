@@ -29,7 +29,9 @@ SOURCES += \
         main.cpp \
         mainwindow.cpp \
     simplespaceobject.cpp \
+    simulationcontroller.cpp \
     space.cpp \
+    test_nvgmath.cpp \
     track.cpp \
     viewingcone.cpp \
     mapwidget.cpp \
@@ -42,12 +44,15 @@ SOURCES += \
 
 HEADERS += \
     analysis.h \
+  graph.h \
+    graphnode.h \
         mainwindow.h \
     coordinates.h \
-    space.h \
     angle.h \
     newspaceplayer.h \
     simplespaceobject.h \
+    simulationcontroller.h \
+    space.h \
     track.h \
     viewingcone.h \
     mapwidget.h \
@@ -67,5 +72,10 @@ CONFIG += \
 
 win32: INCLUDEPATH += 'C:\Program Files (x86)\OpenAL 1.1 SDK\include'
 
-unix: LIBS += -lopenal
+unix: LIBS += -lopenal -lgtest -lpthread
 win32: LIBS += 'C:\Program Files (x86)\OpenAL 1.1 SDK\libs\Win64\OpenAL32.lib'
+
+# Uncomment these 3 lines to make build for code coverage
+#DEFINES += TEST_ONLY
+#LIBS += -lgcov
+#QMAKE_CXXFLAGS += -fprofile-arcs -ftest-coverage -O0

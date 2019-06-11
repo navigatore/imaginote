@@ -125,6 +125,41 @@ void MapWidget::paintTrack() {
   }
 }
 
+void MapWidget::paintAllCorners() {
+  paintCorners(&corners, QColor(0, 255, 255));
+}
+
+void MapWidget::paintExitCorners() {
+  paintCorners(&exitCorners, QColor(255, 0, 0));
+}
+
+void MapWidget::paintShortestPath() {
+  setPenColor(QColor(0, 255, 0));
+  std::optional<Coordinates2d> lastPos;
+  for (const auto& pos : shortestPathNodes) {
+    if (lastPos) {
+      auto old_x = calcPxPositionX(*lastPos);
+      auto old_y = calcPxPositionY(*lastPos);
+      auto x = calcPxPositionX(pos);
+      auto y = calcPxPositionY(pos);
+      painter->drawLine(old_x, old_y, x, y);
+    }
+    lastPos = pos;
+  }
+}
+
+void MapWidget::paintCorners(const std::vector<Coordinates2d>* ptr,
+                             const QColor& color) {
+  if (ptr != nullptr) {
+    setPenColor(color);
+    for (const auto& pos : *ptr) {
+      auto x = calcPxPositionX(pos);
+      auto y = calcPxPositionY(pos);
+      painter->drawEllipse(x - 2, y - 2, 4, 4);
+    }
+  }
+}
+
 void MapWidget::paintEvent(QPaintEvent*) {
   if (mapLoaded) {
     QPainter painter(this);
@@ -135,6 +170,9 @@ void MapWidget::paintEvent(QPaintEvent*) {
     paintPlayer();
     paintDistanceLimitArc();
     paintTrack();
+    paintAllCorners();
+    paintExitCorners();
+    paintShortestPath();
     this->painter = nullptr;
   }
 }
@@ -172,3 +210,15 @@ void MapWidget::setAngleX(const Angle& angleX) { this->angleX = angleX; }
 void MapWidget::setDistanceLimit(float limit) { distanceLimit = limit; }
 
 void MapWidget::setTrack(const Track& track) { this->track = &track; }
+
+void MapWidget::setCorners(const std::vector<Coordinates2d>& points) {
+  corners = points;
+}
+
+void MapWidget::setExitCorners(const std::vector<Coordinates2d>& points) {
+  exitCorners = points;
+}
+
+void MapWidget::setShortestPath(const std::vector<Coordinates2d>& points) {
+  shortestPathNodes = points;
+}

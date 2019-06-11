@@ -1,6 +1,7 @@
 #include "analysis.h"
 #include <chrono>
 #include <fstream>
+#include "graph.h"
 
 Analysis::Analysis(std::chrono::milliseconds updatePeriod)
     : track(updatePeriod) {}
@@ -11,40 +12,58 @@ void Analysis::setMapWidget(MapWidget *mapWidget) {
 
 void Analysis::loadRecording(const std::string &filename) {
   try {
-    fields.clear();
     std::ifstream f;
     f.exceptions(std::ios::badbit | std::ios::failbit | std::ios::eofbit);
     f.open(filename.c_str());
-    uint32_t fixedWidth = 0;
-    f.read(reinterpret_cast<char *>(&fixedWidth), sizeof(fixedWidth));
-    auto width = static_cast<unsigned int>(fixedWidth);
-    uint32_t fixedHeight = 0;
-    f.read(reinterpret_cast<char *>(&fixedHeight), sizeof(fixedHeight));
-    auto height = static_cast<unsigned int>(fixedHeight);
-
-    for (unsigned int z = 0; z < height; ++z) {
-      fields.emplace_back();
-      for (unsigned int x = 0; x < width; ++x) {
-        uint32_t fixedFieldHeight = 0;
-        f.read(reinterpret_cast<char *>(&fixedFieldHeight),
-               sizeof(fixedFieldHeight));
-        auto fieldHeight = static_cast<unsigned int>(fixedFieldHeight);
-        auto floatX = static_cast<float>(x);
-        auto floatZ = static_cast<float>(z);
-        auto obj = SimpleSpaceObject(Coordinates(floatX, 0, floatZ),
-                                     fieldHeight, fieldHeight > 0);
-        fields[z].push_back(obj);
-      }
-    }
-
+    space.loadFromFile(f);
     track.load(f);
     f.close();
 
-    mapWidget->loadMap(fields);
+    mapWidget->loadMap(space.getFields());
     mapWidget->setTrack(track);
     mapWidget->show();
   } catch (std::ifstream::failure &) {
     mapWidget->hide();
     throw InvalidFile();
   }
+}
+
+void Analysis::findBestTrack() {
+  if (!space.isLoaded()) {
+    throw FileNotLoaded();
+  }
+
+  auto innerCorners = space.getInnerCorners();
+  auto exitCorners = space.getExitCorners();
+
+  mapWidget->setCorners(innerCorners);
+  mapWidget->setExitCorners(exitCorners);
+
+  Graph closestPathPossiblePoints;
+  closestPathPossiblePoints.addNonExitNode(
+      Coordinates(track.getPositions()[0]));
+  for (const auto &corner : innerCorners) {
+    closestPathPossiblePoints.addNonExitNode(Coordinates(corner));
+  }
+  for (const auto &corner : exitCorners) {
+    closestPathPossiblePoints.addExitNode(Coordinates(corner));
+  }
+
+  for (auto &node : closestPathPossiblePoints.getNodes()) {
+    for (const auto &otherNode : closestPathPossiblePoints.getNodes()) {
+      if (node != otherNode && !space.hasFieldBetweenPoints(
+                                   node->getValue(), otherNode->getValue())) {
+        node->addNeighbor(otherNode);
+      }
+    }
+  }
+  auto shortestPathNodes = closestPathPossiblePoints.aStar(
+      closestPathPossiblePoints.getNodes()[0], Coordinates::distance2d,
+      Coordinates::distance2d);
+
+  std::vector<Coordinates2d> shortestPath2d;
+  for (const auto &node : shortestPathNodes) {
+    shortestPath2d.push_back(node);
+  }
+  mapWidget->setShortestPath(shortestPath2d);
 }
