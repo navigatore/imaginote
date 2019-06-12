@@ -22,7 +22,7 @@ const float &Coordinates::z() const { return _z; }
 
 float &Coordinates::z() { return _z; }
 
-bool Coordinates::operator==(const Coordinates &other) {
+bool Coordinates::operator==(const Coordinates &other) const {
   auto eps = std::numeric_limits<float>::epsilon();
   return std::abs(_x - other._x) < eps && std::abs(_y - other._y) < eps &&
          std::abs(_z - other._z) < eps;

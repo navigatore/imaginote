@@ -39,9 +39,10 @@ void Analysis::findBestTrack() {
   mapWidget->setCorners(innerCorners);
   mapWidget->setExitCorners(exitCorners);
 
+  auto initialPosition = Coordinates(track.getPositions()[0]);
+
   Graph closestPathPossiblePoints;
-  closestPathPossiblePoints.addNonExitNode(
-      Coordinates(track.getPositions()[0]));
+  closestPathPossiblePoints.addNonExitNode(initialPosition);
   for (const auto &corner : innerCorners) {
     closestPathPossiblePoints.addNonExitNode(Coordinates(corner));
   }
@@ -57,9 +58,8 @@ void Analysis::findBestTrack() {
       }
     }
   }
-  auto shortestPathNodes = closestPathPossiblePoints.aStar(
-      closestPathPossiblePoints.getNodes()[0], Coordinates::distance2d,
-      Coordinates::distance2d);
+  auto shortestPathNodes = closestPathPossiblePoints.findShortestPathToAnyExit(
+      Coordinates(initialPosition));
 
   std::vector<Coordinates2d> shortestPath2d;
   for (const auto &node : shortestPathNodes) {

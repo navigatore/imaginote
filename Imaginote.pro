@@ -26,11 +26,14 @@ DEFINES += QT_DEPRECATED_WARNINGS
 SOURCES += \
     analysis.cpp \
     coordinates.cpp \
+    graph.cpp \
+    graphnode.cpp \
         main.cpp \
         mainwindow.cpp \
     simplespaceobject.cpp \
     simulationcontroller.cpp \
     space.cpp \
+    test_graph.cpp \
     test_nvgmath.cpp \
     track.cpp \
     viewingcone.cpp \

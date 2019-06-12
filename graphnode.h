@@ -1,6 +1,4 @@
-#ifndef GRAPHNODE_H
-#define GRAPHNODE_H
-
+#pragma once
 #include <memory>
 #include <set>
 #include "coordinates.h"
@@ -25,23 +23,3 @@ class GraphNode {
   bool exitNode{};
   WeakPtrSet neighbors;
 };
-
-//**********************************************************************************************************************
-
-GraphNode::GraphNode(Coordinates value) : value(value) {}
-
-void GraphNode::addNeighbor(const SharedPtr& neighbor) {
-  neighbors.insert(neighbor);
-}
-
-void GraphNode::markAsExitNode() { exitNode = true; }
-
-typename GraphNode::WeakPtrSet GraphNode::getNeighbors() const {
-  return neighbors;
-}
-
-Coordinates GraphNode::getValue() const { return value; }
-
-bool GraphNode::isExitNode() const { return exitNode; }
-
-#endif  // GRAPHNODE_H
