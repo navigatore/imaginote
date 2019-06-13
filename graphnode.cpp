@@ -8,9 +8,7 @@ void GraphNode::addNeighbor(const SharedPtr& neighbor) {
 
 void GraphNode::markAsExitNode() { exitNode = true; }
 
-typename GraphNode::WeakPtrSet GraphNode::getNeighbors() const {
-  return neighbors;
-}
+GraphNode::WeakPtrSet GraphNode::getNeighbors() const { return neighbors; }
 
 Coordinates GraphNode::getValue() const { return value; }
 

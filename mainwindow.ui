@@ -315,6 +315,20 @@
           </property>
          </spacer>
         </item>
+        <item>
+         <widget class="QLabel" name="timeDurationLabel">
+          <property name="text">
+           <string>Duration</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QLabel" name="standardDeviationLabel">
+          <property name="text">
+           <string>StandardDeviation</string>
+          </property>
+         </widget>
+        </item>
        </layout>
       </widget>
       <widget class="QWidget" name="generatorTab">

@@ -5,10 +5,11 @@
 #include <fstream>
 #include <vector>
 #include "coordinates2d.h"
+#include "duration.h"
 
 class Track {
  public:
-  Track(std::chrono::milliseconds timeBetweenPoints);
+  Track(Duration timeBetweenPoints);
 
   void addPosition(const Coordinates2d& point);
   void reset();
@@ -16,10 +17,11 @@ class Track {
   void load(std::ifstream& f);
 
   [[nodiscard]] const std::vector<Coordinates2d>& getPositions() const;
+  [[nodiscard]] Duration getDuration() const;
 
  private:
-  std::chrono::microseconds duration;
-  std::chrono::microseconds timeBetweenPoints;
+  Duration duration;
+  Duration timeBetweenPoints;
   std::vector<Coordinates2d> recPositions;
 };
 

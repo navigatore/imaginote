@@ -1,6 +1,6 @@
 #include "track.h"
 
-Track::Track(std::chrono::milliseconds timeBetweenPoints)
+Track::Track(Duration timeBetweenPoints)
     : timeBetweenPoints(timeBetweenPoints) {}
 
 void Track::addPosition(const Coordinates2d& point) {
@@ -24,7 +24,7 @@ void Track::save(std::ofstream& f) {
 }
 
 void Track::load(std::ifstream& f) {
-  recPositions.clear();
+  reset();
   uint32_t fixedNoOfElements = 0;
   f.read(reinterpret_cast<char*>(&fixedNoOfElements),
          sizeof(fixedNoOfElements));
@@ -33,9 +33,12 @@ void Track::load(std::ifstream& f) {
     float x = 0, y = 0;
     f.read(reinterpret_cast<char*>(&x), sizeof(x));
     f.read(reinterpret_cast<char*>(&y), sizeof(y));
-    recPositions.push_back(Coordinates2d(x, y));
+    auto newPosition = Coordinates2d(x, y);
+    addPosition(newPosition);
   }
 }
+
+Duration Track::getDuration() const { return duration; }
 
 const std::vector<Coordinates2d>& Track::getPositions() const {
   return recPositions;

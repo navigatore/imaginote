@@ -2,6 +2,7 @@
 #define ANALYSIS_H
 
 #include <chrono>
+#include "duration.h"
 #include "mapwidget.h"
 #include "space.h"
 
@@ -15,6 +16,8 @@ class Analysis {
   void setMapWidget(MapWidget* mapWidget);
   void loadRecording(const std::string& filename);
   void findBestTrack();
+
+  [[nodiscard]] Duration getDuration() const;
 
  private:
   Space space;

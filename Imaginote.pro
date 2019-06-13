@@ -26,6 +26,7 @@ DEFINES += QT_DEPRECATED_WARNINGS
 SOURCES += \
     analysis.cpp \
     coordinates.cpp \
+    duration.cpp \
     graph.cpp \
     graphnode.cpp \
         main.cpp \
@@ -33,8 +34,10 @@ SOURCES += \
     simplespaceobject.cpp \
     simulationcontroller.cpp \
     space.cpp \
+    test_duration.cpp \
     test_graph.cpp \
     test_nvgmath.cpp \
+    test_track.cpp \
     track.cpp \
     viewingcone.cpp \
     mapwidget.cpp \
@@ -47,6 +50,7 @@ SOURCES += \
 
 HEADERS += \
     analysis.h \
+    duration.h \
   graph.h \
     graphnode.h \
         mainwindow.h \

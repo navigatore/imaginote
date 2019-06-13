@@ -36,6 +36,7 @@ class MainWindow : public QMainWindow {
   void updateListenerPos();
   void updateListenerAngle();
   void updateVolume();
+  void updateAnalysisLabels();
 
   void startClicked();
   void stopClicked();

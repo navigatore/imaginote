@@ -67,3 +67,5 @@ void Analysis::findBestTrack() {
   }
   mapWidget->setShortestPath(shortestPath2d);
 }
+
+Duration Analysis::getDuration() const { return track.getDuration(); }

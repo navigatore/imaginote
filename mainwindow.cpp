@@ -133,6 +133,7 @@ void MainWindow::loadTrack() {
     analysis.loadRecording(filename);
     analysis.findBestTrack();
     ui->trackNameLabel->setText(shortFilename.c_str());
+    updateAnalysisLabels();
   } catch (Analysis::InvalidFile &) {
     ui->trackNameLabel->setText("Invalid file!");
   }
@@ -227,4 +228,9 @@ void MainWindow::updateVolume() {
     ui->volumeLabel->setText(
         ("Volume: " + std::to_string(space.getVolume())).c_str());
   }
+}
+
+void MainWindow::updateAnalysisLabels() {
+  ui->timeDurationLabel->setText(
+      (std::string("Duration: ") + analysis.getDuration().toString()).c_str());
 }
