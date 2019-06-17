@@ -64,8 +64,8 @@ std::vector<Coordinates2d> SimpleSpaceObject::getIntersectionPts(
     const Segment &segm) const {
   std::vector<Coordinates2d> inters;
   std::vector<Segment> walls;
-  Coordinates2d tl, tr, bl, br, l, t, r, b;
-  tl = tr = bl = br = l = t = r = b = _crds;
+  Coordinates2d tl, tr, bl, br;
+  tl = tr = bl = br = _crds;
   tl.x() -= 0.5f;
   tl.y() -= 0.5f;
   tr.x() += 0.5f;
@@ -74,16 +74,10 @@ std::vector<Coordinates2d> SimpleSpaceObject::getIntersectionPts(
   bl.y() += 0.5f;
   br.x() += 0.5f;
   br.y() += 0.5f;
-  l.x() -= 0.5f;
-  r.x() += 0.5f;
-  t.y() -= 0.5f;
-  b.y() += 0.5f;
   walls.push_back(Segment(tl, tr));
   walls.push_back(Segment(tr, br));
   walls.push_back(Segment(br, bl));
   walls.push_back(Segment(bl, tl));
-  //  walls.push_back(Segment(l, r));
-  //  walls.push_back(Segment(t, b));
 
   for (const auto &wall : walls) {
     if (wall.intersects(segm)) {

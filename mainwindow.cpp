@@ -131,7 +131,6 @@ void MainWindow::loadTrack() {
 
   try {
     analysis.loadRecording(filename);
-    analysis.findBestTrack();
     ui->trackNameLabel->setText(shortFilename.c_str());
     updateAnalysisLabels();
   } catch (Analysis::InvalidFile &) {
@@ -233,4 +232,8 @@ void MainWindow::updateVolume() {
 void MainWindow::updateAnalysisLabels() {
   ui->timeDurationLabel->setText(
       (std::string("Duration: ") + analysis.getDuration().toString()).c_str());
+  ui->meanDifferenceLabel->setText(
+      (std::string("Mean difference: ") +
+       std::to_string(analysis.getMeanDifference()) + " m")
+          .c_str());
 }

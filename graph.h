@@ -4,6 +4,7 @@
 #include <set>
 #include <vector>
 #include "graphnode.h"
+#include "segment.h"
 
 using GraphNodeWeakPtr = std::weak_ptr<GraphNode>;
 
@@ -22,8 +23,6 @@ using GraphNodeSharedPointers = std::vector<GraphNodeSharedPtr>;
 
 class Graph {
  public:
-  explicit Graph() {}
-
   class ExitNotFound : public std::exception {};
   class NodeNotFound : public std::exception {};
   class NoExitNode : public std::exception {};

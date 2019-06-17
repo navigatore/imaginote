@@ -323,9 +323,9 @@
          </widget>
         </item>
         <item>
-         <widget class="QLabel" name="standardDeviationLabel">
+         <widget class="QLabel" name="meanDifferenceLabel">
           <property name="text">
-           <string>StandardDeviation</string>
+           <string>MeanDifference</string>
           </property>
          </widget>
         </item>

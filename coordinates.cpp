@@ -28,6 +28,10 @@ bool Coordinates::operator==(const Coordinates &other) const {
          std::abs(_z - other._z) < eps;
 }
 
+Coordinates Coordinates::operator-() const {
+  return Coordinates(-_x, -_y, -_z);
+}
+
 float Coordinates::distance2d(const Coordinates &other) const {
   return distance2d(*this, other);
 }

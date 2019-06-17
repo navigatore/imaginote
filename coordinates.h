@@ -14,7 +14,7 @@ class Coordinates {
   operator Coordinates2d() const;
 
   bool operator==(const Coordinates& other) const;
-  Coordinates operator-() { return Coordinates(-_x, -_y, -_z); }
+  Coordinates operator-() const;
 
   [[nodiscard]] float distance2d(const Coordinates& other) const;
   [[nodiscard]] static float distance2d(const Coordinates& first,

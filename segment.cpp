@@ -24,6 +24,18 @@ Coordinates2d Segment::getIntersectionPoint(const Segment &other) const {
   return line.getIntersectionPoint(other.line);
 }
 
+float Segment::distanceFromPoint(const Coordinates2d &point) const {
+  auto perpendicularLineCrossingZero = line.getPerpendicularLineCrossingZero();
+  auto perpendicularLineCrossingPoint =
+      perpendicularLineCrossingZero.getParallelLineCrossingPoint(point);
+  auto intersectionPoint =
+      line.getIntersectionPoint(perpendicularLineCrossingPoint);
+  if (interPointInside(intersectionPoint)) {
+    return point.distance(intersectionPoint);
+  }
+  return std::min(point.distance(a), point.distance(b));
+}
+
 bool Segment::interPointInside(const Coordinates2d &point) const {
   if (moreHorizontal) {
     return (nvg::lessOrAlmostEqual(a.x(), point.x()) &&

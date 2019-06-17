@@ -3,7 +3,7 @@
 
 class Coordinates2d {
  public:
-  Coordinates2d(float x = 0, float y = 0);
+  explicit Coordinates2d(float x = 0, float y = 0);
 
   [[nodiscard]] float distance(const Coordinates2d& other) const;
 

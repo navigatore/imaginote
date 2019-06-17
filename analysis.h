@@ -4,6 +4,7 @@
 #include <chrono>
 #include "duration.h"
 #include "mapwidget.h"
+#include "path.h"
 #include "space.h"
 
 class Analysis {
@@ -16,14 +17,18 @@ class Analysis {
   void setMapWidget(MapWidget* mapWidget);
   void loadRecording(const std::string& filename);
   void findBestTrack();
+  void calculateMeanDifference();
 
   [[nodiscard]] Duration getDuration() const;
+  [[nodiscard]] float getMeanDifference() const;
 
  private:
   Space space;
 
   Track track;
   MapWidget* mapWidget{};
+  float meanDifference;
+  Path shortestPath;
 };
 
 #endif  // ANALYSIS_H

@@ -31,12 +31,15 @@ SOURCES += \
     graphnode.cpp \
         main.cpp \
         mainwindow.cpp \
+    path.cpp \
     simplespaceobject.cpp \
     simulationcontroller.cpp \
     space.cpp \
     test_duration.cpp \
     test_graph.cpp \
+    test_line.cpp \
     test_nvgmath.cpp \
+    test_path.cpp \
     test_track.cpp \
     track.cpp \
     viewingcone.cpp \
@@ -57,6 +60,7 @@ HEADERS += \
     coordinates.h \
     angle.h \
     newspaceplayer.h \
+    path.h \
     simplespaceobject.h \
     simulationcontroller.h \
     space.h \

@@ -1,4 +1,5 @@
 #include "analysis.h"
+#include <algorithm>
 #include <chrono>
 #include <fstream>
 #include "graph.h"
@@ -12,12 +13,16 @@ void Analysis::setMapWidget(MapWidget *mapWidget) {
 
 void Analysis::loadRecording(const std::string &filename) {
   try {
+    shortestPath = Path();
+    meanDifference = 0;
     std::ifstream f;
     f.exceptions(std::ios::badbit | std::ios::failbit | std::ios::eofbit);
     f.open(filename.c_str());
     space.loadFromFile(f);
     track.load(f);
     f.close();
+    findBestTrack();
+    calculateMeanDifference();
 
     mapWidget->loadMap(space.getFields());
     mapWidget->setTrack(track);
@@ -29,10 +34,6 @@ void Analysis::loadRecording(const std::string &filename) {
 }
 
 void Analysis::findBestTrack() {
-  if (!space.isLoaded()) {
-    throw FileNotLoaded();
-  }
-
   auto innerCorners = space.getInnerCorners();
   auto exitCorners = space.getExitCorners();
 
@@ -61,11 +62,20 @@ void Analysis::findBestTrack() {
   auto shortestPathNodes = closestPathPossiblePoints.findShortestPathToAnyExit(
       Coordinates(initialPosition));
 
-  std::vector<Coordinates2d> shortestPath2d;
   for (const auto &node : shortestPathNodes) {
-    shortestPath2d.push_back(node);
+    shortestPath.addNode(node);
   }
-  mapWidget->setShortestPath(shortestPath2d);
+  mapWidget->setShortestPath(shortestPath.getNodes());
+}
+
+void Analysis::calculateMeanDifference() {
+  float meanAccumulator{};
+  for (const auto &position : track.getPositions()) {
+    meanAccumulator += shortestPath.distance(position);
+  }
+  meanDifference = meanAccumulator / track.getPositions().size();
 }
 
 Duration Analysis::getDuration() const { return track.getDuration(); }
+
+float Analysis::getMeanDifference() const { return meanDifference; }

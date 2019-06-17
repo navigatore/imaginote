@@ -10,6 +10,7 @@ class Segment {
 
   [[nodiscard]] bool intersects(const Segment &other) const;
   [[nodiscard]] Coordinates2d getIntersectionPoint(const Segment &other) const;
+  [[nodiscard]] float distanceFromPoint(const Coordinates2d &point) const;
 
  private:
   [[nodiscard]] bool interPointInside(const Coordinates2d &point) const;
