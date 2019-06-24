@@ -44,7 +44,7 @@ class Graph {
   static void addNode(GraphNodeSharedPointers &nodes, const Coordinates &value);
 
   [[nodiscard]] std::vector<Coordinates> reconstructPath(
-      const GraphNodeSharedPointersMap cameFrom,
+      GraphNodeSharedPointersMap cameFrom,
       GraphNodeSharedPtr current) const;
 
   [[nodiscard]] std::shared_ptr<GraphNode> &getNodeByValue(

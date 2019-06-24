@@ -27,6 +27,7 @@ MainWindow::MainWindow(QWidget *parent)
 
   space.setMapWidget(ui->mapWidget);
   analysis.setMapWidget(ui->analysisMapWidget);
+  spaceGenerator.setMapWidget(ui->generatorMapWidget);
 }
 
 MainWindow::~MainWindow() { delete ui; }
@@ -136,6 +137,15 @@ void MainWindow::loadTrack() {
   } catch (Analysis::InvalidFile &) {
     ui->trackNameLabel->setText("Invalid file!");
   }
+}
+
+void MainWindow::generateSpace() {
+  spaceGenerator.generate();
+  ui->generatorMapWidget->repaint();
+}
+
+void MainWindow::saveSpace() {
+  // TODO: implement this
 }
 
 void MainWindow::startStopClicked() {

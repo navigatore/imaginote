@@ -1,4 +1,5 @@
 #include "space.h"
+#include <algorithm>
 
 void Space::loadFromFile(std::ifstream &f) {
   fields.clear();
@@ -30,6 +31,18 @@ void Space::loadFromFile(std::ifstream &f) {
   findCorners();
 }
 
+void Space::createEmptySpace(unsigned int width, unsigned int height) {
+  fields.clear();
+  fields.resize(height);
+  std::for_each(begin(fields), end(fields),
+                [width](auto &row) { row.resize(width); });
+  for (unsigned int z = 0; z < height; ++z) {
+    for (unsigned int x = 0; x < width; ++x) {
+      fields[z][x].crds() = Coordinates(x, 0, z);
+    }
+  }
+}
+
 bool Space::isLoaded() { return !fields.empty(); }
 
 bool Space::hasFieldBetweenPoints(const Coordinates &firstPoint,
@@ -59,6 +72,10 @@ bool Space::hasFieldBetweenPoints(const Coordinates &firstPoint,
     }
   }
   return false;
+}
+
+std::vector<std::vector<SimpleSpaceObject> > &Space::getFields() {
+  return fields;
 }
 
 void Space::findAllCorners() {

@@ -2,9 +2,9 @@
 #include <algorithm>
 #include <exception>
 #include <fstream>
-#include <iostream>
 
-SimulationController::SimulationController(const std::chrono::milliseconds &updatePeriod)
+SimulationController::SimulationController(
+    const std::chrono::milliseconds &updatePeriod)
     : recTrack(updatePeriod) {}
 
 void SimulationController::loadFromFile(const char *fname) {
@@ -67,9 +67,13 @@ void SimulationController::setMapWidget(MapWidget *mapWidget) {
   mapWidget->setTrack(recTrack);
 }
 
-void SimulationController::rotateListenerLeft(float time) { cone->rotateLeft(time); }
+void SimulationController::rotateListenerLeft(float time) {
+  cone->rotateLeft(time);
+}
 
-void SimulationController::rotateListenerRight(float time) { cone->rotateRight(time); }
+void SimulationController::rotateListenerRight(float time) {
+  cone->rotateRight(time);
+}
 
 void SimulationController::goForward(float time) {
   auto futurePosition = cone->tryForward(time);
@@ -88,7 +92,7 @@ void SimulationController::goBackward(float time) {
 }
 
 void SimulationController::startPlaying(Angle angleX, float maxDistance,
-                         GenericSpacePlayer *sp) {
+                                        GenericSpacePlayer *sp) {
   cone = ViewingCone(startPos, angleX, maxDistance);
   mapWidget->loadMap(fields);
   mapWidget->setAngleX(angleX / 2);
@@ -120,9 +124,13 @@ void SimulationController::update(float time) {
   sp->updateListenerPosition(cone->getPosition(), cone->getDirection());
 }
 
-std::string SimulationController::listenerPositionStr() { return cone->getPosition().str(); }
+std::string SimulationController::listenerPositionStr() {
+  return cone->getPosition().str();
+}
 
-std::string SimulationController::listenerDirectionStr() { return cone->getDirection().str(); }
+std::string SimulationController::listenerDirectionStr() {
+  return cone->getDirection().str();
+}
 
 void SimulationController::toggleMovingFocusAngle() {
   if (movingFocusAngle) {
@@ -141,7 +149,9 @@ void SimulationController::volumeUp() { sp->volumeUp(); }
 
 void SimulationController::volumeDown() { sp->volumeDown(); }
 
-void SimulationController::setRecording(bool activated) { recording = activated; }
+void SimulationController::setRecording(bool activated) {
+  recording = activated;
+}
 
 bool SimulationController::outOfMap() const {
   auto pos = getPlayerPosition();
@@ -257,7 +267,7 @@ bool SimulationController::canGoInto(const Coordinates &point) const {
 }
 
 bool SimulationController::firstCloser(const SimpleSpaceObject &first,
-                        const SimpleSpaceObject &second) {
+                                       const SimpleSpaceObject &second) {
   return distanceSqFrom(first) < distanceSqFrom(second);
 }
 
@@ -271,8 +281,12 @@ std::vector<std::vector<SimpleSpaceObject>> &SimulationController::getFields() {
   return fields;
 }
 
-Coordinates SimulationController::getPlayerPosition() const { return cone->getPosition(); }
+Coordinates SimulationController::getPlayerPosition() const {
+  return cone->getPosition();
+}
 
 float SimulationController::getVolume() const { return sp->getVolume(); }
 
-void SimulationController::moveFocusAngle(float time) { cone->moveFocusAngle(time); }
+void SimulationController::moveFocusAngle(float time) {
+  cone->moveFocusAngle(time);
+}

@@ -5,6 +5,7 @@
 #include "analysis.h"
 #include "angle.h"
 #include "simulationcontroller.h"
+#include "spacegenerator.h"
 
 namespace Ui {
 class MainWindow;
@@ -20,6 +21,8 @@ class MainWindow : public QMainWindow {
  public slots:
   void loadSpaceDef();
   void loadTrack();
+  void generateSpace();
+  void saveSpace();
   void startStopClicked();
   void update();
 
@@ -52,6 +55,7 @@ class MainWindow : public QMainWindow {
 
   SimulationController space;
   Analysis analysis;
+  SpaceGenerator spaceGenerator;
 
   bool spaceLoaded;
   bool presIntValid;

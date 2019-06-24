@@ -35,11 +35,13 @@ SOURCES += \
     simplespaceobject.cpp \
     simulationcontroller.cpp \
     space.cpp \
+    spacegenerator.cpp \
     test_duration.cpp \
     test_graph.cpp \
     test_line.cpp \
     test_nvgmath.cpp \
     test_path.cpp \
+    test_space.cpp \
     test_track.cpp \
     track.cpp \
     viewingcone.cpp \
@@ -64,6 +66,7 @@ HEADERS += \
     simplespaceobject.h \
     simulationcontroller.h \
     space.h \
+    spacegenerator.h \
     track.h \
     viewingcone.h \
     mapwidget.h \

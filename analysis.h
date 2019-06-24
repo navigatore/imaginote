@@ -27,7 +27,7 @@ class Analysis {
 
   Track track;
   MapWidget* mapWidget{};
-  float meanDifference;
+  float meanDifference{};
   Path shortestPath;
 };
 

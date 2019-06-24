@@ -11,6 +11,7 @@ class Space {
   static constexpr auto fieldSize = 1.0F;
 
   void loadFromFile(std::ifstream &f);
+  void createEmptySpace(unsigned int width, unsigned int height);
 
   [[nodiscard]] bool isLoaded();
   [[nodiscard]] bool hasFieldBetweenPoints(
@@ -18,6 +19,7 @@ class Space {
 
   [[nodiscard]] const std::vector<std::vector<SimpleSpaceObject>> &getFields()
       const;
+  [[nodiscard]] std::vector<std::vector<SimpleSpaceObject>> &getFields();
   [[nodiscard]] unsigned int getFieldsWidth();
   [[nodiscard]] unsigned int getFieldsHeight();
   [[nodiscard]] std::vector<Coordinates2d> getInnerCorners() const;
