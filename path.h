@@ -1,6 +1,4 @@
-#ifndef PATH_H
-#define PATH_H
-
+#pragma once
 #include <vector>
 #include "coordinates2d.h"
 #include "segment.h"
@@ -16,5 +14,3 @@ class Path {
   std::vector<Coordinates2d> nodes;
   std::vector<Segment> segments;
 };
-
-#endif  // PATH_H

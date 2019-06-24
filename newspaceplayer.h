@@ -1,7 +1,3 @@
-#ifndef NEWSPACEPLAYER_H
-#define NEWSPACEPLAYER_H
-
+#pragma once
 #include "genericspaceplayer.h"
 class NewSpacePlayer : public GenericSpacePlayer {};
-
-#endif  // NEWSPACEPLAYER_H

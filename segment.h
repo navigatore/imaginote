@@ -1,6 +1,4 @@
-#ifndef SEGMENT_H
-#define SEGMENT_H
-
+#pragma once
 #include "coordinates2d.h"
 #include "line.h"
 
@@ -19,5 +17,3 @@ class Segment {
   Line line;
   bool moreHorizontal;
 };
-
-#endif  // SEGMENT_H

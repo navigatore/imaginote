@@ -1,6 +1,4 @@
-#ifndef NVGMATH_H
-#define NVGMATH_H
-
+#pragma once
 #include <cmath>
 
 namespace nvg {
@@ -27,4 +25,3 @@ constexpr int degToQt(float deg) {
 }
 
 }  // namespace nvg
-#endif  // NVGMATH_H

@@ -1,6 +1,4 @@
-#ifndef COORDINATES_H
-#define COORDINATES_H
-
+#pragma once
 #include <cmath>
 #include <limits>
 #include <string>
@@ -14,6 +12,7 @@ class Coordinates {
   operator Coordinates2d() const;
 
   bool operator==(const Coordinates& other) const;
+  bool operator!=(const Coordinates& other) const;
   Coordinates operator-() const;
 
   [[nodiscard]] float distance2d(const Coordinates& other) const;
@@ -31,5 +30,3 @@ class Coordinates {
  private:
   float _x, _y, _z;
 };
-
-#endif  // COORDINATES_H

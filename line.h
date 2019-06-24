@@ -1,6 +1,4 @@
-#ifndef LINE_H
-#define LINE_H
-
+#pragma once
 #include "coordinates2d.h"
 
 class Line {
@@ -19,5 +17,3 @@ class Line {
   float a, b, c;
   bool vertical{};
 };
-
-#endif  // LINE_H

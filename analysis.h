@@ -1,6 +1,4 @@
-#ifndef ANALYSIS_H
-#define ANALYSIS_H
-
+#pragma once
 #include <chrono>
 #include "duration.h"
 #include "mapwidget.h"
@@ -30,5 +28,3 @@ class Analysis {
   float meanDifference{};
   Path shortestPath;
 };
-
-#endif  // ANALYSIS_H

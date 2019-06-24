@@ -1,6 +1,4 @@
-#ifndef MAPWIDGET_H
-#define MAPWIDGET_H
-
+#pragma once
 #include <QWidget>
 #include <QtGui>
 #include <optional>
@@ -25,9 +23,10 @@ class MapWidget : public QWidget {
 
   void loadMap(const std::vector<std::vector<SimpleSpaceObject>>& map);
   void unloadMap();
-  void update(const Coordinates& playerCrds, const Angle& directionAngle,
+  void update(const Coordinates& playerCoordinates, const Angle& directionAngle,
               const Angle& focusAngle,
               const std::optional<SimpleSpaceObject>& closestField);
+  void setPlayerCoordinates(const Coordinates& playerCoordinates);
   void setAngleX(const Angle& angleX);
   void setDistanceLimit(float limit);
   void setTrack(const Track& track);
@@ -66,11 +65,10 @@ class MapWidget : public QWidget {
   std::vector<Coordinates2d> exitCorners;
   std::vector<Coordinates2d> shortestPathNodes;
   bool mapLoaded;
+  bool simulationMode{};
   Angle directionAngle, angleX, focusAngle;
   std::optional<float> distanceLimit;
   std::optional<SimpleSpaceObject> closestField;
   int pxWidth, pxHeight;
   std::optional<int> playerPxPosX, playerPxPosY;
 };
-
-#endif  // MAPWIDGET_H

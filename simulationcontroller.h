@@ -1,11 +1,10 @@
-#ifndef SIMULATIONCONTROLLER_H
-#define SIMULATIONCONTROLLER_H
-
+#pragma once
 #include <vector>
 #include "coordinates.h"
 #include "mapwidget.h"
 #include "newspaceplayer.h"
 #include "simplespaceobject.h"
+#include "space.h"
 #include "track.h"
 #include "viewingcone.h"
 
@@ -69,8 +68,7 @@ class SimulationController {
   [[nodiscard]] bool canGoInto(const Coordinates &point) const;
 
   std::string name;
-  std::vector<std::vector<SimpleSpaceObject>> fields;
-  unsigned int width{}, height{};
+  Space space;
   std::optional<ViewingCone> cone;
   Coordinates startPos;
   std::optional<SimpleSpaceObject> closestField;
@@ -82,5 +80,3 @@ class SimulationController {
   bool movingFocusAngle{false};
   bool recording{false};
 };
-
-#endif  // SIMULATIONCONTROLLER_H

@@ -9,53 +9,18 @@ SimulationController::SimulationController(
 
 void SimulationController::loadFromFile(const char *fname) {
   clearState();
-  std::ifstream f;
-  f.open(fname);
-
-  unsigned int height{};
-  unsigned int width{};
-
-  f >> name >> width >> height;
-  this->height = height;
-  this->width = width;
-
-  if (!f) {
-    throw InvalidSpaceFile();
-  }
-
-  for (unsigned int z = 0; z < height; ++z) {
-    fields.emplace_back();
-    for (unsigned int x = 0; x < width; ++x) {
-      unsigned int height = 0;
-      std::string tmp;
-      f >> tmp;
-      if (tmp == "x") {
-        startPos = Coordinates(static_cast<float>(x), 0, static_cast<float>(z));
-      } else {
-        height = static_cast<unsigned int>(std::stoi(tmp));
-      }
-      fields[z].emplace_back(
-          Coordinates(static_cast<float>(x), 0, static_cast<float>(z)), height,
-          height > 0);
-    }
-  }
-
-  f.close();
+  std::ifstream file;
+  file.exceptions(std::ios::badbit | std::ios::failbit | std::ios::eofbit);
+  file.open(fname);
+  space.loadFromTextFile(file);
+  file.close();
+  startPos = space.getStartPosition();
+  name = fname;
 }
 
 void SimulationController::saveRecording(const std::string &filename) {
   std::ofstream f(filename.c_str(), std::ios::trunc | std::ios::binary);
-  auto fixedWidth = static_cast<uint32_t>(width);
-  f.write(reinterpret_cast<char *>(&fixedWidth), sizeof(fixedWidth));
-  auto fixedHeight = static_cast<uint32_t>(height);
-  f.write(reinterpret_cast<char *>(&fixedHeight), sizeof(fixedHeight));
-  for (auto &row : fields) {
-    for (auto &field : row) {
-      auto fixedFieldHeight = static_cast<uint32_t>(field.height());
-      f.write(reinterpret_cast<char *>(&fixedFieldHeight),
-              sizeof(fixedFieldHeight));
-    }
-  }
+
   recTrack.save(f);
   f.close();
 }
@@ -94,7 +59,7 @@ void SimulationController::goBackward(float time) {
 void SimulationController::startPlaying(Angle angleX, float maxDistance,
                                         GenericSpacePlayer *sp) {
   cone = ViewingCone(startPos, angleX, maxDistance);
-  mapWidget->loadMap(fields);
+  mapWidget->loadMap(space.getFields());
   mapWidget->setAngleX(angleX / 2);
   mapWidget->setDistanceLimit(maxDistance);
   this->sp = sp;
@@ -155,8 +120,8 @@ void SimulationController::setRecording(bool activated) {
 
 bool SimulationController::outOfMap() const {
   auto pos = getPlayerPosition();
-  auto width = fields[0].size();
-  auto height = fields.size();
+  auto width = space.getFieldsWidth();
+  auto height = space.getFieldsHeight();
   return pos.x() < -halfFieldSize || pos.x() > width - halfFieldSize ||
          pos.z() < -halfFieldSize || pos.z() > height - halfFieldSize;
 }
@@ -164,7 +129,7 @@ bool SimulationController::outOfMap() const {
 bool SimulationController::recordingEnabled() const { return recording; }
 
 void SimulationController::setFieldsFocus() {
-  for (auto &row : fields) {
+  for (auto &row : space.getFields()) {
     for (auto &field : row) {
       if (cone->lookingAt(field)) {
         field.focus() = true;
@@ -179,7 +144,7 @@ void SimulationController::updateClosestFocusField() {
   auto oldClosest = closestField;
   closestField.reset();
 
-  for (const auto &row : fields) {
+  for (const auto &row : space.getFields()) {
     for (auto field : row) {
       if (!closestField) {
         if (field.focus()) {
@@ -203,11 +168,12 @@ void SimulationController::updateStandingField() {
   auto ux = static_cast<unsigned int>(x);
   auto uy = static_cast<unsigned int>(y);
 
-  if (x < 0 || y < 0 || uy >= fields.size() || ux >= fields[0].size()) {
+  if (x < 0 || y < 0 || uy >= space.getFieldsHeight() ||
+      ux >= space.getFieldsWidth()) {
     standingField = nullptr;
     return;
   }
-  auto &newField = fields[uy][ux];
+  auto &newField = space.getFields()[uy][ux];
   sp->setStandingField(newField);
   if (standingField == nullptr) {
     standingField = &newField;
@@ -233,10 +199,9 @@ void SimulationController::playClosestFocusField() {
 }
 
 void SimulationController::clearState() {
-  fields.clear();
+  space.reset();
   cone.reset();
   movingFocusAngle = false;
-  width = height = 0;
   setFromBeginning();
 }
 
@@ -246,7 +211,7 @@ void SimulationController::setFromBeginning() {
   closestFieldChanged = false;
   standingField = nullptr;
 
-  for (auto &row : fields) {
+  for (auto &row : space.getFields()) {
     for (auto &field : row) {
       field.visited() = false;
     }
@@ -256,7 +221,7 @@ void SimulationController::setFromBeginning() {
 }
 
 bool SimulationController::canGoInto(const Coordinates &point) const {
-  for (const auto &row : fields) {
+  for (const auto &row : space.getFields()) {
     for (const auto &field : row) {
       if (field.height() > 0 && field.isInside(point)) {
         return false;
@@ -278,7 +243,7 @@ float SimulationController::distanceSqFrom(SimpleSpaceObject obj) {
 }
 
 std::vector<std::vector<SimpleSpaceObject>> &SimulationController::getFields() {
-  return fields;
+  return space.getFields();
 }
 
 Coordinates SimulationController::getPlayerPosition() const {

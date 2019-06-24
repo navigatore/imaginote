@@ -1,6 +1,4 @@
-#ifndef GENERICSPACEPLAYER_H
-#define GENERICSPACEPLAYER_H
-
+#pragma once
 #include <AL/al.h>
 #include <AL/alc.h>
 #include <array>
@@ -80,5 +78,3 @@ class GenericSpacePlayer {
   ALCcontext *context;
   const SimpleSpaceObject *standingField{};
 };
-
-#endif  // GENERICSPACEPLAYER_H

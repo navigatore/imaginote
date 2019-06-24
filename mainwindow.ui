@@ -439,8 +439,8 @@
    <slot>startStopClicked()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>93</x>
-     <y>415</y>
+     <x>101</x>
+     <y>388</y>
     </hint>
     <hint type="destinationlabel">
      <x>176</x>
@@ -480,6 +480,22 @@
     </hint>
    </hints>
   </connection>
+  <connection>
+   <sender>saveSpaceButton</sender>
+   <signal>clicked()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>saveSpace()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>56</x>
+     <y>110</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>242</x>
+     <y>221</y>
+    </hint>
+   </hints>
+  </connection>
  </connections>
  <slots>
   <slot>loadSpaceDef()</slot>
@@ -488,5 +504,6 @@
   <slot>startStopClicked()</slot>
   <slot>loadTrack()</slot>
   <slot>generateSpace()</slot>
+  <slot>saveSpace()</slot>
  </slots>
 </ui>

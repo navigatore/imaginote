@@ -7,7 +7,6 @@ void Path::addNode(const Coordinates2d &point) {
   if (nodes.size() > 1) {
     segments.emplace_back(*(std::end(nodes) - 2), *(std::end(nodes) - 1));
   }
-  int i;
 }
 
 float Path::distance(const Coordinates2d &point) const {

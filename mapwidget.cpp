@@ -28,16 +28,20 @@ int MapWidget::calcPxPositionY(const Coordinates2d& crds) {
   return static_cast<int>(fieldSize * (crds.y() + 0.5f));
 }
 
-void MapWidget::update(const Coordinates& playerCrds,
+void MapWidget::update(const Coordinates& playerCoordinates,
                        const Angle& directionAngle, const Angle& focusAngle,
                        const std::optional<SimpleSpaceObject>& closestField) {
-  playerPxPosX = calcPxPositionX(playerCrds);
-  playerPxPosY = calcPxPositionY(playerCrds);
-
+  simulationMode = true;
+  setPlayerCoordinates(playerCoordinates);
   this->directionAngle = directionAngle;
   this->focusAngle = focusAngle;
   this->closestField = closestField;
   repaint();
+}
+
+void MapWidget::setPlayerCoordinates(const Coordinates& playerCoordinates) {
+  playerPxPosX = calcPxPositionX(playerCoordinates);
+  playerPxPosY = calcPxPositionY(playerCoordinates);
 }
 
 void MapWidget::loadMap(
@@ -182,7 +186,7 @@ void MapWidget::paintFocusAngle() {
 }
 
 void MapWidget::paintPlayerAngle(Angle angle, const QColor& color) {
-  if (playerPxPosX) {
+  if (simulationMode) {
     float radius =
         static_cast<float>(std::sqrt(pxWidth * pxWidth + pxHeight * pxHeight));
     int x = static_cast<int>(radius * std::cos(angle.getRad()));

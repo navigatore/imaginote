@@ -1,6 +1,4 @@
-#ifndef COORDINATES2D_H
-#define COORDINATES2D_H
-
+#pragma once
 class Coordinates2d {
  public:
   explicit Coordinates2d(float x = 0, float y = 0);
@@ -15,5 +13,3 @@ class Coordinates2d {
  private:
   float _x, _y;
 };
-
-#endif  // COORDINATES2D_H

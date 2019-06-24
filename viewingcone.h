@@ -1,6 +1,4 @@
-#ifndef VIEWINGCONE_H
-#define VIEWINGCONE_H
-
+#pragma once
 #include "angle.h"
 #include "coordinates.h"
 #include "line.h"
@@ -49,5 +47,3 @@ class ViewingCone {
   Angle direction, focusAngle, viewAngleX;
   float maxDistance, moveSpeed, rotateSpeed, focusAngleMoveSpeed;
 };
-
-#endif  // VIEWINGCONE_H

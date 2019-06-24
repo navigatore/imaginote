@@ -1,5 +1,4 @@
-#ifndef SIMPLESPACEOBJECT_H
-#define SIMPLESPACEOBJECT_H
+#pragma once
 #include <optional>
 #include <vector>
 #include "coordinates.h"
@@ -41,5 +40,3 @@ class SimpleSpaceObject {
   bool _focus;
   bool _visited{};
 };
-
-#endif  // SIMPLESPACEOBJECT_H

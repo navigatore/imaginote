@@ -1,6 +1,4 @@
-#ifndef MAINWINDOW_H
-#define MAINWINDOW_H
-
+#pragma once
 #include <QMainWindow>
 #include "analysis.h"
 #include "angle.h"
@@ -60,5 +58,3 @@ class MainWindow : public QMainWindow {
   bool spaceLoaded;
   bool presIntValid;
 };
-
-#endif  // MAINWINDOW_H

@@ -1,6 +1,4 @@
-#ifndef SONARSPACEPLAYER_H
-#define SONARSPACEPLAYER_H
-
+#pragma once
 #include "genericspaceplayer.h"
 
 class SonarSpacePlayer : public GenericSpacePlayer {
@@ -19,5 +17,3 @@ class SonarSpacePlayer : public GenericSpacePlayer {
   bool playing;
   float timeToChangeState;
 };
-
-#endif  // SONARSPACEPLAYER_H

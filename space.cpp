@@ -1,10 +1,8 @@
 #include "space.h"
 #include <algorithm>
 
-void Space::loadFromFile(std::ifstream &f) {
-  fields.clear();
-  corners.clear();
-  exitCorners.clear();
+void Space::loadFromBinaryFile(std::ifstream &f) {
+  reset();
 
   uint32_t fixedWidth = 0;
   f.read(reinterpret_cast<char *>(&fixedWidth), sizeof(fixedWidth));
@@ -29,6 +27,72 @@ void Space::loadFromFile(std::ifstream &f) {
   }
 
   findCorners();
+  loaded = true;
+}
+
+void Space::saveToBinaryFile(std::ofstream &file) {
+  auto fixedWidth = static_cast<uint32_t>(getNoOfFieldsAxisX());
+  file.write(reinterpret_cast<char *>(&fixedWidth), sizeof(fixedWidth));
+  auto fixedHeight = static_cast<uint32_t>(getNoOfFieldsAxisZ());
+  file.write(reinterpret_cast<char *>(&fixedHeight), sizeof(fixedHeight));
+  for (auto &row : fields) {
+    for (auto &field : row) {
+      auto fixedFieldHeight = static_cast<uint32_t>(field.height());
+      file.write(reinterpret_cast<char *>(&fixedFieldHeight),
+                 sizeof(fixedFieldHeight));
+    }
+  }
+}
+
+void Space::loadFromTextFile(std::ifstream &f) {
+  reset();
+  unsigned int height{};
+  unsigned int width{};
+
+  try {
+    f >> width >> height;
+
+    for (unsigned int z = 0; z < height; ++z) {
+      fields.emplace_back();
+      for (unsigned int x = 0; x < width; ++x) {
+        unsigned int height = 0;
+        std::string tmp;
+        f >> tmp;
+        if (tmp == "x") {
+          startPosition =
+              Coordinates(static_cast<float>(x), 0, static_cast<float>(z));
+        } else {
+          height = static_cast<unsigned int>(std::stoi(tmp));
+        }
+        fields[z].emplace_back(
+            Coordinates(static_cast<float>(x), 0, static_cast<float>(z)),
+            height, height > 0);
+      }
+    }
+  } catch (std::ios_base::failure & /*e*/) {
+    throw std::runtime_error("Invalid space file (text representation)");
+  }
+
+  loaded = true;
+}
+
+void Space::saveToTextFile(std::ofstream &file) {
+  if (!loaded) {
+    throw std::logic_error("Can't save space file if space is not loaded");
+  }
+  char separator = ' ';
+  file << getNoOfFieldsAxisX() << separator << getNoOfFieldsAxisZ();
+  for (const auto &row : fields) {
+    for (const auto &field : row) {
+      if (field.crds() != startPosition) {
+        file << field.height();
+      } else {
+        file << 'x';
+      }
+      file << separator;
+    }
+    file << std::endl;
+  }
 }
 
 void Space::createEmptySpace(unsigned int width, unsigned int height) {
@@ -41,9 +105,10 @@ void Space::createEmptySpace(unsigned int width, unsigned int height) {
       fields[z][x].crds() = Coordinates(x, 0, z);
     }
   }
+  loaded = true;
 }
 
-bool Space::isLoaded() { return !fields.empty(); }
+bool Space::isLoaded() { return loaded; }
 
 bool Space::hasFieldBetweenPoints(const Coordinates &firstPoint,
                                   const Coordinates &secondPoint) const {
@@ -76,6 +141,14 @@ bool Space::hasFieldBetweenPoints(const Coordinates &firstPoint,
 
 std::vector<std::vector<SimpleSpaceObject> > &Space::getFields() {
   return fields;
+}
+
+unsigned int Space::getFieldsWidth() const {
+  return static_cast<unsigned int>(getNoOfFieldsAxisX());
+}
+
+unsigned int Space::getFieldsHeight() const {
+  return static_cast<unsigned int>(getNoOfFieldsAxisZ());
 }
 
 void Space::findAllCorners() {
@@ -126,23 +199,28 @@ void Space::removeFalseCorners() {
   }
 }
 
+std::size_t Space::getNoOfFieldsAxisX() const { return fields.at(0).size(); }
+
+std::size_t Space::getNoOfFieldsAxisZ() const { return fields.size(); }
+
 void Space::findCorners() {
   findAllCorners();
   removeFalseCorners();
   findExitCorners();
 }
 
-unsigned int Space::getFieldsWidth() {
-  return static_cast<unsigned int>(fields[0].size());
-}
-
-unsigned int Space::getFieldsHeight() {
-  return static_cast<unsigned int>(fields.size());
-}
-
 std::vector<Coordinates2d> Space::getInnerCorners() const { return corners; }
 
 std::vector<Coordinates2d> Space::getExitCorners() const { return exitCorners; }
+
+Coordinates Space::getStartPosition() const { return startPosition; }
+
+void Space::reset() {
+  loaded = false;
+  fields.clear();
+  corners.clear();
+  exitCorners.clear();
+}
 
 const std::vector<std::vector<SimpleSpaceObject> > &Space::getFields() const {
   return fields;

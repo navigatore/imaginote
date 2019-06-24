@@ -145,7 +145,12 @@ void MainWindow::generateSpace() {
 }
 
 void MainWindow::saveSpace() {
-  // TODO: implement this
+  auto fileName = QFileDialog::getSaveFileName(
+      this, "Enter the name of the file", QDir::currentPath(),
+      "Imaginote space (*.spc)");
+  if (!fileName.isEmpty()) {
+    spaceGenerator.saveGeneratedSpace(std::string(fileName.toUtf8()));
+  }
 }
 
 void MainWindow::startStopClicked() {

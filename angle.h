@@ -1,6 +1,4 @@
-#ifndef ANGLE_H
-#define ANGLE_H
-
+#pragma once
 #include <cmath>
 #include <string>
 
@@ -31,5 +29,3 @@ class Angle {
  private:
   float value;
 };
-
-#endif  // ANGLE_H

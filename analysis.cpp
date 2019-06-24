@@ -18,7 +18,7 @@ void Analysis::loadRecording(const std::string &filename) {
     std::ifstream f;
     f.exceptions(std::ios::badbit | std::ios::failbit | std::ios::eofbit);
     f.open(filename.c_str());
-    space.loadFromFile(f);
+    space.loadFromBinaryFile(f);
     track.load(f);
     f.close();
     findBestTrack();

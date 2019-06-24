@@ -1,6 +1,4 @@
-#ifndef TRACK_H
-#define TRACK_H
-
+#pragma once
 #include <chrono>
 #include <fstream>
 #include <vector>
@@ -27,5 +25,3 @@ class Track {
   Duration timeBetweenPoints;
   std::vector<Coordinates2d> recPositions;
 };
-
-#endif  // TRACK_H
