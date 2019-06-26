@@ -222,6 +222,11 @@ void Space::reset() {
   exitCorners.clear();
 }
 
+void Space::setFieldHeight(unsigned int x, unsigned int z,
+                           unsigned int height) {
+  fields.at(z).at(x).height() = height;
+}
+
 const std::vector<std::vector<SimpleSpaceObject> > &Space::getFields() const {
   return fields;
 }

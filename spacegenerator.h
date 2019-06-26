@@ -19,6 +19,8 @@ class SpaceGenerator {
       std::uniform_int_distribution<unsigned long>& xAxisDistribution,
       std::uniform_int_distribution<unsigned long>& yAxisDistribution);
 
+  void addBorderWithOneExit();
+
   std::optional<Space> generatedSpace;
   MapWidget* mapWidget{};
 
@@ -26,4 +28,5 @@ class SpaceGenerator {
   std::mt19937 randomGenerator{randomDevice()};
 
   std::uniform_int_distribution<unsigned int> heightDistribution{1, maxHeight};
+  std::uniform_int_distribution<unsigned int> tldr{0, 3};
 };

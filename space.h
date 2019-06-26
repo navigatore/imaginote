@@ -14,6 +14,7 @@ class Space {
   void saveToTextFile(std::ofstream &f);
   void createEmptySpace(unsigned int width, unsigned int height);
   void reset();
+  void setFieldHeight(unsigned int x, unsigned int z, unsigned int height);
 
   [[nodiscard]] bool isLoaded();
   [[nodiscard]] bool hasFieldBetweenPoints(
