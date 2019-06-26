@@ -23,6 +23,8 @@ class MainWindow : public QMainWindow {
   void saveSpace();
   void startStopClicked();
   void update();
+  void updateGeneratedWidth(int width);
+  void updateGeneratedHeight(int height);
 
  protected:
   void keyPressEvent(QKeyEvent *ev);
@@ -57,4 +59,6 @@ class MainWindow : public QMainWindow {
 
   bool spaceLoaded;
   bool presIntValid;
+  unsigned int generatedWidth{5};
+  unsigned int generatedHeight{5};
 };

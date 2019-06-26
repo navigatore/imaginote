@@ -56,6 +56,14 @@ void MainWindow::update() {
   }
 }
 
+void MainWindow::updateGeneratedWidth(int width) {
+  generatedWidth = static_cast<unsigned int>(width);
+}
+
+void MainWindow::updateGeneratedHeight(int height) {
+  generatedHeight = static_cast<unsigned int>(height);
+}
+
 void MainWindow::keyPressEvent(QKeyEvent *ev) {
   if (ev->key() == Qt::Key_A) {
     keyLeftPressed = true;
@@ -140,7 +148,7 @@ void MainWindow::loadTrack() {
 }
 
 void MainWindow::generateSpace() {
-  spaceGenerator.generate();
+  spaceGenerator.generate(generatedWidth, generatedHeight);
   ui->generatorMapWidget->repaint();
 }
 
