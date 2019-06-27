@@ -1,6 +1,10 @@
 #include <QApplication>
 #include "mainwindow.h"
 
+#ifdef QT_DEBUG
+#include <gtest/gtest.h>
+#endif  // QT_DEBUG
+
 int _main(int argc, char* argv[]) {
   QApplication a(argc, argv);
   MainWindow w;
@@ -8,9 +12,8 @@ int _main(int argc, char* argv[]) {
   return a.exec();
 }
 
-#ifdef QT_DEBUG
-#include <gtest/gtest.h>
 int main(int argc, char* argv[]) {
+#ifdef QT_DEBUG
   testing::InitGoogleTest(&argc, argv);
   auto x = RUN_ALL_TESTS();
   if (x != 0) {

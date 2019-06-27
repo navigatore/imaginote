@@ -36,13 +36,6 @@ SOURCES += \
     simulationcontroller.cpp \
     space.cpp \
     spacegenerator.cpp \
-    test_duration.cpp \
-    test_graph.cpp \
-    test_line.cpp \
-    test_nvgmath.cpp \
-    test_path.cpp \
-    test_space.cpp \
-    test_track.cpp \
     track.cpp \
     viewingcone.cpp \
     mapwidget.cpp \
@@ -83,6 +76,15 @@ FORMS += \
 
 CONFIG += \
     c++17
+
+unix: SOURCES += \
+    test_duration.cpp \
+    test_graph.cpp \
+    test_line.cpp \
+    test_nvgmath.cpp \
+    test_path.cpp \
+    test_space.cpp \
+    test_track.cpp
 
 win32: INCLUDEPATH += 'C:\Program Files (x86)\OpenAL 1.1 SDK\include'
 
