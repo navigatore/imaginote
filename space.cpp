@@ -81,7 +81,8 @@ void Space::saveToTextFile(std::ofstream &file) {
     throw std::logic_error("Can't save space file if space is not loaded");
   }
   char separator = ' ';
-  file << getNoOfFieldsAxisX() << separator << getNoOfFieldsAxisZ();
+  file << getNoOfFieldsAxisX() << separator << getNoOfFieldsAxisZ()
+       << std::endl;
   for (const auto &row : fields) {
     for (const auto &field : row) {
       if (field.crds() != startPosition) {
@@ -225,6 +226,10 @@ void Space::reset() {
 void Space::setFieldHeight(unsigned int x, unsigned int z,
                            unsigned int height) {
   fields.at(z).at(x).height() = height;
+}
+
+void Space::setStartPosition(const Coordinates &start) {
+  startPosition = start;
 }
 
 const std::vector<std::vector<SimpleSpaceObject> > &Space::getFields() const {

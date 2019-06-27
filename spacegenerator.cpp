@@ -25,6 +25,7 @@ void SpaceGenerator::generate(unsigned int width, unsigned int height) {
   }
 
   Coordinates startPlace = findStartPlace(xAxisDistribution, zAxisDistribution);
+  generatedSpace->setStartPosition(startPlace);
 
   mapWidget->loadMap(generatedSpace->getFields());
   mapWidget->setPlayerCoordinates(startPlace);

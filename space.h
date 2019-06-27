@@ -15,6 +15,7 @@ class Space {
   void createEmptySpace(unsigned int width, unsigned int height);
   void reset();
   void setFieldHeight(unsigned int x, unsigned int z, unsigned int height);
+  void setStartPosition(const Coordinates &start);
 
   [[nodiscard]] bool isLoaded();
   [[nodiscard]] bool hasFieldBetweenPoints(
