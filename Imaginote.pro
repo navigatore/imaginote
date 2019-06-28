@@ -29,6 +29,7 @@ SOURCES += \
     duration.cpp \
     graph.cpp \
     graphnode.cpp \
+  keyboardlayouthelpdialog.cpp \
         main.cpp \
         mainwindow.cpp \
     path.cpp \
@@ -51,6 +52,7 @@ HEADERS += \
     duration.h \
   graph.h \
     graphnode.h \
+  keyboardlayouthelpdialog.h \
         mainwindow.h \
     coordinates.h \
     angle.h \
@@ -71,6 +73,7 @@ HEADERS += \
     sonarspaceplayer.h
 
 FORMS += \
+  keyboardlayouthelpdialog.ui \
         mainwindow.ui \
     mapwidget.ui
 

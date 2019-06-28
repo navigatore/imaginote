@@ -6,6 +6,7 @@
 #include <fstream>
 #include <iomanip>
 #include <sstream>
+#include "keyboardlayouthelpdialog.h"
 #include "sonarspaceplayer.h"
 #include "ui_mainwindow.h"
 
@@ -62,6 +63,11 @@ void MainWindow::updateGeneratedWidth(int width) {
 
 void MainWindow::updateGeneratedHeight(int height) {
   generatedHeight = static_cast<unsigned int>(height);
+}
+
+void MainWindow::showHelp() {
+  auto helpDialog = new KeyboardLayoutHelpDialog(this);
+  helpDialog->show();
 }
 
 void MainWindow::keyPressEvent(QKeyEvent *ev) {

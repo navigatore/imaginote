@@ -25,6 +25,7 @@ class MainWindow : public QMainWindow {
   void update();
   void updateGeneratedWidth(int width);
   void updateGeneratedHeight(int height);
+  void showHelp();
 
  protected:
   void keyPressEvent(QKeyEvent *ev);
