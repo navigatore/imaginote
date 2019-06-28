@@ -1,4 +1,5 @@
 #pragma once
+#include <boost/archive/text_oarchive.hpp>
 class Coordinates2d {
  public:
   explicit Coordinates2d(float x = 0, float y = 0);
@@ -11,5 +12,12 @@ class Coordinates2d {
   float& y();
 
  private:
+  friend class boost::serialization::access;
+  template <typename Archive>
+  void serialize(Archive& archive, const unsigned int /*version*/) {
+    archive& _x;
+    archive& _y;
+  }
+
   float _x, _y;
 };

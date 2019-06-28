@@ -1,5 +1,6 @@
 #include "simulationcontroller.h"
 #include <algorithm>
+#include <boost/archive/text_oarchive.hpp>
 #include <exception>
 #include <fstream>
 
@@ -19,10 +20,9 @@ void SimulationController::loadFromFile(const char *fname) {
 }
 
 void SimulationController::saveRecording(const std::string &filename) {
-  std::ofstream f(filename.c_str(), std::ios::trunc | std::ios::binary);
-
-  recTrack.save(f);
-  f.close();
+  std::ofstream f(filename.c_str());
+  boost::archive::text_oarchive oa(f);
+  oa << space << recTrack;
 }
 
 std::string SimulationController::getName() { return name; }

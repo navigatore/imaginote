@@ -91,7 +91,7 @@ unix: SOURCES += \
 
 win32: INCLUDEPATH += 'C:\Program Files (x86)\OpenAL 1.1 SDK\include'
 
-unix: LIBS += -lopenal -lgtest -lpthread
+unix: LIBS += -lopenal -lgtest -lpthread -lboost_serialization
 win32: LIBS += 'C:\Program Files (x86)\OpenAL 1.1 SDK\libs\Win64\OpenAL32.lib'
 
 extraclean.commands = rm *gc*; rm *\.info; rm -r res;

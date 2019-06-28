@@ -1,4 +1,5 @@
 #pragma once
+#include <boost/archive/text_iarchive.hpp>
 #include <fstream>
 #include <vector>
 #include "coordinates.h"
@@ -8,11 +9,10 @@ class Space {
  public:
   static constexpr auto fieldSize = 1.0F;
 
-  void loadFromBinaryFile(std::ifstream &f);
-  void saveToBinaryFile(std::ofstream &file);
   void loadFromTextFile(std::ifstream &f);
   void saveToTextFile(std::ofstream &f);
   void createEmptySpace(unsigned int width, unsigned int height);
+  void findCorners();
   void reset();
   void setFieldHeight(unsigned int x, unsigned int z, unsigned int height);
   void setStartPosition(const Coordinates &start);
@@ -31,7 +31,16 @@ class Space {
   [[nodiscard]] Coordinates getStartPosition() const;
 
  private:
-  void findCorners();
+  friend class boost::serialization::access;
+  template <class Archive>
+  void serialize(Archive &ar, const unsigned int /*version*/) {
+    ar &fields;
+    ar &corners;
+    ar &exitCorners;
+    ar &startPosition;
+    ar &loaded;
+  }
+
   void findAllCorners();
   void findExitCorners();
   void removeFalseCorners();

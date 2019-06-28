@@ -1,4 +1,6 @@
 #pragma once
+#include <boost/archive/text_oarchive.hpp>
+#include <boost/serialization/vector.hpp>
 #include <chrono>
 #include <fstream>
 #include <vector>
@@ -12,8 +14,6 @@ class Track {
 
   void addPosition(const Coordinates2d& point);
   void reset();
-  void save(std::ofstream& f);
-  void load(std::ifstream& f);
 
   [[nodiscard]] std::vector<Segment> asSegments() const;
 
@@ -21,6 +21,14 @@ class Track {
   [[nodiscard]] Duration getDuration() const;
 
  private:
+  friend class boost::serialization::access;
+  template <typename Archive>
+  void serialize(Archive& archive, const unsigned int /*version*/) {
+    archive& duration;
+    archive& timeBetweenPoints;
+    archive& recPositions;
+  }
+
   Duration duration;
   Duration timeBetweenPoints;
   std::vector<Coordinates2d> recPositions;

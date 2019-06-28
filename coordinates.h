@@ -28,5 +28,13 @@ class Coordinates {
   float& z();
 
  private:
+  friend class boost::serialization::access;
+  template <typename Archive>
+  void serialize(Archive& archive, const unsigned int /*version*/) {
+    archive& _x;
+    archive& _y;
+    archive& _z;
+  }
+
   float _x, _y, _z;
 };

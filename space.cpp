@@ -1,49 +1,6 @@
 #include "space.h"
 #include <algorithm>
 
-void Space::loadFromBinaryFile(std::ifstream &f) {
-  reset();
-
-  uint32_t fixedWidth = 0;
-  f.read(reinterpret_cast<char *>(&fixedWidth), sizeof(fixedWidth));
-  auto width = static_cast<unsigned int>(fixedWidth);
-  uint32_t fixedHeight = 0;
-  f.read(reinterpret_cast<char *>(&fixedHeight), sizeof(fixedHeight));
-  auto height = static_cast<unsigned int>(fixedHeight);
-
-  for (unsigned int z = 0; z < height; ++z) {
-    fields.emplace_back();
-    for (unsigned int x = 0; x < width; ++x) {
-      uint32_t fixedFieldHeight = 0;
-      f.read(reinterpret_cast<char *>(&fixedFieldHeight),
-             sizeof(fixedFieldHeight));
-      auto fieldHeight = static_cast<unsigned int>(fixedFieldHeight);
-      auto floatX = static_cast<float>(x);
-      auto floatZ = static_cast<float>(z);
-      auto obj = SimpleSpaceObject(Coordinates(floatX, 0, floatZ), fieldHeight,
-                                   fieldHeight > 0);
-      fields[z].push_back(obj);
-    }
-  }
-
-  findCorners();
-  loaded = true;
-}
-
-void Space::saveToBinaryFile(std::ofstream &file) {
-  auto fixedWidth = static_cast<uint32_t>(getNoOfFieldsAxisX());
-  file.write(reinterpret_cast<char *>(&fixedWidth), sizeof(fixedWidth));
-  auto fixedHeight = static_cast<uint32_t>(getNoOfFieldsAxisZ());
-  file.write(reinterpret_cast<char *>(&fixedHeight), sizeof(fixedHeight));
-  for (auto &row : fields) {
-    for (auto &field : row) {
-      auto fixedFieldHeight = static_cast<uint32_t>(field.height());
-      file.write(reinterpret_cast<char *>(&fixedFieldHeight),
-                 sizeof(fixedFieldHeight));
-    }
-  }
-}
-
 void Space::loadFromTextFile(std::ifstream &f) {
   reset();
   unsigned int height{};

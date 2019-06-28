@@ -1,4 +1,5 @@
 #pragma once
+#include <boost/serialization/binary_object.hpp>
 #include <optional>
 #include <vector>
 #include "coordinates.h"
@@ -34,6 +35,17 @@ class SimpleSpaceObject {
   bool& visited();
 
  private:
+  friend class boost::serialization::access;
+  template <typename Archive>
+  void serialize(Archive& archive, const unsigned int /*version*/) {
+    archive& _crds;
+    archive& boost::serialization::make_binary_object(&corners,
+                                                      sizeof(corners));
+    archive& _height;
+    archive& _focus;
+    archive& _visited;
+  }
+
   Coordinates _crds;
   std::optional<std::vector<Coordinates>> corners;
   unsigned int _height;

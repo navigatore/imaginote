@@ -1,5 +1,6 @@
 #include "analysis.h"
 #include <algorithm>
+#include <boost/archive/text_iarchive.hpp>
 #include <chrono>
 #include <fstream>
 #include "graph.h"
@@ -18,9 +19,9 @@ void Analysis::loadRecording(const std::string &filename) {
     std::ifstream f;
     f.exceptions(std::ios::badbit | std::ios::failbit | std::ios::eofbit);
     f.open(filename.c_str());
-    space.loadFromBinaryFile(f);
-    track.load(f);
-    f.close();
+    boost::archive::text_iarchive ia(f);
+    ia >> space >> track;
+    space.findCorners();
     findBestTrack();
     calculateMeanDifference();
 
