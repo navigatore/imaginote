@@ -52,7 +52,6 @@ void MapWidget::loadMap(
   pxHeight = fieldSize * static_cast<int>((*fields).size());
   setMinimumSize(pxWidth, pxHeight);
   setMaximumSize(9999, 9999);
-  show();
 }
 
 void MapWidget::unloadMap() {

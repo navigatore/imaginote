@@ -89,10 +89,14 @@ unix: SOURCES += \
     test_space.cpp \
     test_track.cpp
 
-win32: INCLUDEPATH += 'C:\Program Files (x86)\OpenAL 1.1 SDK\include'
+win32: INCLUDEPATH += \
+    'C:\Program Files (x86)\OpenAL 1.1 SDK\include' \
+    'C:\Program Files\boost\include\boost-1_70'
 
 unix: LIBS += -lopenal -lgtest -lpthread -lboost_serialization
-win32: LIBS += 'C:\Program Files (x86)\OpenAL 1.1 SDK\libs\Win64\OpenAL32.lib'
+win32: LIBS += \
+    'C:\Program Files (x86)\OpenAL 1.1 SDK\libs\Win64\OpenAL32.lib' \
+    -L 'C:\Program Files\boost\lib' -lboost_serialization-mgw73-mt-x64-1_70
 
 extraclean.commands = rm *gc*; rm *\.info; rm -r res;
 distclean.depends = extraclean
