@@ -12,11 +12,15 @@ void SimulationController::loadFromFile(const char *fname) {
   clearState();
   std::ifstream file;
   file.exceptions(std::ios::badbit | std::ios::failbit | std::ios::eofbit);
-  file.open(fname);
-  space.loadFromTextFile(file);
-  file.close();
-  startPos = space.getStartPosition();
-  name = fname;
+  try {
+    file.open(fname);
+    space.loadFromTextFile(file);
+    file.close();
+    startPos = space.getStartPosition();
+    name = fname;
+  } catch (...) {
+    throw InvalidSpaceFile();
+  }
 }
 
 void SimulationController::saveRecording(const std::string &filename) {
