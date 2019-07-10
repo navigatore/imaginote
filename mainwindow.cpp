@@ -116,16 +116,18 @@ void MainWindow::loadSpaceDef() {
       this, "Select space definition file", QDir::currentPath(),
       "Space definition (*.spc)");
 
-  QByteArray ba = fileName.toLatin1();
-  const char *c_str = ba.data();
+  if (!fileName.isEmpty()) {
+    QByteArray ba = fileName.toLatin1();
+    const char *c_str = ba.data();
 
-  try {
-    space.loadFromFile(c_str);
-    ui->spaceLabel->setText(space.getName().c_str());
-    spaceLoaded = true;
-    tryEnableStartStop();
-  } catch (InvalidSpaceFile &) {
-    ui->spaceLabel->setText("Invalid file!");
+    try {
+      space.loadFromFile(c_str);
+      ui->spaceLabel->setText(space.getName().c_str());
+      spaceLoaded = true;
+      tryEnableStartStop();
+    } catch (InvalidSpaceFile &) {
+      ui->spaceLabel->setText("Invalid file!");
+    }
   }
 }
 
