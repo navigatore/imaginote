@@ -84,9 +84,11 @@ void MainWindow::keyPressEvent(QKeyEvent *ev) {
   } else if (ev->key() == Qt::Key_F) {
     space.toggleMovingFocusAngle();
   } else if (ev->key() == Qt::Key_H) {
-    space.toggleMapWidgetVisibility();
-    ui->listenerPosLabel->setVisible(!ui->listenerPosLabel->isVisible());
-    ui->listenerAngleLabel->setVisible(!ui->listenerAngleLabel->isVisible());
+    if (playing) {
+      space.toggleMapWidgetVisibility();
+      ui->listenerPosLabel->setVisible(!ui->listenerPosLabel->isVisible());
+      ui->listenerAngleLabel->setVisible(!ui->listenerAngleLabel->isVisible());
+    }
   } else if (ev->key() == Qt::Key_P) {
     if (playing) {
       space.volumeUp();
