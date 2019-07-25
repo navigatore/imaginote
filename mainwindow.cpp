@@ -18,6 +18,8 @@ MainWindow::MainWindow(QWidget *parent)
       spaceLoaded(false) {
   ui->setupUi(this);
   ui->spaceLabel->setText("No space definition loaded");
+  ui->listenerPosLabel->hide();
+  ui->listenerAngleLabel->hide();
   playing = false;
   presIntValid = true;
   timer = new QTimer(this);
