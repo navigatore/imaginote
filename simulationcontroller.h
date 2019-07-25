@@ -1,6 +1,7 @@
 #pragma once
 #include <vector>
 #include "coordinates.h"
+#include "filenamestring.h"
 #include "mapwidget.h"
 #include "newspaceplayer.h"
 #include "simplespaceobject.h"
@@ -67,7 +68,7 @@ class SimulationController {
   void playClosestFocusField();
   [[nodiscard]] bool canGoInto(const Coordinates &point) const;
 
-  std::string name;
+  FileNameString name;
   Space space;
   std::optional<ViewingCone> cone;
   Coordinates startPos;

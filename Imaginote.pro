@@ -27,6 +27,7 @@ SOURCES += \
     analysis.cpp \
     coordinates.cpp \
     duration.cpp \
+    filenamestring.cpp \
     graph.cpp \
     graphnode.cpp \
   keyboardlayouthelpdialog.cpp \
@@ -50,6 +51,7 @@ SOURCES += \
 HEADERS += \
     analysis.h \
     duration.h \
+    filenamestring.h \
   graph.h \
     graphnode.h \
   keyboardlayouthelpdialog.h \

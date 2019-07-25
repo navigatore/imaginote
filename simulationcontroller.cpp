@@ -18,6 +18,8 @@ void SimulationController::loadFromFile(const char *fname) {
     file.close();
     startPos = space.getStartPosition();
     name = fname;
+    name.removeDirectoryPath();
+    name.removeExtension();
   } catch (...) {
     throw InvalidSpaceFile();
   }
