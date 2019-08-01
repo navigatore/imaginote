@@ -326,6 +326,13 @@
          </spacer>
         </item>
         <item>
+         <widget class="QLabel" name="exitReachedLabel">
+          <property name="text">
+           <string>ExitReached</string>
+          </property>
+         </widget>
+        </item>
+        <item>
          <widget class="QLabel" name="timeDurationLabel">
           <property name="text">
            <string>Duration</string>

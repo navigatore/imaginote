@@ -28,7 +28,12 @@ void SimulationController::loadFromFile(const char *fname) {
 void SimulationController::saveRecording(const std::string &filename) {
   std::ofstream f(filename.c_str());
   boost::archive::text_oarchive oa(f);
-  oa << recordingMagicNumber << recordingVersion2Constant << space << recTrack;
+  oa << recordingMagicNumber << recordingVersion2Constant << space << recTrack
+     << exitReached;
+}
+
+bool SimulationController::getExitReached() const noexcept {
+  return exitReached;
 }
 
 std::string SimulationController::getName() { return name; }
@@ -91,6 +96,9 @@ void SimulationController::update(float time) {
   mapWidget->update(cone->getPosition(), cone->getDirection(),
                     cone->getFocusAngle(), closestField);
   playClosestFocusField();
+  if (outOfMap()) {
+    exitReached = true;
+  }
   sp->updateTime(time);
   sp->updateListenerPosition(cone->getPosition(), cone->getDirection());
 }
@@ -124,7 +132,7 @@ void SimulationController::setRecording(bool activated) {
   recording = activated;
 }
 
-bool SimulationController::outOfMap() const {
+bool SimulationController::outOfMap() const noexcept {
   auto pos = getPlayerPosition();
   auto width = space.getFieldsWidth();
   auto height = space.getFieldsHeight();

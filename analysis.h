@@ -17,6 +17,8 @@ class Analysis {
   void findBestTrack();
   void calculateMeanDifference();
 
+  [[nodiscard]] bool getIsExtended() const noexcept;
+  [[nodiscard]] std::optional<bool> getExitReached() const noexcept;
   [[nodiscard]] Duration getDuration() const;
   [[nodiscard]] float getMeanDifference() const;
 
@@ -27,6 +29,8 @@ class Analysis {
   void loadRecordingVersion2(const std::string& filename);
   void loadRecordingVersion1(const std::string& filename);
 
+  bool isExtended{};
+  std::optional<bool> exitReached;
   Space space;
   Track track;
   MapWidget* mapWidget{};

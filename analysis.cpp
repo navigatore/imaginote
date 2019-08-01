@@ -16,11 +16,13 @@ void Analysis::setMapWidget(MapWidget *mapWidget) {
 void Analysis::loadRecording(const std::string &filename) {
   try {
     loadRecordingVersion2(filename);
+    isExtended = true;
   } catch (...) {
     std::cerr
         << "This is not a recording file v. 2, trying to load as v. 1...\n";
     try {
       loadRecordingVersion1(filename);
+      isExtended = false;
     } catch (...) {
       throw InvalidFile();
     }
@@ -80,6 +82,12 @@ void Analysis::calculateMeanDifference() {
   meanDifference = meanAccumulator / track.getPositions().size();
 }
 
+bool Analysis::getIsExtended() const noexcept { return isExtended; }
+
+std::optional<bool> Analysis::getExitReached() const noexcept {
+  return exitReached;
+}
+
 Duration Analysis::getDuration() const { return track.getDuration(); }
 
 float Analysis::getMeanDifference() const { return meanDifference; }
@@ -89,12 +97,14 @@ void Analysis::loadRecordingVersion2(const std::string &filename) {
   f.open(filename.c_str());
   boost::archive::text_iarchive ia(f);
   uint32_t magicNumber{}, version{};
+  bool exitReached{};
   ia >> magicNumber >> version;
   if (magicNumber != recordingMagicNumber ||
       version != recordingVersion2Constant) {
     throw InvalidFile();
   }
-  ia >> space >> track;
+  ia >> space >> track >> exitReached;
+  this->exitReached = exitReached;
 }
 
 void Analysis::loadRecordingVersion1(const std::string &filename) {

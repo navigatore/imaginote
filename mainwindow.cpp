@@ -53,7 +53,7 @@ void MainWindow::update() {
     updateListenerAngle();
     updateVolume();
 
-    if (space.outOfMap()) {
+    if (space.getExitReached()) {
       stopClicked();
       space.setFromBeginning();
     }
@@ -238,12 +238,14 @@ void MainWindow::showAnalysis() {
   ui->analysisMapWidget->show();
   ui->timeDurationLabel->show();
   ui->meanDifferenceLabel->show();
+  ui->exitReachedLabel->show();
 }
 
 void MainWindow::hideAnalysis() {
   ui->analysisMapWidget->hide();
   ui->timeDurationLabel->hide();
   ui->meanDifferenceLabel->hide();
+  ui->exitReachedLabel->hide();
 }
 
 bool MainWindow::is_number(const std::string &s) {
@@ -286,4 +288,14 @@ void MainWindow::updateAnalysisLabels() {
       (std::string("Mean difference: ") +
        std::to_string(analysis.getMeanDifference()) + " m")
           .c_str());
+  ui->exitReachedLabel->setText(std::string("Exit reached: unknown").c_str());
+  if (analysis.getIsExtended()) {
+    updateExtendedAnalysisLabels();
+  }
+}
+
+void MainWindow::updateExtendedAnalysisLabels() {
+  ui->exitReachedLabel->setText((std::string("Exit reached: ") +
+                                 (*analysis.getExitReached() ? "Yes" : "No"))
+                                    .c_str());
 }

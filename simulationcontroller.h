@@ -53,7 +53,7 @@ class SimulationController {
   void setRecording(bool activated);
   void saveRecording(const std::string &filename);
 
-  [[nodiscard]] bool outOfMap() const;
+  [[nodiscard]] bool getExitReached() const noexcept;
   [[nodiscard]] bool recordingEnabled() const;
   bool firstCloser(const SimpleSpaceObject &first,
                    const SimpleSpaceObject &second);
@@ -69,7 +69,9 @@ class SimulationController {
 
   void moveFocusAngle(float time);
   void playClosestFocusField();
+
   [[nodiscard]] bool canGoInto(const Coordinates &point) const;
+  [[nodiscard]] bool outOfMap() const noexcept;
 
   FileNameString name;
   Space space;
@@ -80,6 +82,7 @@ class SimulationController {
   GenericSpacePlayer *sp{};
   Track recTrack;
   MapWidget *mapWidget{};
+  bool exitReached{};
   bool closestFieldChanged{false};
   bool movingFocusAngle{false};
   bool recording{false};
