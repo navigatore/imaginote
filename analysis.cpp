@@ -85,8 +85,17 @@ Duration Analysis::getDuration() const { return track.getDuration(); }
 
 float Analysis::getMeanDifference() const { return meanDifference; }
 
-void Analysis::loadRecordingVersion2(const std::string &) {
-  throw std::logic_error("Load recording file v. 2 not implemented yet");
+void Analysis::loadRecordingVersion2(const std::string &filename) {
+  std::ifstream f;
+  f.open(filename.c_str());
+  boost::archive::text_iarchive ia(f);
+  uint32_t magicNumber{}, version{};
+  ia >> magicNumber >> version;
+  if (magicNumber != recordingMagicNumber ||
+      version != recordingVersion2Constant) {
+    throw InvalidFile();
+  }
+  ia >> space >> track;
 }
 
 void Analysis::loadRecordingVersion1(const std::string &filename) {

@@ -28,7 +28,7 @@ void SimulationController::loadFromFile(const char *fname) {
 void SimulationController::saveRecording(const std::string &filename) {
   std::ofstream f(filename.c_str());
   boost::archive::text_oarchive oa(f);
-  oa << space << recTrack;
+  oa << recordingMagicNumber << recordingVersion2Constant << space << recTrack;
 }
 
 std::string SimulationController::getName() { return name; }

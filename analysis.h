@@ -21,6 +21,9 @@ class Analysis {
   [[nodiscard]] float getMeanDifference() const;
 
  private:
+  static constexpr uint32_t recordingMagicNumber = 0x84465e34;
+  static constexpr uint32_t recordingVersion2Constant = 2;
+
   void loadRecordingVersion2(const std::string& filename);
   void loadRecordingVersion1(const std::string& filename);
 

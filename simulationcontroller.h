@@ -64,6 +64,9 @@ class SimulationController {
   [[nodiscard]] float getVolume() const;
 
  private:
+  static constexpr uint32_t recordingMagicNumber = 0x84465e34;
+  static constexpr uint32_t recordingVersion2Constant = 2;
+
   void moveFocusAngle(float time);
   void playClosestFocusField();
   [[nodiscard]] bool canGoInto(const Coordinates &point) const;
