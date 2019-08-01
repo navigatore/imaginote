@@ -3,6 +3,7 @@
 #include <boost/archive/text_iarchive.hpp>
 #include <chrono>
 #include <fstream>
+#include <iostream>
 #include "graph.h"
 
 Analysis::Analysis(std::chrono::milliseconds updatePeriod)
@@ -14,24 +15,27 @@ void Analysis::setMapWidget(MapWidget *mapWidget) {
 
 void Analysis::loadRecording(const std::string &filename) {
   try {
-    shortestPath = Path();
-    meanDifference = 0;
-    std::ifstream f;
-    f.exceptions(std::ios::badbit | std::ios::failbit | std::ios::eofbit);
-    f.open(filename.c_str());
-    boost::archive::text_iarchive ia(f);
-    ia >> space >> track;
-    space.findCorners();
-    findBestTrack();
-    calculateMeanDifference();
-
-    mapWidget->loadMap(space.getFields());
-    mapWidget->setTrack(track);
-    mapWidget->show();
-  } catch (std::ifstream::failure &) {
-    mapWidget->hide();
-    throw InvalidFile();
+    loadRecordingVersion2(filename);
+  } catch (...) {
+    std::cerr
+        << "This is not a recording file v. 2, trying to load as v. 1...\n";
+    try {
+      loadRecordingVersion1(filename);
+    } catch (...) {
+      mapWidget->hide();
+      throw InvalidFile();
+    }
   }
+  shortestPath = Path();
+  meanDifference = 0;
+
+  space.findCorners();
+  findBestTrack();
+  calculateMeanDifference();
+
+  mapWidget->loadMap(space.getFields());
+  mapWidget->setTrack(track);
+  mapWidget->show();
 }
 
 void Analysis::findBestTrack() {
@@ -80,3 +84,14 @@ void Analysis::calculateMeanDifference() {
 Duration Analysis::getDuration() const { return track.getDuration(); }
 
 float Analysis::getMeanDifference() const { return meanDifference; }
+
+void Analysis::loadRecordingVersion2(const std::string &) {
+  throw std::logic_error("Load recording file v. 2 not implemented yet");
+}
+
+void Analysis::loadRecordingVersion1(const std::string &filename) {
+  std::ifstream f;
+  f.open(filename.c_str());
+  boost::archive::text_iarchive ia(f);
+  ia >> space >> track;
+}

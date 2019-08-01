@@ -21,8 +21,10 @@ class Analysis {
   [[nodiscard]] float getMeanDifference() const;
 
  private:
-  Space space;
+  void loadRecordingVersion2(const std::string& filename);
+  void loadRecordingVersion1(const std::string& filename);
 
+  Space space;
   Track track;
   MapWidget* mapWidget{};
   float meanDifference{};
