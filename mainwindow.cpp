@@ -20,6 +20,7 @@ MainWindow::MainWindow(QWidget *parent)
   ui->spaceLabel->setText("No space definition loaded");
   ui->listenerPosLabel->hide();
   ui->listenerAngleLabel->hide();
+  hideAnalysis();
   playing = false;
   presIntValid = true;
   timer = new QTimer(this);
@@ -154,8 +155,10 @@ void MainWindow::loadTrack() {
     analysis.loadRecording(filename);
     ui->trackNameLabel->setText(shortFilename.c_str());
     updateAnalysisLabels();
+    showAnalysis();
   } catch (Analysis::InvalidFile &) {
     ui->trackNameLabel->setText("Invalid file!");
+    hideAnalysis();
   }
 }
 
@@ -229,6 +232,18 @@ void MainWindow::stopClicked() {
 
   playing = false;
   space.stopPlaying();
+}
+
+void MainWindow::showAnalysis() {
+  ui->analysisMapWidget->show();
+  ui->timeDurationLabel->show();
+  ui->meanDifferenceLabel->show();
+}
+
+void MainWindow::hideAnalysis() {
+  ui->analysisMapWidget->hide();
+  ui->timeDurationLabel->hide();
+  ui->meanDifferenceLabel->hide();
 }
 
 bool MainWindow::is_number(const std::string &s) {

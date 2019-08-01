@@ -22,7 +22,6 @@ void Analysis::loadRecording(const std::string &filename) {
     try {
       loadRecordingVersion1(filename);
     } catch (...) {
-      mapWidget->hide();
       throw InvalidFile();
     }
   }

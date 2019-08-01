@@ -45,6 +45,9 @@ class MainWindow : public QMainWindow {
   void startClicked();
   void stopClicked();
 
+  void showAnalysis();
+  void hideAnalysis();
+
   Ui::MainWindow *ui;
 
   QTimer *timer;
