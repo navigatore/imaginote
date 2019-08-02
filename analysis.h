@@ -18,7 +18,8 @@ class Analysis {
   void calculateMeanDifference();
 
   [[nodiscard]] bool getIsExtended() const noexcept;
-  [[nodiscard]] std::optional<bool> getExitReached() const noexcept;
+  [[nodiscard]] bool getExitReached() const noexcept;
+  [[nodiscard]] std::string getSonificationMethodName() const noexcept;
   [[nodiscard]] Duration getDuration() const;
   [[nodiscard]] float getMeanDifference() const;
 
@@ -30,7 +31,8 @@ class Analysis {
   void loadRecordingVersion1(const std::string& filename);
 
   bool isExtended{};
-  std::optional<bool> exitReached;
+  bool exitReached{};
+  std::string sonificationMethodName;
   Space space;
   Track track;
   MapWidget* mapWidget{};

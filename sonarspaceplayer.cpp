@@ -42,3 +42,7 @@ void SonarSpacePlayer::updateTime(float duration) {
   }
   GenericSpacePlayer::updateGains(duration);
 }
+
+std::string SonarSpacePlayer::getName() const noexcept {
+  return std::string("Sonar");
+}

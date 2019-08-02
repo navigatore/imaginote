@@ -346,6 +346,13 @@
           </property>
          </widget>
         </item>
+        <item>
+         <widget class="QLabel" name="sonificationMethodNameLabel">
+          <property name="text">
+           <string>SonificationMethodName</string>
+          </property>
+         </widget>
+        </item>
        </layout>
       </widget>
       <widget class="QWidget" name="generatorTab">

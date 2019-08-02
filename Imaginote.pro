@@ -33,6 +33,7 @@ SOURCES += \
   keyboardlayouthelpdialog.cpp \
         main.cpp \
         mainwindow.cpp \
+    newspaceplayer.cpp \
     path.cpp \
     simplespaceobject.cpp \
     simulationcontroller.cpp \

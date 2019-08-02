@@ -9,6 +9,8 @@ class SonarSpacePlayer : public GenericSpacePlayer {
   virtual void stopPlaying();
   virtual void updateTime(float duration);
 
+  virtual std::string getName() const noexcept override;
+
  private:
   constexpr static const float oneSignalDuration = 0.5f;
   constexpr static const float timeDistanceCoeff = 0.25f;

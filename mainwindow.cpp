@@ -239,6 +239,7 @@ void MainWindow::showAnalysis() {
   ui->timeDurationLabel->show();
   ui->meanDifferenceLabel->show();
   ui->exitReachedLabel->show();
+  ui->sonificationMethodNameLabel->show();
 }
 
 void MainWindow::hideAnalysis() {
@@ -246,6 +247,7 @@ void MainWindow::hideAnalysis() {
   ui->timeDurationLabel->hide();
   ui->meanDifferenceLabel->hide();
   ui->exitReachedLabel->hide();
+  ui->sonificationMethodNameLabel->hide();
 }
 
 bool MainWindow::is_number(const std::string &s) {
@@ -289,6 +291,8 @@ void MainWindow::updateAnalysisLabels() {
        std::to_string(analysis.getMeanDifference()) + " m")
           .c_str());
   ui->exitReachedLabel->setText(std::string("Exit reached: unknown").c_str());
+  ui->sonificationMethodNameLabel->setText(
+      std::string("Sonification method: unknown").c_str());
   if (analysis.getIsExtended()) {
     updateExtendedAnalysisLabels();
   }
@@ -296,6 +300,10 @@ void MainWindow::updateAnalysisLabels() {
 
 void MainWindow::updateExtendedAnalysisLabels() {
   ui->exitReachedLabel->setText((std::string("Exit reached: ") +
-                                 (*analysis.getExitReached() ? "Yes" : "No"))
+                                 (analysis.getExitReached() ? "Yes" : "No"))
                                     .c_str());
+  ui->sonificationMethodNameLabel->setText(
+      (std::string("Sonification method: ") +
+       analysis.getSonificationMethodName())
+          .c_str());
 }

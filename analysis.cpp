@@ -84,8 +84,10 @@ void Analysis::calculateMeanDifference() {
 
 bool Analysis::getIsExtended() const noexcept { return isExtended; }
 
-std::optional<bool> Analysis::getExitReached() const noexcept {
-  return exitReached;
+bool Analysis::getExitReached() const noexcept { return exitReached; }
+
+std::string Analysis::getSonificationMethodName() const noexcept {
+  return sonificationMethodName;
 }
 
 Duration Analysis::getDuration() const { return track.getDuration(); }
@@ -97,14 +99,12 @@ void Analysis::loadRecordingVersion2(const std::string &filename) {
   f.open(filename.c_str());
   boost::archive::text_iarchive ia(f);
   uint32_t magicNumber{}, version{};
-  bool exitReached{};
   ia >> magicNumber >> version;
   if (magicNumber != recordingMagicNumber ||
       version != recordingVersion2Constant) {
     throw InvalidFile();
   }
-  ia >> space >> track >> exitReached;
-  this->exitReached = exitReached;
+  ia >> space >> track >> exitReached >> sonificationMethodName;
 }
 
 void Analysis::loadRecordingVersion1(const std::string &filename) {

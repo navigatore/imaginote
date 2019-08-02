@@ -29,6 +29,8 @@ class GenericSpacePlayer {
 
   [[nodiscard]] float getVolume() const;
 
+  [[nodiscard]] virtual std::string getName() const noexcept = 0;
+
  protected:
   virtual void updateGains(float duration);
 
