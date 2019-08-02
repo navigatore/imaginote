@@ -240,6 +240,8 @@ void MainWindow::showAnalysis() {
   ui->meanDifferenceLabel->show();
   ui->exitReachedLabel->show();
   ui->sonificationMethodNameLabel->show();
+  ui->visualAngleLabel_2->show();
+  ui->distanceLimitLabel_2->show();
 }
 
 void MainWindow::hideAnalysis() {
@@ -248,6 +250,8 @@ void MainWindow::hideAnalysis() {
   ui->meanDifferenceLabel->hide();
   ui->exitReachedLabel->hide();
   ui->sonificationMethodNameLabel->hide();
+  ui->visualAngleLabel_2->hide();
+  ui->distanceLimitLabel_2->hide();
 }
 
 bool MainWindow::is_number(const std::string &s) {
@@ -290,9 +294,10 @@ void MainWindow::updateAnalysisLabels() {
       (std::string("Mean difference: ") +
        std::to_string(analysis.getMeanDifference()) + " m")
           .c_str());
-  ui->exitReachedLabel->setText(std::string("Exit reached: unknown").c_str());
-  ui->sonificationMethodNameLabel->setText(
-      std::string("Sonification method: unknown").c_str());
+  ui->exitReachedLabel->setText("Exit reached: unknown");
+  ui->sonificationMethodNameLabel->setText("Sonification method: unknown");
+  ui->visualAngleLabel_2->setText("Visual angle: unknown");
+  ui->distanceLimitLabel_2->setText("Distance limit: unknown");
   if (analysis.getIsExtended()) {
     updateExtendedAnalysisLabels();
   }
@@ -305,5 +310,12 @@ void MainWindow::updateExtendedAnalysisLabels() {
   ui->sonificationMethodNameLabel->setText(
       (std::string("Sonification method: ") +
        analysis.getSonificationMethodName())
+          .c_str());
+  ui->visualAngleLabel_2->setText(
+      (std::string("Visual angle: ") + analysis.getVisualAngle().str())
+          .c_str());
+  ui->distanceLimitLabel_2->setText(
+      (std::string("Distance limit: ") +
+       std::to_string(analysis.getDistanceLimit()) + " m")
           .c_str());
 }

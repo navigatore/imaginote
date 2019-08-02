@@ -29,7 +29,8 @@ void SimulationController::saveRecording(const std::string &filename) {
   std::ofstream f(filename.c_str());
   boost::archive::text_oarchive oa(f);
   oa << recordingMagicNumber << recordingVersion2Constant << space << recTrack
-     << exitReached << sp->getName();
+     << exitReached << sp->getName() << cone->getAngleX()
+     << cone->getMaxDistance();
 }
 
 bool SimulationController::getExitReached() const noexcept {

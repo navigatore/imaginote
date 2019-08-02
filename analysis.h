@@ -22,6 +22,8 @@ class Analysis {
   [[nodiscard]] std::string getSonificationMethodName() const noexcept;
   [[nodiscard]] Duration getDuration() const;
   [[nodiscard]] float getMeanDifference() const;
+  [[nodiscard]] Angle getVisualAngle() const noexcept;
+  [[nodiscard]] float getDistanceLimit() const noexcept;
 
  private:
   static constexpr uint32_t recordingMagicNumber = 0x84465e34;
@@ -35,6 +37,8 @@ class Analysis {
   std::string sonificationMethodName;
   Space space;
   Track track;
+  Angle visualAngle;
+  float distanceLimit{};
   MapWidget* mapWidget{};
   float meanDifference{};
   Path shortestPath;

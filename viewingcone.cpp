@@ -43,9 +43,11 @@ Coordinates2d ViewingCone::getFocusPointPosition(
   return closestIntersectionPoint(intersectionPts);
 }
 
-Angle ViewingCone::getDirection() { return direction; }
+Angle ViewingCone::getDirection() const { return direction; }
 
 Angle ViewingCone::getFocusAngle() const { return focusAngle; }
+
+float ViewingCone::getMaxDistance() const noexcept { return maxDistance; }
 
 Coordinates ViewingCone::tryForward(float time) {
   Coordinates newPosition = position;
@@ -56,13 +58,11 @@ Coordinates ViewingCone::tryForward(float time) {
 
 Coordinates ViewingCone::tryBackward(float time) { return tryForward(-time); }
 
-Angle ViewingCone::getAngleX() { return viewAngleX; }
+Angle ViewingCone::getAngleX() const { return viewAngleX; }
 
 void ViewingCone::setPosition(Coordinates position) {
   this->position = position;
 }
-
-void ViewingCone::setAngleX(const Angle &angleX) { viewAngleX = angleX; }
 
 void ViewingCone::setDistanceLimit(float limit) { maxDistance = limit; }
 

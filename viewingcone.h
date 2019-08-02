@@ -9,7 +9,6 @@ class ViewingCone {
   ViewingCone(Coordinates startPosition, Angle viewAngleX, float maxDistance);
 
   void setPosition(Coordinates position);
-  void setAngleX(const Angle &angleX);
   void setDistanceLimit(float limit);
 
   void rotateLeft(float time);
@@ -23,9 +22,10 @@ class ViewingCone {
   [[nodiscard]] Coordinates getPosition() const;
   [[nodiscard]] Coordinates2d getFocusPointPosition(
       const SimpleSpaceObject &obj) const;
-  Angle getAngleX();
-  Angle getDirection();
+  [[nodiscard]] Angle getAngleX() const;
+  [[nodiscard]] Angle getDirection() const;
   [[nodiscard]] Angle getFocusAngle() const;
+  [[nodiscard]] float getMaxDistance() const noexcept;
 
   Coordinates tryForward(float time);
   Coordinates tryBackward(float time);

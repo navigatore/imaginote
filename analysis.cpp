@@ -94,6 +94,10 @@ Duration Analysis::getDuration() const { return track.getDuration(); }
 
 float Analysis::getMeanDifference() const { return meanDifference; }
 
+Angle Analysis::getVisualAngle() const noexcept { return visualAngle; }
+
+float Analysis::getDistanceLimit() const noexcept { return distanceLimit; }
+
 void Analysis::loadRecordingVersion2(const std::string &filename) {
   std::ifstream f;
   f.open(filename.c_str());
@@ -104,7 +108,8 @@ void Analysis::loadRecordingVersion2(const std::string &filename) {
       version != recordingVersion2Constant) {
     throw InvalidFile();
   }
-  ia >> space >> track >> exitReached >> sonificationMethodName;
+  ia >> space >> track >> exitReached >> sonificationMethodName >>
+      visualAngle >> distanceLimit;
 }
 
 void Analysis::loadRecordingVersion1(const std::string &filename) {

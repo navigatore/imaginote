@@ -1,4 +1,5 @@
 #pragma once
+#include <boost/archive/text_oarchive.hpp>
 #include <cmath>
 #include <string>
 
@@ -27,5 +28,10 @@ class Angle {
   [[nodiscard]] std::string str() const;
 
  private:
+  friend class boost::serialization::access;
+  template <typename Archive>
+  void serialize(Archive& archive, const unsigned int /*version*/) {
+    archive& value;
+  }
   float value;
 };
