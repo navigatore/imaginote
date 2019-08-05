@@ -91,6 +91,10 @@ std::string Analysis::getSonificationMethodName() const noexcept {
   return recording->getSonificationMethodName();
 }
 
+std::string Analysis::getSpaceName() const noexcept {
+  return recording->getSpaceName();
+}
+
 Duration Analysis::getDuration() const { return track.getDuration(); }
 
 float Analysis::getMeanDifference() const { return meanDifference; }

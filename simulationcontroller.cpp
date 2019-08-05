@@ -59,6 +59,7 @@ void SimulationController::startPlaying(Angle angleX, float maxDistance,
   cone = ViewingCone(startPos, angleX, maxDistance);
   this->sp = sp;
   RecordingInfo recordingInfo;
+  recordingInfo.setSpaceName(name);
   recordingInfo.setSpace(space);
   recordingInfo.setSonificationMethodName(sp->getName());
   recordingInfo.setAngleX(cone->getAngleX());

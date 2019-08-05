@@ -23,6 +23,7 @@ class Recording {
   [[nodiscard]] const std::vector<bool> &getMovingFocusVector() const noexcept;
   [[nodiscard]] const std::vector<bool> &getMapPreviewVector() const noexcept;
   [[nodiscard]] bool getExitReached() const noexcept;
+  [[nodiscard]] std::string getSpaceName() const noexcept;
   [[nodiscard]] std::string getSonificationMethodName() const noexcept;
   [[nodiscard]] Angle getVisualAngle() const noexcept;
   [[nodiscard]] float getDistanceLimit() const noexcept;
@@ -36,6 +37,7 @@ class Recording {
 
   Space space;
   Track track;
+  std::string spaceName;
   std::string sonificationMethodName;
   Angle angleX;
   float maxDistance{};

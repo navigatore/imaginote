@@ -4,6 +4,7 @@
 
 Recording::Recording(const RecordingInfo &recordingInfo)
     : space(recordingInfo.getSpace()),
+      spaceName(recordingInfo.getSpaceName()),
       sonificationMethodName(recordingInfo.getSonificationMethodName()),
       angleX(recordingInfo.getAngleX()),
       maxDistance(recordingInfo.getMaxDistance()) {}
@@ -20,8 +21,8 @@ Recording::Recording(const std::string &filename, bool oldVersion)
 void Recording::saveRecording(const std::string &filename) {
   std::ofstream f(filename.c_str());
   boost::archive::text_oarchive oa(f);
-  oa << recordingMagicNumber << recordingVersion2Constant << space << track
-     << _exitReached << sonificationMethodName << angleX << maxDistance
+  oa << recordingMagicNumber << recordingVersion2Constant << spaceName << space
+     << track << _exitReached << sonificationMethodName << angleX << maxDistance
      << movingFocusVector << mapPreviewVector;
 }
 
@@ -46,6 +47,8 @@ const std::vector<bool> &Recording::getMovingFocusVector() const noexcept {
 
 bool Recording::getExitReached() const noexcept { return _exitReached; }
 
+std::string Recording::getSpaceName() const noexcept { return spaceName; }
+
 std::string Recording::getSonificationMethodName() const noexcept {
   return sonificationMethodName;
 }
@@ -68,8 +71,8 @@ void Recording::loadRecording(const std::string &filename) {
       version != recordingVersion2Constant) {
     throw InvalidFile();
   }
-  ia >> space >> track >> _exitReached >> sonificationMethodName >> angleX >>
-      maxDistance >> movingFocusVector >> mapPreviewVector;
+  ia >> spaceName >> space >> track >> _exitReached >> sonificationMethodName >>
+      angleX >> maxDistance >> movingFocusVector >> mapPreviewVector;
 }
 
 void Recording::loadOldRecording(const std::string &filename) {

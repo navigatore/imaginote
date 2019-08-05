@@ -233,6 +233,7 @@ void MainWindow::showAnalysis() {
   ui->distanceLimitLabel_2->show();
   ui->trackingRadiusTimeLabel->show();
   ui->mapPreviewTimeLabel->show();
+  ui->spaceNameLabel->show();
 }
 
 void MainWindow::hideAnalysis() {
@@ -245,6 +246,7 @@ void MainWindow::hideAnalysis() {
   ui->distanceLimitLabel_2->hide();
   ui->trackingRadiusTimeLabel->hide();
   ui->mapPreviewTimeLabel->hide();
+  ui->spaceNameLabel->hide();
 }
 
 bool MainWindow::is_number(const std::string &s) {
@@ -296,6 +298,7 @@ void MainWindow::updateAnalysisLabels() {
   ui->distanceLimitLabel_2->setText("Distance limit: unknown");
   ui->trackingRadiusTimeLabel->setText("Moving tracking radius time: unknown");
   ui->mapPreviewTimeLabel->setText("Map preview enabled time: unknown");
+  ui->spaceNameLabel->setText("Space name: unknown");
   if (analysis.getIsExtended()) {
     updateExtendedAnalysisLabels();
   }
@@ -326,4 +329,6 @@ void MainWindow::updateExtendedAnalysisLabels() {
        std::to_string(analysis.getMapPreviewEnabledPercentageTime()) +
        std::string(" %"))
           .c_str());
+  ui->spaceNameLabel->setText(
+      (std::string("Space name: ") + analysis.getSpaceName()).c_str());
 }

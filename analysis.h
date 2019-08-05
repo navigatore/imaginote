@@ -21,6 +21,7 @@ class Analysis {
   [[nodiscard]] bool getIsExtended() const noexcept;
   [[nodiscard]] bool getExitReached() const noexcept;
   [[nodiscard]] std::string getSonificationMethodName() const noexcept;
+  [[nodiscard]] std::string getSpaceName() const noexcept;
   [[nodiscard]] Duration getDuration() const;
   [[nodiscard]] float getMeanDifference() const;
   [[nodiscard]] Angle getVisualAngle() const noexcept;
