@@ -1,12 +1,7 @@
 #include "simulationcontroller.h"
 #include <algorithm>
-#include <boost/archive/text_oarchive.hpp>
 #include <exception>
 #include <fstream>
-
-SimulationController::SimulationController(
-    const std::chrono::milliseconds &updatePeriod)
-    : recTrack(updatePeriod) {}
 
 void SimulationController::loadFromFile(const char *fname) {
   clearState();
@@ -25,14 +20,6 @@ void SimulationController::loadFromFile(const char *fname) {
   }
 }
 
-void SimulationController::saveRecording(const std::string &filename) {
-  std::ofstream f(filename.c_str());
-  boost::archive::text_oarchive oa(f);
-  oa << recordingMagicNumber << recordingVersion2Constant << space << recTrack
-     << exitReached << sp->getName() << cone->getAngleX()
-     << cone->getMaxDistance();
-}
-
 bool SimulationController::getExitReached() const noexcept {
   return exitReached;
 }
@@ -41,7 +28,6 @@ std::string SimulationController::getName() { return name; }
 
 void SimulationController::setMapWidget(MapWidget *mapWidget) {
   this->mapWidget = mapWidget;
-  mapWidget->setTrack(recTrack);
 }
 
 void SimulationController::rotateListenerLeft(float time) {
@@ -71,10 +57,19 @@ void SimulationController::goBackward(float time) {
 void SimulationController::startPlaying(Angle angleX, float maxDistance,
                                         GenericSpacePlayer *sp) {
   cone = ViewingCone(startPos, angleX, maxDistance);
+  this->sp = sp;
+  RecordingInfo recordingInfo;
+  recordingInfo.setSpace(space);
+  recordingInfo.setSonificationMethodName(sp->getName());
+  recordingInfo.setAngleX(cone->getAngleX());
+  recordingInfo.setMaxDistance(cone->getMaxDistance());
+  recording = std::make_unique<Recording>(recordingInfo);
+
   mapWidget->loadMap(space.getFields());
   mapWidget->setAngleX(angleX / 2);
   mapWidget->setDistanceLimit(maxDistance);
-  this->sp = sp;
+  mapWidget->setTrack(recording->getTrack());
+
   update(0);
 }
 
@@ -82,12 +77,15 @@ void SimulationController::stopPlaying() {
   delete sp;
   sp = nullptr;
   mapWidget->unloadMap();
+  if (recordingEnabled) {
+    saveRecording();
+  }
   setFromBeginning();
 }
 
 void SimulationController::update(float time) {
-  if (recording) {
-    recTrack.addPosition(cone->getPosition());
+  if (recordingEnabled) {
+    recording->addPosition(cone->getPosition());
   }
   if (movingFocusAngle) {
     moveFocusAngle(time);
@@ -99,6 +97,7 @@ void SimulationController::update(float time) {
   playClosestFocusField();
   if (outOfMap()) {
     exitReached = true;
+    recording->exitReached();
   }
   sp->updateTime(time);
   sp->updateListenerPosition(cone->getPosition(), cone->getDirection());
@@ -129,8 +128,8 @@ void SimulationController::volumeUp() { sp->volumeUp(); }
 
 void SimulationController::volumeDown() { sp->volumeDown(); }
 
-void SimulationController::setRecording(bool activated) {
-  recording = activated;
+void SimulationController::setRecordingActivated(bool activated) {
+  recordingEnabled = activated;
 }
 
 bool SimulationController::outOfMap() const noexcept {
@@ -141,7 +140,9 @@ bool SimulationController::outOfMap() const noexcept {
          pos.z() < -halfFieldSize || pos.z() > height - halfFieldSize;
 }
 
-bool SimulationController::recordingEnabled() const { return recording; }
+bool SimulationController::getRecordingEnabled() const noexcept {
+  return recordingEnabled;
+}
 
 void SimulationController::setFieldsFocus() {
   for (auto &row : space.getFields()) {
@@ -213,6 +214,14 @@ void SimulationController::playClosestFocusField() {
   }
 }
 
+void SimulationController::saveRecording() {
+  auto t = std::time(nullptr);
+  auto tm = *std::localtime(&t);
+  std::ostringstream filename;
+  filename << std::put_time(&tm, "%Y-%m-%d_%H-%M-%S") << ".rec";
+  recording->saveRecording(std::string((filename.str())));
+}
+
 void SimulationController::clearState() {
   space.reset();
   cone.reset();
@@ -225,6 +234,7 @@ void SimulationController::setFromBeginning() {
   closestField.reset();
   closestFieldChanged = false;
   standingField = nullptr;
+  exitReached = false;
 
   for (auto &row : space.getFields()) {
     for (auto &field : row) {
@@ -232,7 +242,7 @@ void SimulationController::setFromBeginning() {
     }
   }
 
-  recTrack.reset();
+  recording.release();
 }
 
 bool SimulationController::canGoInto(const Coordinates &point) const {

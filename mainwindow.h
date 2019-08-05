@@ -32,9 +32,6 @@ class MainWindow : public QMainWindow {
   void keyReleaseEvent(QKeyEvent *ev);
 
  private:
-  static const unsigned int updateFreq = 60;
-  static constexpr std::chrono::milliseconds updatePeriod{1000 / updateFreq};
-
   void tryEnableStartStop();
   bool is_number(const std::string &s);
   void updateListenerPos();
@@ -55,10 +52,12 @@ class MainWindow : public QMainWindow {
 
   bool playing;
 
-  bool keyLeftPressed = false, keyRightPressed = false, keyUpPressed = false,
-       keyDownPressed = false;
+  bool keyLeftPressed{};
+  bool keyRightPressed{};
+  bool keyUpPressed{};
+  bool keyDownPressed{};
 
-  SimulationController space;
+  SimulationController simulationController;
   Analysis analysis;
   SpaceGenerator spaceGenerator;
 

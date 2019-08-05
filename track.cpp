@@ -1,11 +1,8 @@
 #include "track.h"
 
-Track::Track(Duration timeBetweenPoints)
-    : timeBetweenPoints(timeBetweenPoints) {}
-
 void Track::addPosition(const Coordinates2d& point) {
   recPositions.push_back(point);
-  duration += timeBetweenPoints;
+  duration += updatePeriod;
 }
 
 void Track::reset() {

@@ -3,14 +3,15 @@
 #include "duration.h"
 #include "mapwidget.h"
 #include "path.h"
+#include "recording.h"
 #include "space.h"
 
 class Analysis {
  public:
-  explicit Analysis(std::chrono::milliseconds updatePeriod);
+  Analysis() = default;
 
-  class InvalidFile : public std::exception {};
   class FileNotLoaded : public std::exception {};
+  class InvalidFile : public std::exception {};
 
   void setMapWidget(MapWidget* mapWidget);
   void loadRecording(const std::string& filename);
@@ -26,19 +27,10 @@ class Analysis {
   [[nodiscard]] float getDistanceLimit() const noexcept;
 
  private:
-  static constexpr uint32_t recordingMagicNumber = 0x84465e34;
-  static constexpr uint32_t recordingVersion2Constant = 2;
-
-  void loadRecordingVersion2(const std::string& filename);
-  void loadRecordingVersion1(const std::string& filename);
-
   bool isExtended{};
-  bool exitReached{};
-  std::string sonificationMethodName;
   Space space;
   Track track;
-  Angle visualAngle;
-  float distanceLimit{};
+  std::unique_ptr<Recording> recording;
   MapWidget* mapWidget{};
   float meanDifference{};
   Path shortestPath;

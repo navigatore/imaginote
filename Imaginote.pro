@@ -35,6 +35,8 @@ SOURCES += \
         mainwindow.cpp \
     newspaceplayer.cpp \
     path.cpp \
+    recording.cpp \
+    recordinginfo.cpp \
     simplespaceobject.cpp \
     simulationcontroller.cpp \
     space.cpp \
@@ -51,6 +53,7 @@ SOURCES += \
 
 HEADERS += \
     analysis.h \
+    constants.h \
     duration.h \
     filenamestring.h \
   graph.h \
@@ -61,6 +64,8 @@ HEADERS += \
     angle.h \
     newspaceplayer.h \
     path.h \
+    recording.h \
+    recordinginfo.h \
     simplespaceobject.h \
     simulationcontroller.h \
     space.h \

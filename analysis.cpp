@@ -6,22 +6,19 @@
 #include <iostream>
 #include "graph.h"
 
-Analysis::Analysis(std::chrono::milliseconds updatePeriod)
-    : track(updatePeriod) {}
-
 void Analysis::setMapWidget(MapWidget *mapWidget) {
   this->mapWidget = mapWidget;
 }
 
 void Analysis::loadRecording(const std::string &filename) {
   try {
-    loadRecordingVersion2(filename);
+    recording = std::make_unique<Recording>(filename);
     isExtended = true;
   } catch (...) {
     std::cerr
         << "This is not a recording file v. 2, trying to load as v. 1...\n";
     try {
-      loadRecordingVersion1(filename);
+      recording = std::make_unique<Recording>(filename, true);
       isExtended = false;
     } catch (...) {
       throw InvalidFile();
@@ -30,12 +27,14 @@ void Analysis::loadRecording(const std::string &filename) {
   shortestPath = Path();
   meanDifference = 0;
 
+  space = recording->getSpace();
   space.findCorners();
+  track = recording->getTrack();
   findBestTrack();
   calculateMeanDifference();
 
   mapWidget->loadMap(space.getFields());
-  mapWidget->setTrack(track);
+  mapWidget->setTrack(recording->getTrack());
   mapWidget->show();
 }
 
@@ -84,37 +83,22 @@ void Analysis::calculateMeanDifference() {
 
 bool Analysis::getIsExtended() const noexcept { return isExtended; }
 
-bool Analysis::getExitReached() const noexcept { return exitReached; }
+bool Analysis::getExitReached() const noexcept {
+  return recording->getExitReached();
+}
 
 std::string Analysis::getSonificationMethodName() const noexcept {
-  return sonificationMethodName;
+  return recording->getSonificationMethodName();
 }
 
 Duration Analysis::getDuration() const { return track.getDuration(); }
 
 float Analysis::getMeanDifference() const { return meanDifference; }
 
-Angle Analysis::getVisualAngle() const noexcept { return visualAngle; }
-
-float Analysis::getDistanceLimit() const noexcept { return distanceLimit; }
-
-void Analysis::loadRecordingVersion2(const std::string &filename) {
-  std::ifstream f;
-  f.open(filename.c_str());
-  boost::archive::text_iarchive ia(f);
-  uint32_t magicNumber{}, version{};
-  ia >> magicNumber >> version;
-  if (magicNumber != recordingMagicNumber ||
-      version != recordingVersion2Constant) {
-    throw InvalidFile();
-  }
-  ia >> space >> track >> exitReached >> sonificationMethodName >>
-      visualAngle >> distanceLimit;
+Angle Analysis::getVisualAngle() const noexcept {
+  return recording->getVisualAngle();
 }
 
-void Analysis::loadRecordingVersion1(const std::string &filename) {
-  std::ifstream f;
-  f.open(filename.c_str());
-  boost::archive::text_iarchive ia(f);
-  ia >> space >> track;
+float Analysis::getDistanceLimit() const noexcept {
+  return recording->getDistanceLimit();
 }

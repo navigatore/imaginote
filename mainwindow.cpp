@@ -6,16 +6,13 @@
 #include <fstream>
 #include <iomanip>
 #include <sstream>
+#include "constants.h"
 #include "keyboardlayouthelpdialog.h"
 #include "sonarspaceplayer.h"
 #include "ui_mainwindow.h"
 
 MainWindow::MainWindow(QWidget *parent)
-    : QMainWindow(parent),
-      ui(new Ui::MainWindow),
-      space(updatePeriod),
-      analysis(updatePeriod),
-      spaceLoaded(false) {
+    : QMainWindow(parent), ui(new Ui::MainWindow), spaceLoaded(false) {
   ui->setupUi(this);
   ui->spaceLabel->setText("No space definition loaded");
   ui->listenerPosLabel->hide();
@@ -29,7 +26,7 @@ MainWindow::MainWindow(QWidget *parent)
 
   setWindowFlags(Qt::Dialog | Qt::MSWindowsFixedSizeDialogHint);
 
-  space.setMapWidget(ui->mapWidget);
+  simulationController.setMapWidget(ui->mapWidget);
   analysis.setMapWidget(ui->analysisMapWidget);
   spaceGenerator.setMapWidget(ui->generatorMapWidget);
 }
@@ -39,23 +36,22 @@ MainWindow::~MainWindow() { delete ui; }
 void MainWindow::update() {
   if (playing) {
     if (keyLeftPressed) {
-      space.rotateListenerLeft(1.0f / updateFreq);
+      simulationController.rotateListenerLeft(1.0f / updateFreq);
     } else if (keyRightPressed) {
-      space.rotateListenerRight(1.0f / updateFreq);
+      simulationController.rotateListenerRight(1.0f / updateFreq);
     }
     if (keyUpPressed) {
-      space.goForward(1.0f / updateFreq);
+      simulationController.goForward(1.0f / updateFreq);
     } else if (keyDownPressed) {
-      space.goBackward(1.0f / updateFreq);
+      simulationController.goBackward(1.0f / updateFreq);
     }
-    space.update(1.0f / updateFreq);
+    simulationController.update(1.0f / updateFreq);
     updateListenerPos();
     updateListenerAngle();
     updateVolume();
 
-    if (space.getExitReached()) {
+    if (simulationController.getExitReached()) {
       stopClicked();
-      space.setFromBeginning();
     }
   }
 }
@@ -83,20 +79,20 @@ void MainWindow::keyPressEvent(QKeyEvent *ev) {
   } else if (ev->key() == Qt::Key_S) {
     keyDownPressed = true;
   } else if (ev->key() == Qt::Key_F) {
-    space.toggleMovingFocusAngle();
+    simulationController.toggleMovingFocusAngle();
   } else if (ev->key() == Qt::Key_H) {
     if (playing) {
-      space.toggleMapWidgetVisibility();
+      simulationController.toggleMapWidgetVisibility();
       ui->listenerPosLabel->setVisible(!ui->listenerPosLabel->isVisible());
       ui->listenerAngleLabel->setVisible(!ui->listenerAngleLabel->isVisible());
     }
   } else if (ev->key() == Qt::Key_P) {
     if (playing) {
-      space.volumeUp();
+      simulationController.volumeUp();
     }
   } else if (ev->key() == Qt::Key_L) {
     if (playing) {
-      space.volumeDown();
+      simulationController.volumeDown();
     }
   }
 }
@@ -126,8 +122,8 @@ void MainWindow::loadSpaceDef() {
     const char *c_str = ba.data();
 
     try {
-      space.loadFromFile(c_str);
-      ui->spaceLabel->setText(space.getName().c_str());
+      simulationController.loadFromFile(c_str);
+      ui->spaceLabel->setText(simulationController.getName().c_str());
       spaceLoaded = true;
       tryEnableStartStop();
     } catch (InvalidSpaceFile &) {
@@ -207,8 +203,9 @@ void MainWindow::startClicked() {
   playing = true;
   auto angleX = Angle(ui->visualAngleSlider->value());
   auto maxDistance = ui->distanceLimitSlider->value();
-  space.setRecording(ui->recordTrackCheckBox->isChecked());
-  space.startPlaying(angleX, maxDistance, player);
+  simulationController.setRecordingActivated(
+      ui->recordTrackCheckBox->isChecked());
+  simulationController.startPlaying(angleX, maxDistance, player);
   adjustSize();
 }
 
@@ -222,16 +219,8 @@ void MainWindow::stopClicked() {
     ui->tabWidget->setTabEnabled(i, true);
   }
 
-  if (space.recordingEnabled()) {
-    auto t = std::time(nullptr);
-    auto tm = *std::localtime(&t);
-    std::ostringstream filename;
-    filename << std::put_time(&tm, "%Y-%m-%d_%H-%M-%S") << ".rec";
-    space.saveRecording(std::string((filename.str())));
-  }
-
   playing = false;
-  space.stopPlaying();
+  simulationController.stopPlaying();
 }
 
 void MainWindow::showAnalysis() {
@@ -270,12 +259,14 @@ void MainWindow::tryEnableStartStop() {
 
 void MainWindow::updateListenerPos() {
   ui->listenerPosLabel->setText(
-      ("Listener position: " + space.listenerPositionStr()).c_str());
+      ("Listener position: " + simulationController.listenerPositionStr())
+          .c_str());
 }
 
 void MainWindow::updateListenerAngle() {
   ui->listenerAngleLabel->setText(
-      ("Listener angle: " + space.listenerDirectionStr()).c_str());
+      ("Listener angle: " + simulationController.listenerDirectionStr())
+          .c_str());
 }
 
 void MainWindow::updateVolume() {
@@ -283,7 +274,8 @@ void MainWindow::updateVolume() {
     ui->volumeLabel->setText("Volume: undefined");
   } else {
     ui->volumeLabel->setText(
-        ("Volume: " + std::to_string(space.getVolume())).c_str());
+        ("Volume: " + std::to_string(simulationController.getVolume()))
+            .c_str());
   }
 }
 

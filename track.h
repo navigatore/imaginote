@@ -4,13 +4,14 @@
 #include <chrono>
 #include <fstream>
 #include <vector>
+#include "constants.h"
 #include "coordinates2d.h"
 #include "duration.h"
 #include "segment.h"
 
 class Track {
  public:
-  Track(Duration timeBetweenPoints);
+  Track() = default;
 
   void addPosition(const Coordinates2d& point);
   void reset();
@@ -25,11 +26,11 @@ class Track {
   template <typename Archive>
   void serialize(Archive& archive, const unsigned int /*version*/) {
     archive& duration;
-    archive& timeBetweenPoints;
+    archive& unused;
     archive& recPositions;
   }
 
   Duration duration;
-  Duration timeBetweenPoints;
+  Duration unused;  // for backward compatibility
   std::vector<Coordinates2d> recPositions;
 };

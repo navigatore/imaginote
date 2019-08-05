@@ -4,6 +4,7 @@
 #include "filenamestring.h"
 #include "mapwidget.h"
 #include "newspaceplayer.h"
+#include "recording.h"
 #include "simplespaceobject.h"
 #include "space.h"
 #include "track.h"
@@ -13,7 +14,7 @@ class InvalidSpaceFile : public std::exception {};
 
 class SimulationController {
  public:
-  SimulationController(const std::chrono::milliseconds &updatePeriod);
+  SimulationController() = default;
 
   static constexpr float fieldSize = 1.0F;
   static constexpr float halfFieldSize = fieldSize / 2.0F;
@@ -50,11 +51,10 @@ class SimulationController {
   void volumeUp();
   void volumeDown();
 
-  void setRecording(bool activated);
-  void saveRecording(const std::string &filename);
+  void setRecordingActivated(bool activated);
 
   [[nodiscard]] bool getExitReached() const noexcept;
-  [[nodiscard]] bool recordingEnabled() const;
+  [[nodiscard]] bool getRecordingEnabled() const noexcept;
   bool firstCloser(const SimpleSpaceObject &first,
                    const SimpleSpaceObject &second);
   float distanceSqFrom(SimpleSpaceObject obj);
@@ -64,11 +64,9 @@ class SimulationController {
   [[nodiscard]] float getVolume() const;
 
  private:
-  static constexpr uint32_t recordingMagicNumber = 0x84465e34;
-  static constexpr uint32_t recordingVersion2Constant = 2;
-
   void moveFocusAngle(float time);
   void playClosestFocusField();
+  void saveRecording();
 
   [[nodiscard]] bool canGoInto(const Coordinates &point) const;
   [[nodiscard]] bool outOfMap() const noexcept;
@@ -80,10 +78,10 @@ class SimulationController {
   std::optional<SimpleSpaceObject> closestField;
   SimpleSpaceObject *standingField{};
   GenericSpacePlayer *sp{};
-  Track recTrack;
   MapWidget *mapWidget{};
+  std::unique_ptr<Recording> recording;
   bool exitReached{};
   bool closestFieldChanged{false};
   bool movingFocusAngle{false};
-  bool recording{false};
+  bool recordingEnabled{false};
 };
