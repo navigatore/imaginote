@@ -108,3 +108,9 @@ float Analysis::getTrackingRadiusEnabledPercentageTime() const noexcept {
   return 100.0f * std::accumulate(begin(vector), end(vector), 0) /
          vector.size();
 }
+
+float Analysis::getMapPreviewEnabledPercentageTime() const noexcept {
+  auto &vector{recording->getMapPreviewVector()};
+  return 100.0f * std::accumulate(begin(vector), end(vector), 0) /
+         vector.size();
+}

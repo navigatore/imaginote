@@ -22,7 +22,7 @@ void Recording::saveRecording(const std::string &filename) {
   boost::archive::text_oarchive oa(f);
   oa << recordingMagicNumber << recordingVersion2Constant << space << track
      << _exitReached << sonificationMethodName << angleX << maxDistance
-     << movingFocusVector;
+     << movingFocusVector << mapPreviewVector;
 }
 
 void Recording::exitReached() { _exitReached = true; }
@@ -31,6 +31,13 @@ void Recording::addPosition(const Coordinates2d &position,
                             bool movingFocusEnabled) {
   track.addPosition(position);
   movingFocusVector.push_back(movingFocusEnabled);
+  mapPreviewVector.push_back(mapPreviewEnabled);
+}
+
+void Recording::toggleMapPreview() { mapPreviewEnabled = !mapPreviewEnabled; }
+
+const std::vector<bool> &Recording::getMapPreviewVector() const noexcept {
+  return mapPreviewVector;
 }
 
 const std::vector<bool> &Recording::getMovingFocusVector() const noexcept {
@@ -62,7 +69,7 @@ void Recording::loadRecording(const std::string &filename) {
     throw InvalidFile();
   }
   ia >> space >> track >> _exitReached >> sonificationMethodName >> angleX >>
-      maxDistance >> movingFocusVector;
+      maxDistance >> movingFocusVector >> mapPreviewVector;
 }
 
 void Recording::loadOldRecording(const std::string &filename) {

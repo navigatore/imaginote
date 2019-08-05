@@ -122,6 +122,7 @@ void SimulationController::toggleMovingFocusAngle() {
 
 void SimulationController::toggleMapWidgetVisibility() {
   mapWidget->setVisible(!mapWidget->isVisible());
+  recording->toggleMapPreview();
 }
 
 void SimulationController::volumeUp() { sp->volumeUp(); }

@@ -16,10 +16,12 @@ class Recording {
   void saveRecording(const std::string &filename);
   void exitReached();
   void addPosition(const Coordinates2d &position, bool movingFocusEnabled);
+  void toggleMapPreview();
 
   [[nodiscard]] const Track &getTrack() const noexcept;
   [[nodiscard]] const Space &getSpace() const noexcept;
   [[nodiscard]] const std::vector<bool> &getMovingFocusVector() const noexcept;
+  [[nodiscard]] const std::vector<bool> &getMapPreviewVector() const noexcept;
   [[nodiscard]] bool getExitReached() const noexcept;
   [[nodiscard]] std::string getSonificationMethodName() const noexcept;
   [[nodiscard]] Angle getVisualAngle() const noexcept;
@@ -39,5 +41,7 @@ class Recording {
   float maxDistance{};
   bool _exitReached{};
   bool oldVersion{};
+  bool mapPreviewEnabled{};
   std::vector<bool> movingFocusVector;
+  std::vector<bool> mapPreviewVector;
 };

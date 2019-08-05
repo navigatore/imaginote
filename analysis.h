@@ -26,6 +26,7 @@ class Analysis {
   [[nodiscard]] Angle getVisualAngle() const noexcept;
   [[nodiscard]] float getDistanceLimit() const noexcept;
   [[nodiscard]] float getTrackingRadiusEnabledPercentageTime() const noexcept;
+  [[nodiscard]] float getMapPreviewEnabledPercentageTime() const noexcept;
 
  private:
   bool isExtended{};

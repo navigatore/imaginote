@@ -374,6 +374,13 @@
           </property>
          </widget>
         </item>
+        <item>
+         <widget class="QLabel" name="mapPreviewTimeLabel">
+          <property name="text">
+           <string>MapPreview</string>
+          </property>
+         </widget>
+        </item>
        </layout>
       </widget>
       <widget class="QWidget" name="generatorTab">
