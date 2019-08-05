@@ -25,6 +25,7 @@ class Analysis {
   [[nodiscard]] float getMeanDifference() const;
   [[nodiscard]] Angle getVisualAngle() const noexcept;
   [[nodiscard]] float getDistanceLimit() const noexcept;
+  [[nodiscard]] float getTrackingRadiusEnabledPercentageTime() const noexcept;
 
  private:
   bool isExtended{};

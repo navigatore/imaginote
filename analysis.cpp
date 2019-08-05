@@ -102,3 +102,9 @@ Angle Analysis::getVisualAngle() const noexcept {
 float Analysis::getDistanceLimit() const noexcept {
   return recording->getDistanceLimit();
 }
+
+float Analysis::getTrackingRadiusEnabledPercentageTime() const noexcept {
+  auto &vector{recording->getMovingFocusVector()};
+  return 100.0f * std::accumulate(begin(vector), end(vector), 0) /
+         vector.size();
+}

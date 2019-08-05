@@ -367,6 +367,13 @@
           </property>
          </widget>
         </item>
+        <item>
+         <widget class="QLabel" name="trackingRadiusTimeLabel">
+          <property name="text">
+           <string>TrackingRadius</string>
+          </property>
+         </widget>
+        </item>
        </layout>
       </widget>
       <widget class="QWidget" name="generatorTab">

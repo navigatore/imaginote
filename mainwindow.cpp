@@ -231,6 +231,7 @@ void MainWindow::showAnalysis() {
   ui->sonificationMethodNameLabel->show();
   ui->visualAngleLabel_2->show();
   ui->distanceLimitLabel_2->show();
+  ui->trackingRadiusTimeLabel->show();
 }
 
 void MainWindow::hideAnalysis() {
@@ -241,6 +242,7 @@ void MainWindow::hideAnalysis() {
   ui->sonificationMethodNameLabel->hide();
   ui->visualAngleLabel_2->hide();
   ui->distanceLimitLabel_2->hide();
+  ui->trackingRadiusTimeLabel->hide();
 }
 
 bool MainWindow::is_number(const std::string &s) {
@@ -290,6 +292,7 @@ void MainWindow::updateAnalysisLabels() {
   ui->sonificationMethodNameLabel->setText("Sonification method: unknown");
   ui->visualAngleLabel_2->setText("Visual angle: unknown");
   ui->distanceLimitLabel_2->setText("Distance limit: unknown");
+  ui->trackingRadiusTimeLabel->setText("Moving tracking radius time: unknown");
   if (analysis.getIsExtended()) {
     updateExtendedAnalysisLabels();
   }
@@ -309,5 +312,10 @@ void MainWindow::updateExtendedAnalysisLabels() {
   ui->distanceLimitLabel_2->setText(
       (std::string("Distance limit: ") +
        std::to_string(analysis.getDistanceLimit()) + " m")
+          .c_str());
+  ui->trackingRadiusTimeLabel->setText(
+      (std::string("Moving tracking radius time: ") +
+       std::to_string(analysis.getTrackingRadiusEnabledPercentageTime()) +
+       std::string(" %"))
           .c_str());
 }

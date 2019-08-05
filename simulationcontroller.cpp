@@ -85,7 +85,7 @@ void SimulationController::stopPlaying() {
 
 void SimulationController::update(float time) {
   if (recordingEnabled) {
-    recording->addPosition(cone->getPosition());
+    recording->addPosition(cone->getPosition(), movingFocusAngle);
   }
   if (movingFocusAngle) {
     moveFocusAngle(time);
