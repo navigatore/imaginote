@@ -42,11 +42,12 @@ class GenericSpacePlayer {
   static constexpr unsigned int samplesLen = sample_rate;
   static constexpr unsigned int buf_size = 2 * samplesLen;
   static constexpr float volumeMultiplierChangeStep = 0.1F;
+  static constexpr float referenceDistance = 0.3F;
   static constexpr float fadeTime = 0.1F;
   static constexpr unsigned int fadeSamples =
       static_cast<unsigned int>(sample_rate * fadeTime);
   static constexpr float baseFrequency = 440.0F;
-  static constexpr float defaultAmplitude = 0.3F;
+  static constexpr float defaultAmplitude = 0.1F;
   static constexpr float warnAmplitude = 0.3F * defaultAmplitude;
   static constexpr unsigned int noOfBuffers = 3;
   static constexpr unsigned int visitedWarnIdx = 2;

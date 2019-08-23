@@ -33,6 +33,7 @@ GenericSpacePlayer::GenericSpacePlayer() {
 
   for (unsigned int i = 0; i < noOfBuffers; ++i) {
     startSource(i);
+    alSourcef(i, AL_REFERENCE_DISTANCE, referenceDistance);
   }
 }
 
