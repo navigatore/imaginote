@@ -54,6 +54,10 @@ void GenericSpacePlayer::updateListenerPosition(const Coordinates &pos,
 
 void GenericSpacePlayer::updateTime(float duration) { updateGains(duration); }
 
+void GenericSpacePlayer::setVolume(float volume) {
+  alListenerf(AL_GAIN, volume);
+}
+
 void GenericSpacePlayer::updateGains(float duration) {
   auto gainStep = duration / fadeTime;
   if (!playing) {
@@ -72,21 +76,6 @@ void GenericSpacePlayer::updateGains(float duration) {
   }
   setGains();
 }
-
-void GenericSpacePlayer::volumeUp() {
-  volumeMultiplier += volumeMultiplierChangeStep;
-  alListenerf(AL_GAIN, volumeMultiplier);
-}
-
-void GenericSpacePlayer::volumeDown() {
-  volumeMultiplier -= volumeMultiplierChangeStep;
-  if (volumeMultiplier < 0) {
-    volumeMultiplier = 0;
-  }
-  alListenerf(AL_GAIN, volumeMultiplier);
-}
-
-float GenericSpacePlayer::getVolume() const { return volumeMultiplier; }
 
 float GenericSpacePlayer::getFrequency(unsigned int height) {
   return baseFrequency / static_cast<float>(height);

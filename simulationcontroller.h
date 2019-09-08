@@ -18,6 +18,7 @@ class SimulationController {
 
   static constexpr float fieldSize = 1.0F;
   static constexpr float halfFieldSize = fieldSize / 2.0F;
+  static constexpr float volumeMultiplierChangeStep = 0.1F;
 
   void loadFromFile(const char *fname);
   Coordinates getInitListenerPos();
@@ -80,6 +81,7 @@ class SimulationController {
   GenericSpacePlayer *sp{};
   MapWidget *mapWidget{};
   std::unique_ptr<Recording> recording;
+  float volumeMultiplier{1.0F};
   bool exitReached{};
   bool closestFieldChanged{false};
   bool movingFocusAngle{false};

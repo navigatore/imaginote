@@ -58,6 +58,7 @@ void SimulationController::startPlaying(Angle angleX, float maxDistance,
                                         GenericSpacePlayer *sp) {
   cone = ViewingCone(startPos, angleX, maxDistance);
   this->sp = sp;
+  sp->setVolume(volumeMultiplier);
   RecordingInfo recordingInfo;
   recordingInfo.setSpaceName(name);
   recordingInfo.setSpace(space);
@@ -126,9 +127,18 @@ void SimulationController::toggleMapWidgetVisibility() {
   recording->toggleMapPreview();
 }
 
-void SimulationController::volumeUp() { sp->volumeUp(); }
+void SimulationController::volumeUp() {
+  volumeMultiplier += volumeMultiplierChangeStep;
+  sp->setVolume(volumeMultiplier);
+}
 
-void SimulationController::volumeDown() { sp->volumeDown(); }
+void SimulationController::volumeDown() {
+  volumeMultiplier -= volumeMultiplierChangeStep;
+  if (volumeMultiplier < 0) {
+    volumeMultiplier = 0;
+  }
+  sp->setVolume(volumeMultiplier);
+}
 
 void SimulationController::setRecordingActivated(bool activated) {
   recordingEnabled = activated;
@@ -277,7 +287,7 @@ Coordinates SimulationController::getPlayerPosition() const {
   return cone->getPosition();
 }
 
-float SimulationController::getVolume() const { return sp->getVolume(); }
+float SimulationController::getVolume() const { return volumeMultiplier; }
 
 void SimulationController::moveFocusAngle(float time) {
   cone->moveFocusAngle(time);

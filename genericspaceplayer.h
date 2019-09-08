@@ -24,10 +24,7 @@ class GenericSpacePlayer {
   virtual void updateListenerPosition(const Coordinates &pos,
                                       const Angle &angle);
   virtual void updateTime(float duration);
-  virtual void volumeUp();
-  virtual void volumeDown();
-
-  [[nodiscard]] float getVolume() const;
+  virtual void setVolume(float volume);
 
   [[nodiscard]] virtual std::string getName() const noexcept = 0;
 
@@ -41,7 +38,6 @@ class GenericSpacePlayer {
   static constexpr unsigned int sample_rate = 44100;
   static constexpr unsigned int samplesLen = sample_rate;
   static constexpr unsigned int buf_size = 2 * samplesLen;
-  static constexpr float volumeMultiplierChangeStep = 0.1F;
   static constexpr float referenceDistance = 0.3F;
   static constexpr float fadeTime = 0.1F;
   static constexpr unsigned int fadeSamples =
@@ -71,7 +67,6 @@ class GenericSpacePlayer {
   bool playing{false};
   unsigned int primaryIdx{};
 
-  float volumeMultiplier{1.0F};
   float primaryGain{}, secondaryGain{}, warnGain{};
   float primaryFrequency{};
   std::array<ALuint, noOfBuffers> src{};
