@@ -218,7 +218,8 @@ void MainWindow::stopClicked() {
   for (int i = 0; i < ui->tabWidget->count(); ++i) {
     ui->tabWidget->setTabEnabled(i, true);
   }
-
+  ui->listenerPosLabel->hide();
+  ui->listenerAngleLabel->hide();
   playing = false;
   simulationController.stopPlaying();
 }
