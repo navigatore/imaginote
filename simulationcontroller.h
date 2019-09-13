@@ -3,7 +3,7 @@
 #include "coordinates.h"
 #include "filenamestring.h"
 #include "mapwidget.h"
-#include "newspaceplayer.h"
+#include "simplespaceplayer.h"
 #include "recording.h"
 #include "simplespaceobject.h"
 #include "space.h"

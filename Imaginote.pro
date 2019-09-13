@@ -33,11 +33,11 @@ SOURCES += \
   keyboardlayouthelpdialog.cpp \
         main.cpp \
         mainwindow.cpp \
-    newspaceplayer.cpp \
     path.cpp \
     recording.cpp \
     recordinginfo.cpp \
     simplespaceobject.cpp \
+    simplespaceplayer.cpp \
     simulationcontroller.cpp \
     space.cpp \
     spacegenerator.cpp \
@@ -62,11 +62,11 @@ HEADERS += \
         mainwindow.h \
     coordinates.h \
     angle.h \
-    newspaceplayer.h \
     path.h \
     recording.h \
     recordinginfo.h \
     simplespaceobject.h \
+    simplespaceplayer.h \
     simulationcontroller.h \
     space.h \
     spacegenerator.h \

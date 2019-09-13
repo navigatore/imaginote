@@ -185,7 +185,7 @@ void MainWindow::startClicked() {
 
   GenericSpacePlayer *player = nullptr;
   if (ui->simpleButton->isChecked()) {
-    player = new NewSpacePlayer();
+    player = new SimpleSpacePlayer();
   } else if (ui->sonarButton->isChecked()) {
     player = new SonarSpacePlayer();
   }
