@@ -1,5 +1,6 @@
 #pragma once
 #include <optional>
+
 #include "mapwidget.h"
 #include "space.h"
 
@@ -27,6 +28,7 @@ class SpaceGenerator {
   std::random_device randomDevice;
   std::mt19937 randomGenerator{randomDevice()};
 
-  std::uniform_int_distribution<unsigned int> heightDistribution{1, maxHeight};
+  std::uniform_int_distribution<unsigned int> fieldHeightDistribution{
+      1, maxHeight};
   std::uniform_int_distribution<unsigned int> tldr{0, 3};
 };

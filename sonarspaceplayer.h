@@ -5,9 +5,9 @@ class SonarSpacePlayer : public GenericSpacePlayer {
  public:
   SonarSpacePlayer();
 
-  virtual void startPlaying();
-  virtual void stopPlaying();
-  virtual void updateTime(float duration);
+  virtual void startPlaying() override;
+  virtual void stopPlaying() override;
+  virtual void updateTime(float duration) override;
 
   virtual std::string getName() const noexcept override;
 

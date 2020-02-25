@@ -1,9 +1,12 @@
 #include <QApplication>
+
 #include "mainwindow.h"
 
 #ifdef QT_DEBUG
 #include <gtest/gtest.h>
 #endif  // QT_DEBUG
+
+int _main(int argc, char* argv[]);
 
 int _main(int argc, char* argv[]) {
   QApplication a(argc, argv);

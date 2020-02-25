@@ -1,4 +1,5 @@
 #include "space.h"
+
 #include <algorithm>
 
 void Space::loadFromTextFile(std::ifstream &f) {
@@ -12,18 +13,18 @@ void Space::loadFromTextFile(std::ifstream &f) {
     for (unsigned int z = 0; z < height; ++z) {
       fields.emplace_back();
       for (unsigned int x = 0; x < width; ++x) {
-        unsigned int height = 0;
+        unsigned int fieldHeight = 0;
         std::string tmp;
         f >> tmp;
         if (tmp == "x") {
           startPosition =
               Coordinates(static_cast<float>(x), 0, static_cast<float>(z));
         } else {
-          height = static_cast<unsigned int>(std::stoi(tmp));
+          fieldHeight = static_cast<unsigned int>(std::stoi(tmp));
         }
         fields[z].emplace_back(
             Coordinates(static_cast<float>(x), 0, static_cast<float>(z)),
-            height, height > 0);
+            fieldHeight, fieldHeight > 0);
       }
     }
   } catch (std::ios_base::failure & /*e*/) {

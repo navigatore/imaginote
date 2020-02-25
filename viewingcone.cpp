@@ -1,4 +1,5 @@
 #include "viewingcone.h"
+
 #include <stdexcept>
 
 ViewingCone::ViewingCone(Coordinates startPosition, Angle viewAngleX,
@@ -60,9 +61,7 @@ Coordinates ViewingCone::tryBackward(float time) { return tryForward(-time); }
 
 Angle ViewingCone::getAngleX() const { return viewAngleX; }
 
-void ViewingCone::setPosition(Coordinates position) {
-  this->position = position;
-}
+void ViewingCone::setPosition(Coordinates position_) { position = position_; }
 
 void ViewingCone::setDistanceLimit(float limit) { maxDistance = limit; }
 

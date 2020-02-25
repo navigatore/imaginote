@@ -1,5 +1,7 @@
 #include "line.h"
+
 #include <stdexcept>
+
 #include "nvgmath.h"
 
 Line::Line(const Coordinates2d &first, const Coordinates2d &second) {

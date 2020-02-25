@@ -1,5 +1,7 @@
 #include "mapwidget.h"
+
 #include <cmath>
+
 #include "ui_mapwidget.h"
 
 MapWidget::MapWidget(QWidget* parent)
@@ -12,7 +14,7 @@ MapWidget::MapWidget(QWidget* parent)
       pxHeight(0) {
   ui->setupUi(this);
   QPalette pal = palette();
-  pal.setColor(QPalette::Background, Qt::black);
+  pal.setColor(QPalette::Window, Qt::black);
   setAutoFillBackground(true);
   setPalette(pal);
   hide();
@@ -29,13 +31,13 @@ int MapWidget::calcPxPositionY(const Coordinates2d& crds) {
 }
 
 void MapWidget::update(const Coordinates& playerCoordinates,
-                       const Angle& directionAngle, const Angle& focusAngle,
-                       const std::optional<SimpleSpaceObject>& closestField) {
+                       const Angle& directionAngle_, const Angle& focusAngle_,
+                       const std::optional<SimpleSpaceObject>& closestField_) {
   simulationMode = true;
   setPlayerCoordinates(playerCoordinates);
-  this->directionAngle = directionAngle;
-  this->focusAngle = focusAngle;
-  this->closestField = closestField;
+  directionAngle = directionAngle_;
+  focusAngle = focusAngle_;
+  closestField = closestField_;
   repaint();
 }
 
@@ -165,8 +167,8 @@ void MapWidget::paintCorners(const std::vector<Coordinates2d>* ptr,
 
 void MapWidget::paintEvent(QPaintEvent*) {
   if (mapLoaded) {
-    QPainter painter(this);
-    this->painter = &painter;
+    QPainter localPainter(this);
+    this->painter = &localPainter;
     paintFocusAngle();
     paintClosestField();
     paintFields();
@@ -208,11 +210,11 @@ void MapWidget::paintClosestField() {
   }
 }
 
-void MapWidget::setAngleX(const Angle& angleX) { this->angleX = angleX; }
+void MapWidget::setAngleX(const Angle& angleX_) { angleX = angleX_; }
 
 void MapWidget::setDistanceLimit(float limit) { distanceLimit = limit; }
 
-void MapWidget::setTrack(const Track& track) { this->track = &track; }
+void MapWidget::setTrack(const Track& track_) { track = &track_; }
 
 void MapWidget::setCorners(const std::vector<Coordinates2d>& points) {
   corners = points;

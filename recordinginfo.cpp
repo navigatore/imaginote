@@ -2,21 +2,21 @@
 
 RecordingInfo::RecordingInfo() {}
 
-void RecordingInfo::setSpaceName(const std::string spaceName) {
-  this->spaceName = spaceName;
+void RecordingInfo::setSpaceName(const std::string &spaceName_) {
+  spaceName = spaceName_;
 }
 
-void RecordingInfo::setSpace(const Space &space) { this->space = space; }
+void RecordingInfo::setSpace(const Space &space_) { space = space_; }
 
 void RecordingInfo::setSonificationMethodName(
-    const std::string &sonificationMethodName) {
-  this->sonificationMethodName = sonificationMethodName;
+    const std::string &sonificationMethodName_) {
+  sonificationMethodName = sonificationMethodName_;
 }
 
-void RecordingInfo::setAngleX(const Angle &angleX) { this->angleX = angleX; }
+void RecordingInfo::setAngleX(const Angle &angleX_) { angleX = angleX_; }
 
-void RecordingInfo::setMaxDistance(float maxDistance) {
-  this->maxDistance = maxDistance;
+void RecordingInfo::setMaxDistance(float maxDistance_) {
+  maxDistance = maxDistance_;
 }
 
 std::string RecordingInfo::getSpaceName() const {

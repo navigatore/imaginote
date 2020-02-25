@@ -1,4 +1,5 @@
 #include "simulationcontroller.h"
+
 #include <algorithm>
 #include <exception>
 #include <fstream>
@@ -26,8 +27,8 @@ bool SimulationController::getExitReached() const noexcept {
 
 std::string SimulationController::getName() { return name; }
 
-void SimulationController::setMapWidget(MapWidget *mapWidget) {
-  this->mapWidget = mapWidget;
+void SimulationController::setMapWidget(MapWidget *mapWidget_) {
+  mapWidget = mapWidget_;
 }
 
 void SimulationController::rotateListenerLeft(float time) {
@@ -55,9 +56,9 @@ void SimulationController::goBackward(float time) {
 }
 
 void SimulationController::startPlaying(Angle angleX, float maxDistance,
-                                        GenericSpacePlayer *sp) {
+                                        GenericSpacePlayer *sp_) {
   cone = ViewingCone(startPos, angleX, maxDistance);
-  this->sp = sp;
+  sp = sp_;
   sp->setVolume(volumeMultiplier);
   RecordingInfo recordingInfo;
   recordingInfo.setSpaceName(name);

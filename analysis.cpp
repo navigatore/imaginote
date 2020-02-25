@@ -1,14 +1,14 @@
 #include "analysis.h"
+
 #include <algorithm>
 #include <boost/archive/text_iarchive.hpp>
 #include <chrono>
 #include <fstream>
 #include <iostream>
+
 #include "graph.h"
 
-void Analysis::setMapWidget(MapWidget *mapWidget) {
-  this->mapWidget = mapWidget;
-}
+void Analysis::setMapWidget(MapWidget *mapWidget_) { mapWidget = mapWidget_; }
 
 void Analysis::loadRecording(const std::string &filename) {
   try {

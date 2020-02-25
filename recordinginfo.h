@@ -1,5 +1,6 @@
 #pragma once
 #include <optional>
+
 #include "angle.h"
 #include "space.h"
 
@@ -9,7 +10,7 @@ class RecordingInfo {
 
   class NotFullySetUp : public std::exception {};
 
-  void setSpaceName(const std::string spaceName);
+  void setSpaceName(const std::string& spaceName);
   void setSpace(const Space& space);
   void setSonificationMethodName(const std::string& sonificationMethodName);
   void setAngleX(const Angle& angleX);

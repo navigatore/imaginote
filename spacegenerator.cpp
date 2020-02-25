@@ -1,4 +1,5 @@
 #include "spacegenerator.h"
+
 #include <random>
 #include <vector>
 
@@ -19,8 +20,8 @@ void SpaceGenerator::generate(unsigned int width, unsigned int height) {
     if (generatedSpace->getFields()[y][x].height() > 0) {
       continue;
     }
-    auto height = heightDistribution(randomGenerator);
-    generatedSpace->getFields()[y][x].height() = height;
+    auto fieldHeight = fieldHeightDistribution(randomGenerator);
+    generatedSpace->getFields()[y][x].height() = fieldHeight;
     ++nonEmptyFields;
   }
 
@@ -42,8 +43,8 @@ void SpaceGenerator::saveGeneratedSpace(const std::string& fileName) {
   generatedSpace->saveToTextFile(file);
 }
 
-void SpaceGenerator::setMapWidget(MapWidget* mapWidget) {
-  this->mapWidget = mapWidget;
+void SpaceGenerator::setMapWidget(MapWidget* mapWidget_) {
+  mapWidget = mapWidget_;
 }
 
 Coordinates SpaceGenerator::findStartPlace(
@@ -72,9 +73,9 @@ void SpaceGenerator::addBorderWithOneExit() {
   }
   auto edge = tldr(randomGenerator);
   unsigned int x{}, z{};
-  std::uniform_int_distribution<unsigned long> widthDistribution(
+  std::uniform_int_distribution<unsigned int> widthDistribution(
       1, generatedSpace->getFieldsWidth() - 2);
-  std::uniform_int_distribution<unsigned long> heightDistribution(
+  std::uniform_int_distribution<unsigned int> heightDistribution(
       1, generatedSpace->getFieldsHeight() - 2);
 
   switch (edge) {
