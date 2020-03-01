@@ -1,7 +1,5 @@
 #include "recordinginfo.h"
 
-RecordingInfo::RecordingInfo() {}
-
 void RecordingInfo::setSpaceName(const std::string &spaceName_) {
   spaceName = spaceName_;
 }

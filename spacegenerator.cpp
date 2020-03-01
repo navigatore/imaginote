@@ -72,7 +72,8 @@ void SpaceGenerator::addBorderWithOneExit() {
                                    borderHeight);
   }
   auto edge = tldr(randomGenerator);
-  unsigned int x{}, z{};
+  unsigned int x{};
+  unsigned int z{};
   std::uniform_int_distribution<unsigned int> widthDistribution(
       1, generatedSpace->getFieldsWidth() - 2);
   std::uniform_int_distribution<unsigned int> heightDistribution(

@@ -6,7 +6,7 @@
 
 class RecordingInfo {
  public:
-  RecordingInfo();
+  RecordingInfo() = default;
 
   class NotFullySetUp : public std::exception {};
 

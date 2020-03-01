@@ -3,6 +3,7 @@
 #include <memory>
 #include <set>
 #include <vector>
+
 #include "graphnode.h"
 #include "segment.h"
 
@@ -43,9 +44,8 @@ class Graph {
 
   static void addNode(GraphNodeSharedPointers &nodes, const Coordinates &value);
 
-  [[nodiscard]] std::vector<Coordinates> reconstructPath(
-      GraphNodeSharedPointersMap cameFrom,
-      GraphNodeSharedPtr current) const;
+  [[nodiscard]] static std::vector<Coordinates> reconstructPath(
+      const GraphNodeSharedPointersMap &cameFrom, GraphNodeSharedPtr current);
 
   [[nodiscard]] std::shared_ptr<GraphNode> &getNodeByValue(
       const Coordinates &value);

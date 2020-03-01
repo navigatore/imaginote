@@ -1,4 +1,5 @@
 #include "path.h"
+
 #include <exception>
 #include <optional>
 
@@ -10,7 +11,7 @@ void Path::addNode(const Coordinates2d &point) {
 }
 
 float Path::distance(const Coordinates2d &point) const {
-  if (segments.size() == 0) {
+  if (segments.empty()) {
     throw std::logic_error(
         "Path must contain at least two points to calculate distance from "
         "a point");

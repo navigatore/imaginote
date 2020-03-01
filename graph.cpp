@@ -68,8 +68,7 @@ std::vector<Coordinates> Graph::findShortestPathToAnyExit(
 const GraphNodeSharedPointers &Graph::getNodes() const { return _nodes; }
 
 std::vector<Coordinates> Graph::reconstructPath(
-    const GraphNodeSharedPointersMap cameFrom,
-    GraphNodeSharedPtr current) const {
+    const GraphNodeSharedPointersMap &cameFrom, GraphNodeSharedPtr current) {
   std::vector<Coordinates> totalPath;
   while (cameFrom.find(current) != cameFrom.end()) {
     totalPath.push_back(current->getValue());
@@ -89,7 +88,7 @@ std::shared_ptr<GraphNode> &Graph::getNodeByValue(const Coordinates &value) {
 }
 
 float Graph::distanceFromClosestExit(const Coordinates &position) const {
-  if (!exitNodes.size()) {
+  if (exitNodes.empty()) {
     throw NoExitNode();
   }
   auto minNumberSoFar = position.distance2d(exitNodes[0]->getValue());

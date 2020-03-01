@@ -255,7 +255,7 @@ void SimulationController::setFromBeginning() {
     }
   }
 
-  recording.release();
+  recording.reset();
 }
 
 bool SimulationController::canGoInto(const Coordinates &point) const {

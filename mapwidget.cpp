@@ -23,11 +23,11 @@ MapWidget::MapWidget(QWidget* parent)
 MapWidget::~MapWidget() { delete ui; }
 
 int MapWidget::calcPxPositionX(const Coordinates2d& crds) {
-  return static_cast<int>(fieldSize * (crds.x() + 0.5f));
+  return static_cast<int>(fieldSize * (crds.x() + fieldHalf));
 }
 
 int MapWidget::calcPxPositionY(const Coordinates2d& crds) {
-  return static_cast<int>(fieldSize * (crds.y() + 0.5f));
+  return static_cast<int>(fieldSize * (crds.y() + fieldHalf));
 }
 
 void MapWidget::update(const Coordinates& playerCoordinates,
@@ -53,13 +53,11 @@ void MapWidget::loadMap(
   pxWidth = fieldSize * static_cast<int>((*fields)[0].size());
   pxHeight = fieldSize * static_cast<int>((*fields).size());
   setMinimumSize(pxWidth, pxHeight);
-  setMaximumSize(9999, 9999);
 }
 
 void MapWidget::unloadMap() {
   mapLoaded = false;
   setMinimumSize(0, 0);
-  setMaximumSize(0, 0);
   hide();
 }
 
@@ -75,13 +73,13 @@ void MapWidget::paintFields() {
       auto x = static_cast<int>(field.crds().x() * fieldSize);
       auto y = static_cast<int>(field.crds().z() * fieldSize);
       if (field.height() > 0) {
-        setPenColor(QColor(255, 255, 255));
+        setPenColor(fieldColor);
         painter->drawRect(x, y, fieldSize - 2, fieldSize - 2);
         painter->drawText(x + fieldSize / 2, y + fieldSize / 2,
                           QString(std::to_string(field.height()).c_str()));
       }
       if (field.visited()) {
-        setPenColor(QColor(0, 100, 100));
+        setPenColor(visitedFieldColor);
         painter->drawRect(x, y, fieldSize - 2, fieldSize - 2);
         painter->drawText(x + fieldSize / 2, y + fieldSize / 2, QString('V'));
       }
@@ -94,8 +92,7 @@ void MapWidget::paintPlayer() {
     int playerBeginX = *playerPxPosX - playerFieldRadius;
     int playerBeginY = *playerPxPosY - playerFieldRadius;
     int size = playerFieldRadius * 2 + 1;
-    painter->fillRect(playerBeginX, playerBeginY, size, size,
-                      QColor(255, 255, 0));
+    painter->fillRect(playerBeginX, playerBeginY, size, size, playerColor);
     painter->drawRect(playerBeginX, playerBeginY, size, size);
   }
 }
@@ -103,12 +100,12 @@ void MapWidget::paintPlayer() {
 void MapWidget::paintDistanceLimitArc() {
   if (distanceLimit) {
     auto distanceLimitRadiusPx = static_cast<int>(fieldSize * (*distanceLimit));
-    setPenColor(QColor(0, 255, 0));
+    setPenColor(distanceLimitArcColor);
     painter->drawPie(*playerPxPosX - distanceLimitRadiusPx,
                      *playerPxPosY - distanceLimitRadiusPx,
                      2 * distanceLimitRadiusPx, 2 * distanceLimitRadiusPx,
                      (directionAngle - angleX).getQtAngle(),
-                     (angleX * 2.0f).getQtAngle());
+                     (angleX * 2.0F).getQtAngle());
   }
 }
 
@@ -117,7 +114,7 @@ void MapWidget::paintTrack() {
     return;
   }
   std::optional<std::pair<int, int>> lastCrds;
-  setPenColor(QColor(255, 255, 0));
+  setPenColor(trackColor);
   for (auto& pos : track->getPositions()) {
     auto currCrds = std::make_pair(calcPxPositionX(pos), calcPxPositionY(pos));
     if (!lastCrds || currCrds != lastCrds) {
@@ -130,16 +127,14 @@ void MapWidget::paintTrack() {
   }
 }
 
-void MapWidget::paintAllCorners() {
-  paintCorners(&corners, QColor(0, 255, 255));
-}
+void MapWidget::paintAllCorners() { paintCorners(&corners, cornersColor); }
 
 void MapWidget::paintExitCorners() {
-  paintCorners(&exitCorners, QColor(255, 0, 0));
+  paintCorners(&exitCorners, exitCornersColor);
 }
 
 void MapWidget::paintShortestPath() {
-  setPenColor(QColor(0, 255, 0));
+  setPenColor(shortestPathColor);
   std::optional<Coordinates2d> lastPos;
   for (const auto& pos : shortestPathNodes) {
     if (lastPos) {
@@ -165,7 +160,7 @@ void MapWidget::paintCorners(const std::vector<Coordinates2d>* ptr,
   }
 }
 
-void MapWidget::paintEvent(QPaintEvent*) {
+void MapWidget::paintEvent(QPaintEvent* /*event*/) {
   if (mapLoaded) {
     QPainter localPainter(this);
     this->painter = &localPainter;
@@ -183,12 +178,12 @@ void MapWidget::paintEvent(QPaintEvent*) {
 }
 
 void MapWidget::paintFocusAngle() {
-  paintPlayerAngle(focusAngle, QColor(255, 0, 0));
+  paintPlayerAngle(focusAngle, focusAngleColor);
 }
 
 void MapWidget::paintPlayerAngle(Angle angle, const QColor& color) {
   if (simulationMode) {
-    float radius =
+    auto radius =
         static_cast<float>(std::sqrt(pxWidth * pxWidth + pxHeight * pxHeight));
     int x = static_cast<int>(radius * std::cos(angle.getRad()));
     int y = static_cast<int>(radius * std::sin(angle.getRad()));
@@ -206,7 +201,7 @@ void MapWidget::paintClosestField() {
     int x = static_cast<int>(closestField->crds().x()) * fieldSize;
     int y = static_cast<int>(closestField->crds().z()) * fieldSize;
 
-    painter->fillRect(x, y, fieldSize - 2, fieldSize - 2, QColor(255, 0, 0));
+    painter->fillRect(x, y, fieldSize - 2, fieldSize - 2, closestFieldColor);
   }
 }
 

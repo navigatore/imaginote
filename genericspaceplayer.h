@@ -1,9 +1,11 @@
 #pragma once
 #include <AL/al.h>
 #include <AL/alc.h>
+
 #include <array>
 #include <cstdlib>
 #include <vector>
+
 #include "angle.h"
 #include "simplespaceobject.h"
 
@@ -61,7 +63,7 @@ class GenericSpacePlayer {
 
   void setGains();
 
-  float getFrequency(unsigned int height);
+  [[nodiscard]] static constexpr float getFrequency(unsigned int height);
 
   Coordinates2d _listenerPos, _sonifiedPointPos;
   bool playing{false};

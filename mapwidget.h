@@ -2,6 +2,7 @@
 #include <QWidget>
 #include <QtGui>
 #include <optional>
+
 #include "angle.h"
 #include "simplespaceobject.h"
 #include "track.h"
@@ -56,6 +57,17 @@ class MapWidget : public QWidget {
 
   const int fieldSize = 30;
   const int playerFieldRadius = 2;
+  static constexpr float fieldHalf{0.5F};
+  static constexpr QColor closestFieldColor{255, 0, 0};
+  static constexpr QColor focusAngleColor{255, 0, 0};
+  static constexpr QColor trackColor{255, 255, 0};
+  static constexpr QColor cornersColor{0, 255, 255};
+  static constexpr QColor exitCornersColor{255, 0, 0};
+  static constexpr QColor fieldColor{255, 255, 255};
+  static constexpr QColor distanceLimitArcColor{0, 255, 0};
+  static constexpr QColor shortestPathColor{0, 255, 0};
+  static constexpr QColor playerColor{255, 255, 0};
+  static constexpr QColor visitedFieldColor{0, 100, 100};
 
   Ui::MapWidget* ui;
   QPainter* painter;

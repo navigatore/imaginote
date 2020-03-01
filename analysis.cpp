@@ -109,12 +109,12 @@ float Analysis::getDistanceLimit() const noexcept {
 
 float Analysis::getTrackingRadiusEnabledPercentageTime() const noexcept {
   auto &vector{recording->getMovingFocusVector()};
-  return 100.0f * std::accumulate(begin(vector), end(vector), 0) /
+  return 100.0F * std::accumulate(begin(vector), end(vector), 0) /
          vector.size();
 }
 
 float Analysis::getMapPreviewEnabledPercentageTime() const noexcept {
   auto &vector{recording->getMapPreviewVector()};
-  return 100.0f * std::accumulate(begin(vector), end(vector), 0) /
+  return 100.0F * std::accumulate(begin(vector), end(vector), 0) /
          vector.size();
 }

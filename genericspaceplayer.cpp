@@ -1,9 +1,12 @@
 #include "genericspaceplayer.h"
+
 #include <AL/al.h>
 #include <AL/alc.h>
+
 #include <cmath>
 #include <cstring>
 #include <limits>
+
 #include "nvgmath.h"
 
 GenericSpacePlayer::GenericSpacePlayer() {
@@ -77,7 +80,7 @@ void GenericSpacePlayer::updateGains(float duration) {
   setGains();
 }
 
-float GenericSpacePlayer::getFrequency(unsigned int height) {
+constexpr float GenericSpacePlayer::getFrequency(unsigned int height) {
   return baseFrequency / static_cast<float>(height);
 }
 

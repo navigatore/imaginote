@@ -1,4 +1,5 @@
 #include "recording.h"
+
 #include <boost/archive/text_oarchive.hpp>
 #include <fstream>
 
@@ -65,7 +66,8 @@ void Recording::loadRecording(const std::string &filename) {
   std::ifstream f;
   f.open(filename.c_str());
   boost::archive::text_iarchive ia(f);
-  uint32_t magicNumber{}, version{};
+  uint32_t magicNumber{};
+  uint32_t version{};
   ia >> magicNumber >> version;
   if (magicNumber != recordingMagicNumber ||
       version != recordingVersion2Constant) {
